@@ -1,0 +1,1122 @@
+[NeMo W 2025-05-23 01:01:37 nemo_logging:349] /home/aithe209/anaconda3/envs/kynd_nemo_200/lib/python3.10/site-packages/megatron/core/tensor_parallel/layers.py:254: FutureWarning: `torch.cuda.amp.custom_fwd(args...)` is deprecated. Please use `torch.amp.custom_fwd(args..., device_type='cuda')` instead.
+      def forward(
+    
+[NeMo W 2025-05-23 01:01:37 nemo_logging:349] /home/aithe209/anaconda3/envs/kynd_nemo_200/lib/python3.10/site-packages/megatron/core/tensor_parallel/layers.py:265: FutureWarning: `torch.cuda.amp.custom_bwd(args...)` is deprecated. Please use `torch.amp.custom_bwd(args..., device_type='cuda')` instead.
+      def backward(ctx, grad_output):
+    
+[NeMo W 2025-05-23 01:01:37 nemo_logging:349] /home/aithe209/anaconda3/envs/kynd_nemo_200/lib/python3.10/site-packages/megatron/core/tensor_parallel/layers.py:325: FutureWarning: `torch.cuda.amp.custom_fwd(args...)` is deprecated. Please use `torch.amp.custom_fwd(args..., device_type='cuda')` instead.
+      def forward(
+    
+[NeMo W 2025-05-23 01:01:37 nemo_logging:349] /home/aithe209/anaconda3/envs/kynd_nemo_200/lib/python3.10/site-packages/megatron/core/tensor_parallel/layers.py:360: FutureWarning: `torch.cuda.amp.custom_bwd(args...)` is deprecated. Please use `torch.amp.custom_bwd(args..., device_type='cuda')` instead.
+      def backward(ctx, grad_output):
+    
+[NeMo W 2025-05-23 01:01:41 nemo_logging:349] /home/aithe209/anaconda3/envs/kynd_nemo_200/lib/python3.10/site-packages/hydra/_internal/hydra.py:119: UserWarning: Future Hydra versions will no longer change working directory at job runtime by default.
+    See https://hydra.cc/docs/1.2/upgrades/1.1_to_1.2/changes_to_job_working_dir/ for more information.
+      ret = run_job(
+    
+[NeMo I 2025-05-23 01:01:41 speech_to_text_bpe:87] Hydra config: name: Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2
+    init_from_nemo_model:
+      model:
+        path: /AN202_data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Finetune/src/03.train/base/2024-09-05_14-47-08-epoch16.nemo
+    model:
+      sample_rate: 16000
+      log_prediction: true
+      ctc_reduction: mean_batch
+      skip_nan_grad: false
+      train_ds:
+        manifest_filepath: /AN202_data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Finetune/Manifest/filtering_SKShieldus_manifest_train.json
+        sample_rate: ${model.sample_rate}
+        batch_size: 6
+        shuffle: true
+        num_workers: 16
+        pin_memory: true
+        use_start_end_token: false
+        trim_silence: false
+        max_duration: 30
+        min_duration: 0.5
+        is_tarred: false
+        tarred_audio_filepaths: null
+        shuffle_n: 2048
+        bucketing_strategy: synced_randomized
+        bucketing_batch_size: null
+      validation_ds:
+        manifest_filepath: /AN202_data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Finetune/Manifest/filtering_SKShieldus_manifest_validation.json
+        sample_rate: ${model.sample_rate}
+        batch_size: 6
+        shuffle: false
+        num_workers: 8
+        pin_memory: true
+        use_start_end_token: false
+      test_ds:
+        manifest_filepath: null
+        sample_rate: ${model.sample_rate}
+        batch_size: 6
+        shuffle: false
+        num_workers: 8
+        pin_memory: true
+        use_start_end_token: false
+      tokenizer:
+        dir: /AN202_data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Finetune/src/03.train/create_tokens/tok_output_unigram/tokenizer_spe_unigram_v2354
+        type: bpe
+      preprocessor:
+        _target_: nemo.collections.asr.modules.AudioToMelSpectrogramPreprocessor
+        sample_rate: ${model.sample_rate}
+        normalize: per_feature
+        window_size: 0.025
+        window_stride: 0.01
+        window: hann
+        features: 80
+        n_fft: 512
+        log: true
+        frame_splicing: 1
+        dither: 1.0e-05
+        pad_to: 0
+        pad_value: 0.0
+      spec_augment:
+        _target_: nemo.collections.asr.modules.SpectrogramAugmentation
+        freq_masks: 2
+        time_masks: 10
+        freq_width: 27
+        time_width: 0.05
+      encoder:
+        _target_: nemo.collections.asr.modules.ConformerEncoder
+        feat_in: ${model.preprocessor.features}
+        feat_out: -1
+        n_layers: 18
+        d_model: 512
+        subsampling: striding
+        subsampling_factor: 4
+        subsampling_conv_channels: -1
+        causal_downsampling: false
+        ff_expansion_factor: 4
+        self_attention_model: rel_pos
+        n_heads: 8
+        att_context_size:
+        - -1
+        - -1
+        att_context_style: regular
+        xscaling: true
+        untie_biases: true
+        pos_emb_max_len: 5000
+        conv_kernel_size: 31
+        conv_norm_type: batch_norm
+        conv_context_size: null
+        dropout: 0.1
+        dropout_pre_encoder: 0.1
+        dropout_emb: 0.0
+        dropout_att: 0.1
+      decoder:
+        _target_: nemo.collections.asr.modules.ConvASRDecoder
+        feat_in: null
+        num_classes: -1
+        vocabulary: []
+      optim:
+        name: adamw
+        lr: 0.5
+        betas:
+        - 0.9
+        - 0.98
+        weight_decay: 0.001
+        sched:
+          name: NoamAnnealing
+          d_model: ${model.encoder.d_model}
+          warmup_steps: 5000
+          warmup_ratio: null
+          min_lr: 1.0e-06
+    trainer:
+      devices:
+      - 0
+      - 1
+      num_nodes: 1
+      max_epochs: 1000
+      max_steps: -1
+      val_check_interval: 1.0
+      accelerator: auto
+      strategy: ddp
+      accumulate_grad_batches: 1
+      gradient_clip_val: 0.0
+      precision: 32
+      log_every_n_steps: 10
+      enable_progress_bar: true
+      num_sanity_val_steps: 0
+      check_val_every_n_epoch: 1
+      sync_batchnorm: true
+      enable_checkpointing: false
+      logger: false
+      benchmark: false
+    exp_manager:
+      exp_dir: null
+      name: ${name}
+      create_tensorboard_logger: true
+      create_checkpoint_callback: true
+      checkpoint_callback_params:
+        monitor: val_wer
+        mode: min
+        save_top_k: 5
+        always_save_nemo: true
+      resume_if_exists: false
+      resume_ignore_no_checkpoint: false
+      create_wandb_logger: false
+      wandb_logger_kwargs:
+        name: null
+        project: null
+    
+[NeMo I 2025-05-23 01:01:41 exp_manager:396] Experiments will be logged at /AN202_data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Finetune/src/03.train/nemo_experiments/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2/2025-05-23_01-01-20
+[NeMo I 2025-05-23 01:01:41 exp_manager:842] TensorboardLogger has been set up
+[NeMo I 2025-05-23 01:01:46 mixins:172] Tokenizer SentencePieceTokenizer initialized with 2354 tokens
+[NeMo I 2025-05-23 01:01:46 ctc_bpe_models:66] 
+    Replacing placeholder number of classes (-1) with actual number of classes - 2354
+[NeMo I 2025-05-23 01:01:47 collections:196] Dataset loaded with 130 files totalling 0.16 hours
+[NeMo I 2025-05-23 01:01:47 collections:197] 0 files were filtered totalling 0.00 hours
+[NeMo I 2025-05-23 01:01:47 collections:196] Dataset loaded with 16 files totalling 0.02 hours
+[NeMo I 2025-05-23 01:01:47 collections:197] 0 files were filtered totalling 0.00 hours
+[NeMo W 2025-05-23 01:01:48 audio_to_text_dataset:830] Could not load dataset as `manifest_filepath` was None. Provided config : {'manifest_filepath': None, 'sample_rate': 16000, 'batch_size': 6, 'shuffle': False, 'num_workers': 8, 'pin_memory': True, 'use_start_end_token': False}
+[NeMo I 2025-05-23 01:01:48 features:289] PADDING: 0
+[NeMo I 2025-05-23 01:01:50 modelPT:723] Optimizer config = AdamW (
+    Parameter Group 0
+        amsgrad: False
+        betas: [0.9, 0.98]
+        capturable: False
+        differentiable: False
+        eps: 1e-08
+        foreach: None
+        fused: None
+        lr: 0.5
+        maximize: False
+        weight_decay: 0.001
+    )
+[NeMo I 2025-05-23 01:01:50 lr_scheduler:915] Scheduler "<nemo.core.optim.lr_scheduler.NoamAnnealing object at 0x7f9725500970>" 
+    will be used during training (effective maximum steps = 11000) - 
+    Parameters : 
+    (d_model: 512
+    warmup_steps: 5000
+    warmup_ratio: null
+    min_lr: 1.0e-06
+    max_steps: 11000
+    )
+[NeMo W 2025-05-23 01:01:53 nemo_logging:349] /home/aithe209/anaconda3/envs/kynd_nemo_200/lib/python3.10/site-packages/nemo/collections/asr/parts/preprocessing/features.py:417: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+      with torch.cuda.amp.autocast(enabled=False):
+    
+[NeMo I 2025-05-23 01:01:56 wer:318] 
+    
+[NeMo I 2025-05-23 01:01:56 wer:319] reference:네네 네 지금 그런데 확인해보니 한 건은 신용카드로 후원 중이시고 다른 최근에 참용하셨던 내용은 자동이체로 후원 중이신 걸로 확인이 되셨어요
+[NeMo I 2025-05-23 01:01:56 wer:320] predicted:네에서에서 네 네요 음 네 않하시고 한번 네 아예 좀로 알겠습니다 한 네 네 하나 말씀아 혹시가 네 백 월 네데  안 그 네 일나요 네 김 정기구독 아 네 안 왔고 안 안녕하세요 네 진행 말씀 제가 네 일나요 네아 혹시가 네 백 월 네데  하나 네수 이 네되어 오래를 바로 뭐 지금
+[NeMo I 2025-05-23 01:01:57 wer:318] 
+    
+[NeMo I 2025-05-23 01:01:57 wer:319] reference:네 각각 두 개의 회원번호이시기 때문에 요청하시면은 네 그럼 카드나 자동이체로 변경 처리 진행해드릴까요
+[NeMo I 2025-05-23 01:01:57 wer:320] predicted:네에서 네호호 네 할 네 요거 공 네구 월습니다 가  안에 네 될까요리 아 네 지금 반품고 안을 제가 네에서 네 않드려 네아 혹시 오 네 감사합니다 어떻게 어 이 네 기다려주세요라고 네 상품이 네네 네 두 아마로 혹시분한 지금
+[NeMo I 2025-05-23 01:01:58 wer:318] 
+    
+[NeMo I 2025-05-23 01:01:58 wer:319] reference:네
+[NeMo I 2025-05-23 01:01:58 wer:320] predicted:네혹
+[NeMo I 2025-05-23 01:01:58 nemo_model_checkpoint:183] New .nemo model saved to: /AN202_data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Finetune/src/03.train/nemo_experiments/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2/2025-05-23_01-01-20/checkpoints/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2.nemo
+[NeMo I 2025-05-23 01:02:29 nemo_model_checkpoint:183] New .nemo model saved to: /AN202_data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Finetune/src/03.train/nemo_experiments/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2/2025-05-23_01-01-20/checkpoints/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2.nemo
+[NeMo I 2025-05-23 01:03:02 wer:318] 
+    
+[NeMo I 2025-05-23 01:03:02 wer:319] reference:예
+[NeMo I 2025-05-23 01:03:02 wer:320] predicted:네죠 뭐
+[NeMo I 2025-05-23 01:03:03 wer:318] 
+    
+[NeMo I 2025-05-23 01:03:03 wer:319] reference:네 각각 두 개의 회원번호이시기 때문에 요청하시면은 네 그럼 카드나 자동이체로 변경 처리 진행해드릴까요
+[NeMo I 2025-05-23 01:03:03 wer:320] predicted:네에서 네호호 네 할 네 요거 공 네구 월습니다 가  안에 네 될까요리 아 네 지금 반품고 안을 제가 네에서 네 않드려 네아 혹시 오 네 감사합니다 어떻게 어 이 네 기다려주세요라고 네 상품이 네네 네 두 아마로 혹시분한 지금
+[NeMo I 2025-05-23 01:03:03 wer:318] 
+    
+[NeMo I 2025-05-23 01:03:03 wer:319] reference:네
+[NeMo I 2025-05-23 01:03:03 wer:320] predicted:네혹
+[NeMo I 2025-05-23 01:03:03 nemo_model_checkpoint:183] New .nemo model saved to: /AN202_data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Finetune/src/03.train/nemo_experiments/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2/2025-05-23_01-01-20/checkpoints/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2.nemo
+[NeMo I 2025-05-23 01:03:34 nemo_model_checkpoint:183] New .nemo model saved to: /AN202_data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Finetune/src/03.train/nemo_experiments/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2/2025-05-23_01-01-20/checkpoints/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2.nemo
+[NeMo I 2025-05-23 01:04:08 wer:318] 
+    
+[NeMo I 2025-05-23 01:04:08 wer:319] reference:네
+[NeMo I 2025-05-23 01:04:08 wer:320] predicted:네까지
+[NeMo I 2025-05-23 01:04:09 wer:318] 
+    
+[NeMo I 2025-05-23 01:04:09 wer:319] reference:네 각각 두 개의 회원번호이시기 때문에 요청하시면은 네 그럼 카드나 자동이체로 변경 처리 진행해드릴까요
+[NeMo I 2025-05-23 01:04:09 wer:320] predicted:네에서 네호호 네 할 네 요거 공 네구 월습니다 가  안에 네 될까요리 아 네 지금 반품고 안을 제가 네죠 네 않드려 네아 혹시 오 네 감사합니다 어떻게 어 이 네 기다려주세요라고 상품이 네네 네 두 아마로 혹시분한 지금
+[NeMo I 2025-05-23 01:04:09 wer:318] 
+    
+[NeMo I 2025-05-23 01:04:09 wer:319] reference:네
+[NeMo I 2025-05-23 01:04:09 wer:320] predicted:네혹
+[NeMo I 2025-05-23 01:04:10 nemo_model_checkpoint:183] New .nemo model saved to: /AN202_data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Finetune/src/03.train/nemo_experiments/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2/2025-05-23_01-01-20/checkpoints/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2.nemo
+[NeMo I 2025-05-23 01:04:41 nemo_model_checkpoint:183] New .nemo model saved to: /AN202_data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Finetune/src/03.train/nemo_experiments/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2/2025-05-23_01-01-20/checkpoints/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2.nemo
+[NeMo I 2025-05-23 01:05:14 wer:318] 
+    
+[NeMo I 2025-05-23 01:05:14 wer:319] reference:공 오 사
+[NeMo I 2025-05-23 01:05:14 wer:320] predicted:네 그다 구독 네 일 게 지금
+[NeMo I 2025-05-23 01:05:15 wer:318] 
+    
+[NeMo I 2025-05-23 01:05:15 wer:319] reference:네 각각 두 개의 회원번호이시기 때문에 요청하시면은 네 그럼 카드나 자동이체로 변경 처리 진행해드릴까요
+[NeMo I 2025-05-23 01:05:15 wer:320] predicted:네에서 네호호 네 할 네 요거 공 네구 월습니다 가  안에 네 될까요리 아 네 지금 반품고 안을 제가 네죠 네 않드려 네아 혹시 오 네 감사합니다 어떻게 어 이 네 기다려주세요라고 상품이 네네 네 두 아마로 혹시분한 지금
+[NeMo I 2025-05-23 01:05:15 wer:318] 
+    
+[NeMo I 2025-05-23 01:05:15 wer:319] reference:네
+[NeMo I 2025-05-23 01:05:15 wer:320] predicted:네혹
+[NeMo I 2025-05-23 01:05:16 nemo_model_checkpoint:183] New .nemo model saved to: /AN202_data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Finetune/src/03.train/nemo_experiments/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2/2025-05-23_01-01-20/checkpoints/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2.nemo
+[NeMo I 2025-05-23 01:05:47 nemo_model_checkpoint:183] New .nemo model saved to: /AN202_data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Finetune/src/03.train/nemo_experiments/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2/2025-05-23_01-01-20/checkpoints/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2.nemo
+[NeMo I 2025-05-23 01:06:21 wer:318] 
+    
+[NeMo I 2025-05-23 01:06:21 wer:319] reference:예 예 어 팔 일 구
+[NeMo I 2025-05-23 01:06:21 wer:320] predicted:네까지까지 뭐 네 주세요 좀 삼 그게
+[NeMo I 2025-05-23 01:06:22 wer:318] 
+    
+[NeMo I 2025-05-23 01:06:22 wer:319] reference:네 각각 두 개의 회원번호이시기 때문에 요청하시면은 네 그럼 카드나 자동이체로 변경 처리 진행해드릴까요
+[NeMo I 2025-05-23 01:06:22 wer:320] predicted:네에서 네호호 네 할 요거 공 네구 월습니다 가  안에 네 될까요리 아 네 지금 반품고 안을 제가 네죠 네 않드려 네아 혹시 오 네 감사합니다 어떻게 어 이 네 기다려주세요라고 상품이 네네 네 두 아마로 혹시분한 지금
+[NeMo I 2025-05-23 01:06:22 wer:318] 
+    
+[NeMo I 2025-05-23 01:06:22 wer:319] reference:네
+[NeMo I 2025-05-23 01:06:22 wer:320] predicted:네혹
+[NeMo I 2025-05-23 01:06:22 nemo_model_checkpoint:183] New .nemo model saved to: /AN202_data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Finetune/src/03.train/nemo_experiments/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2/2025-05-23_01-01-20/checkpoints/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2.nemo
+[NeMo I 2025-05-23 01:06:54 nemo_model_checkpoint:183] New .nemo model saved to: /AN202_data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Finetune/src/03.train/nemo_experiments/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2/2025-05-23_01-01-20/checkpoints/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2.nemo
+[NeMo I 2025-05-23 01:07:28 wer:318] 
+    
+[NeMo I 2025-05-23 01:07:28 wer:319] reference:예 예
+[NeMo I 2025-05-23 01:07:28 wer:320] predicted:또 혹시
+[NeMo I 2025-05-23 01:07:29 wer:318] 
+    
+[NeMo I 2025-05-23 01:07:29 wer:319] reference:네 각각 두 개의 회원번호이시기 때문에 요청하시면은 네 그럼 카드나 자동이체로 변경 처리 진행해드릴까요
+[NeMo I 2025-05-23 01:07:29 wer:320] predicted:네에서 네호호 네 할 요거 공 네구 월습니다 가  안에 네 될까요리 아 네 지금 반품고 안을 제가 네죠 네 않드려 네아 혹시 오 네 감사합니다 어떻게 어 이 네 기다려주세요라고 상품이 네네 네 두 아마로 혹시분한 지금
+[NeMo I 2025-05-23 01:07:29 wer:318] 
+    
+[NeMo I 2025-05-23 01:07:29 wer:319] reference:네
+[NeMo I 2025-05-23 01:07:29 wer:320] predicted:네혹
+[NeMo I 2025-05-23 01:07:29 nemo_model_checkpoint:183] New .nemo model saved to: /AN202_data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Finetune/src/03.train/nemo_experiments/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2/2025-05-23_01-01-20/checkpoints/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2.nemo
+[NeMo I 2025-05-23 01:08:00 nemo_model_checkpoint:183] New .nemo model saved to: /AN202_data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Finetune/src/03.train/nemo_experiments/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2/2025-05-23_01-01-20/checkpoints/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2.nemo
+[NeMo I 2025-05-23 01:08:34 wer:318] 
+    
+[NeMo I 2025-05-23 01:08:34 wer:319] reference:예
+[NeMo I 2025-05-23 01:08:34 wer:320] predicted:까지
+[NeMo I 2025-05-23 01:08:35 wer:318] 
+    
+[NeMo I 2025-05-23 01:08:35 wer:319] reference:네 각각 두 개의 회원번호이시기 때문에 요청하시면은 네 그럼 카드나 자동이체로 변경 처리 진행해드릴까요
+[NeMo I 2025-05-23 01:08:35 wer:320] predicted:네에서 네호호 네 할 요거 공 네구 월습니다 가  안에 네 될까요리 아 네 지금 반품고 안을 제가 네죠 네 않드려 네아 혹시 오 네 감사합니다 어떻게 어 이 네 기다려주세요라고 상품이 네네 네 두 아마로 혹시분한 지금
+[NeMo I 2025-05-23 01:08:35 wer:318] 
+    
+[NeMo I 2025-05-23 01:08:35 wer:319] reference:네
+[NeMo I 2025-05-23 01:08:35 wer:320] predicted:네혹
+[NeMo I 2025-05-23 01:08:35 nemo_model_checkpoint:183] New .nemo model saved to: /AN202_data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Finetune/src/03.train/nemo_experiments/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2/2025-05-23_01-01-20/checkpoints/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2.nemo
+[NeMo I 2025-05-23 01:09:07 nemo_model_checkpoint:183] New .nemo model saved to: /AN202_data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Finetune/src/03.train/nemo_experiments/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2/2025-05-23_01-01-20/checkpoints/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2.nemo
+[NeMo I 2025-05-23 01:09:41 wer:318] 
+    
+[NeMo I 2025-05-23 01:09:41 wer:319] reference:예
+[NeMo I 2025-05-23 01:09:41 wer:320] predicted:또
+[NeMo I 2025-05-23 01:09:42 wer:318] 
+    
+[NeMo I 2025-05-23 01:09:42 wer:319] reference:네 각각 두 개의 회원번호이시기 때문에 요청하시면은 네 그럼 카드나 자동이체로 변경 처리 진행해드릴까요
+[NeMo I 2025-05-23 01:09:42 wer:320] predicted:네에서 네호호 네 할 요거 네구 월습니다 가  안에 네 될까요리 아 네 지금 반품고 안을 제가 네 않드려 네아 혹시 오 네 감사합니다 어떻게 어 이 네 기다려주세요라고 상품이 네네 네 두 아마로 혹시분한 지금
+[NeMo I 2025-05-23 01:09:42 wer:318] 
+    
+[NeMo I 2025-05-23 01:09:42 wer:319] reference:네
+[NeMo I 2025-05-23 01:09:42 wer:320] predicted:네혹
+[NeMo I 2025-05-23 01:09:42 nemo_model_checkpoint:183] New .nemo model saved to: /AN202_data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Finetune/src/03.train/nemo_experiments/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2/2025-05-23_01-01-20/checkpoints/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2.nemo
+[NeMo I 2025-05-23 01:10:13 nemo_model_checkpoint:183] New .nemo model saved to: /AN202_data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Finetune/src/03.train/nemo_experiments/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2/2025-05-23_01-01-20/checkpoints/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2.nemo
+[NeMo I 2025-05-23 01:10:48 wer:318] 
+    
+[NeMo I 2025-05-23 01:10:48 wer:319] reference:아 네 가능하세요 그러면 기존에 이만 원 후원권 유지하시고 최근에 참여하셨던 후원권은 만 원으로 변경 처리해드리면 될까요
+[NeMo I 2025-05-23 01:10:48 wer:320] predicted:네만 네 예고 사 지금 네에 로그인 예 네 도 월 백 월 그러면 네된에고 안 그 네 저 어 예신을 도 백 월 그럼도 예 이 네 기다려주세요라고 상품이 네네로 혹시 네네을 네 주소한 지금
+[NeMo I 2025-05-23 01:10:49 wer:318] 
+    
+[NeMo I 2025-05-23 01:10:49 wer:319] reference:네 각각 두 개의 회원번호이시기 때문에 요청하시면은 네 그럼 카드나 자동이체로 변경 처리 진행해드릴까요
+[NeMo I 2025-05-23 01:10:49 wer:320] predicted:네에서 네호호 네 할 요거구 월습니다 가  안에 네 될까요리 아 네 지금 반품고 안을 제가 네 않드려 네아 혹시 오 네 감사합니다 어떻게 어 이 네 기다려주세요라고 상품이 네네 네 두 아마로 혹시분한 지금
+[NeMo I 2025-05-23 01:10:49 wer:318] 
+    
+[NeMo I 2025-05-23 01:10:49 wer:319] reference:네
+[NeMo I 2025-05-23 01:10:49 wer:320] predicted:네혹
+[NeMo I 2025-05-23 01:10:49 nemo_model_checkpoint:183] New .nemo model saved to: /AN202_data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Finetune/src/03.train/nemo_experiments/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2/2025-05-23_01-01-20/checkpoints/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2.nemo
+[NeMo I 2025-05-23 01:11:20 nemo_model_checkpoint:183] New .nemo model saved to: /AN202_data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Finetune/src/03.train/nemo_experiments/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2/2025-05-23_01-01-20/checkpoints/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2.nemo
+[NeMo I 2025-05-23 01:11:54 wer:318] 
+    
+[NeMo I 2025-05-23 01:11:54 wer:319] reference:기계상사
+[NeMo I 2025-05-23 01:11:54 wer:320] predicted:네에 상품 구 배송
+[NeMo I 2025-05-23 01:11:55 wer:318] 
+    
+[NeMo I 2025-05-23 01:11:55 wer:319] reference:네 각각 두 개의 회원번호이시기 때문에 요청하시면은 네 그럼 카드나 자동이체로 변경 처리 진행해드릴까요
+[NeMo I 2025-05-23 01:11:55 wer:320] predicted:네에서 네호호 네데 요거구 월습니다 가  안에 네 될까요리 아 네 지금 반품고 안을 제가 네 않드려 네아 혹시 오 네 감사합니다 어떻게 어 이 네 기다려주세요라고 상품이 네네 네 두 아마로 혹시분한 지금
+[NeMo I 2025-05-23 01:11:56 wer:318] 
+    
+[NeMo I 2025-05-23 01:11:56 wer:319] reference:네
+[NeMo I 2025-05-23 01:11:56 wer:320] predicted:네혹
+[NeMo I 2025-05-23 01:11:56 nemo_model_checkpoint:183] New .nemo model saved to: /AN202_data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Finetune/src/03.train/nemo_experiments/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2/2025-05-23_01-01-20/checkpoints/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2.nemo
+[NeMo I 2025-05-23 01:12:27 nemo_model_checkpoint:183] New .nemo model saved to: /AN202_data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Finetune/src/03.train/nemo_experiments/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2/2025-05-23_01-01-20/checkpoints/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2.nemo
+[NeMo I 2025-05-23 01:13:01 wer:318] 
+    
+[NeMo I 2025-05-23 01:13:01 wer:319] reference:알겠습니다
+[NeMo I 2025-05-23 01:13:01 wer:320] predicted:네되어 다시잖아요 한 일
+[NeMo I 2025-05-23 01:13:02 wer:318] 
+    
+[NeMo I 2025-05-23 01:13:02 wer:319] reference:네 각각 두 개의 회원번호이시기 때문에 요청하시면은 네 그럼 카드나 자동이체로 변경 처리 진행해드릴까요
+[NeMo I 2025-05-23 01:13:02 wer:320] predicted:네에서 네호호 네 할 요거구 월습니다 가  안에 네 될까요리 아 네 지금 반품고 안을 제가 네 않드려아 혹시 오 네 감사합니다 어떻게 어 이 네 기다려주세요라고 상품이 네네 네 두 아마로 혹시분한 지금
+[NeMo I 2025-05-23 01:13:02 wer:318] 
+    
+[NeMo I 2025-05-23 01:13:02 wer:319] reference:네
+[NeMo I 2025-05-23 01:13:02 wer:320] predicted:네혹
+[NeMo I 2025-05-23 01:13:02 nemo_model_checkpoint:183] New .nemo model saved to: /AN202_data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Finetune/src/03.train/nemo_experiments/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2/2025-05-23_01-01-20/checkpoints/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2.nemo
+[NeMo I 2025-05-23 01:13:34 nemo_model_checkpoint:183] New .nemo model saved to: /AN202_data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Finetune/src/03.train/nemo_experiments/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2/2025-05-23_01-01-20/checkpoints/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2.nemo
+[NeMo I 2025-05-23 01:14:07 wer:318] 
+    
+[NeMo I 2025-05-23 01:14:07 wer:319] reference:예 그래서 제가 형상이 안 되는 안 안 되거든요
+[NeMo I 2025-05-23 01:14:07 wer:320] predicted:고객님 전 있는  그리고 네 너무 그럼진 지금
+[NeMo I 2025-05-23 01:14:08 wer:318] 
+    
+[NeMo I 2025-05-23 01:14:08 wer:319] reference:네 각각 두 개의 회원번호이시기 때문에 요청하시면은 네 그럼 카드나 자동이체로 변경 처리 진행해드릴까요
+[NeMo I 2025-05-23 01:14:08 wer:320] predicted:네호호 할 요거구 월습니다 가  안에 네 될까요리 아 네 지금 반품고 안을 네 않드려아 혹시 오 네 감사합니다 어떻게 어 이 네 기다려주세요라고 상품이 네네 네 두 아마로 혹시분한 지금
+[NeMo I 2025-05-23 01:14:09 wer:318] 
+    
+[NeMo I 2025-05-23 01:14:09 wer:319] reference:네
+[NeMo I 2025-05-23 01:14:09 wer:320] predicted:네혹
+[NeMo I 2025-05-23 01:14:09 nemo_model_checkpoint:183] New .nemo model saved to: /AN202_data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Finetune/src/03.train/nemo_experiments/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2/2025-05-23_01-01-20/checkpoints/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2.nemo
+[NeMo I 2025-05-23 01:14:40 nemo_model_checkpoint:183] New .nemo model saved to: /AN202_data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Finetune/src/03.train/nemo_experiments/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2/2025-05-23_01-01-20/checkpoints/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2.nemo
+[NeMo I 2025-05-23 01:15:14 wer:318] 
+    
+[NeMo I 2025-05-23 01:15:14 wer:319] reference:괜찮으실까요 네 그러시면 명의 변경 같은 경우에는 전화 주신 시점부터 가능하기 때문에 제가 유 월 달부터 명의 변경 진행해드릴 거구요 사업자 번호 다시 한번만 말씀 부탁드리겠습니다
+[NeMo I 2025-05-23 01:15:14 wer:320] predicted:개가 모르겠이요상리 공라고 오늘 아 예 네 취소 본인를 안 맞으실까요시 이렇게 고객님 추가고에 될까요리 아된저 아니요스 일 안 거 오래시 혹시 네네 다시잖아요
+[NeMo I 2025-05-23 01:15:15 wer:318] 
+    
+[NeMo I 2025-05-23 01:15:15 wer:319] reference:네 각각 두 개의 회원번호이시기 때문에 요청하시면은 네 그럼 카드나 자동이체로 변경 처리 진행해드릴까요
+[NeMo I 2025-05-23 01:15:15 wer:320] predicted:네호호데 요거구 월습니다 가  안에 네 될까요리 아 네 지금 반품고 안을 않드려아 혹시 오 네 감사합니다 어떻게 어 이 기다려주세요라고 상품이 네네 네 두 아마로 혹시분한 지금
+[NeMo I 2025-05-23 01:15:15 wer:318] 
+    
+[NeMo I 2025-05-23 01:15:15 wer:319] reference:네
+[NeMo I 2025-05-23 01:15:15 wer:320] predicted:네
+[NeMo I 2025-05-23 01:15:15 nemo_model_checkpoint:183] New .nemo model saved to: /AN202_data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Finetune/src/03.train/nemo_experiments/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2/2025-05-23_01-01-20/checkpoints/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2.nemo
+[NeMo I 2025-05-23 01:15:47 nemo_model_checkpoint:183] New .nemo model saved to: /AN202_data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Finetune/src/03.train/nemo_experiments/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2/2025-05-23_01-01-20/checkpoints/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2.nemo
+[NeMo I 2025-05-23 01:16:20 wer:318] 
+    
+[NeMo I 2025-05-23 01:16:20 wer:319] reference:아 중단은 바로 가능하신데 혹시나 해서 안내 말씀드리자면 환전는 저희는 오천 원부터도 호환이 가능하시거든요
+[NeMo I 2025-05-23 01:16:20 wer:320] predicted:만을 그러세요 이 고객님 추가고 하나 있을 안 오 전화 월 고객님 추가고 안 그럼 지금
+[NeMo I 2025-05-23 01:16:21 wer:318] 
+    
+[NeMo I 2025-05-23 01:16:21 wer:319] reference:네 각각 두 개의 회원번호이시기 때문에 요청하시면은 네 그럼 카드나 자동이체로 변경 처리 진행해드릴까요
+[NeMo I 2025-05-23 01:16:21 wer:320] predicted:네호호데 요거구 월습니다 가  안에 될까요리 아 지금 반품고 안을 않드려아 혹시 오 네 감사합니다 어떻게 어 이 기다려주세요라고 상품이 네네 두 아마로 혹시분한 지금
+[NeMo I 2025-05-23 01:16:21 wer:318] 
+    
+[NeMo I 2025-05-23 01:16:21 wer:319] reference:네
+[NeMo I 2025-05-23 01:16:21 wer:320] predicted:
+[NeMo I 2025-05-23 01:16:21 nemo_model_checkpoint:183] New .nemo model saved to: /AN202_data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Finetune/src/03.train/nemo_experiments/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2/2025-05-23_01-01-20/checkpoints/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2.nemo
+[NeMo I 2025-05-23 01:16:52 nemo_model_checkpoint:183] New .nemo model saved to: /AN202_data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Finetune/src/03.train/nemo_experiments/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2/2025-05-23_01-01-20/checkpoints/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2.nemo
+[NeMo I 2025-05-23 01:17:27 wer:318] 
+    
+[NeMo I 2025-05-23 01:17:27 wer:319] reference:네 잘 알겠습니다 다른 문의사항은 없으십니까
+[NeMo I 2025-05-23 01:17:27 wer:320] predicted:다시잖아요나요리 공이요고요
+[NeMo I 2025-05-23 01:17:28 wer:318] 
+    
+[NeMo I 2025-05-23 01:17:28 wer:319] reference:네 각각 두 개의 회원번호이시기 때문에 요청하시면은 네 그럼 카드나 자동이체로 변경 처리 진행해드릴까요
+[NeMo I 2025-05-23 01:17:28 wer:320] predicted:네호호 할 요거구 월습니다 가  안에 될까요리 아 지금 반품고 안을드려아 혹시 오 네 감사합니다 어떻게 어 이 기다려주세요라고 상품이 네네 두 아마로 혹시분한 지금
+[NeMo I 2025-05-23 01:17:28 wer:318] 
+    
+[NeMo I 2025-05-23 01:17:28 wer:319] reference:네
+[NeMo I 2025-05-23 01:17:28 wer:320] predicted:
+[NeMo I 2025-05-23 01:17:28 nemo_model_checkpoint:183] New .nemo model saved to: /AN202_data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Finetune/src/03.train/nemo_experiments/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2/2025-05-23_01-01-20/checkpoints/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2.nemo
+[NeMo I 2025-05-23 01:18:00 nemo_model_checkpoint:183] New .nemo model saved to: /AN202_data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Finetune/src/03.train/nemo_experiments/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2/2025-05-23_01-01-20/checkpoints/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2.nemo
+[NeMo I 2025-05-23 01:18:33 wer:318] 
+    
+[NeMo I 2025-05-23 01:18:33 wer:319] reference:예예
+[NeMo I 2025-05-23 01:18:33 wer:320] predicted:죠
+[NeMo I 2025-05-23 01:18:34 wer:318] 
+    
+[NeMo I 2025-05-23 01:18:34 wer:319] reference:네 각각 두 개의 회원번호이시기 때문에 요청하시면은 네 그럼 카드나 자동이체로 변경 처리 진행해드릴까요
+[NeMo I 2025-05-23 01:18:34 wer:320] predicted:네 네호호 요거구 월습니다 가  안에 될까요리 아 지금 반품고을드려아 혹시 오 감사합니다 어떻게 어 기다려주세요라고 상품이 네네 두 아마로 혹시분한
+[NeMo I 2025-05-23 01:18:34 wer:318] 
+    
+[NeMo I 2025-05-23 01:18:34 wer:319] reference:네
+[NeMo I 2025-05-23 01:18:34 wer:320] predicted:
+[NeMo I 2025-05-23 01:18:34 nemo_model_checkpoint:183] New .nemo model saved to: /AN202_data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Finetune/src/03.train/nemo_experiments/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2/2025-05-23_01-01-20/checkpoints/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2.nemo
+[NeMo I 2025-05-23 01:19:05 nemo_model_checkpoint:183] New .nemo model saved to: /AN202_data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Finetune/src/03.train/nemo_experiments/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2/2025-05-23_01-01-20/checkpoints/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2.nemo
+[NeMo I 2025-05-23 01:19:39 wer:318] 
+    
+[NeMo I 2025-05-23 01:19:39 wer:319] reference:제가 옛날에 그 유니세프를 신청을 했었는데요
+[NeMo I 2025-05-23 01:19:39 wer:320] predicted:에이치와이 이십 않 한 하나 반품이 수 변경 예 한번
+[NeMo I 2025-05-23 01:19:40 wer:318] 
+    
+[NeMo I 2025-05-23 01:19:40 wer:319] reference:네 각각 두 개의 회원번호이시기 때문에 요청하시면은 네 그럼 카드나 자동이체로 변경 처리 진행해드릴까요
+[NeMo I 2025-05-23 01:19:40 wer:320] predicted:호호 요거구 월습니다 가 에 될까요리 아 지금 반품을드려아 혹시 오 감사합니다 어떻게 어 기다려주세요라고 상품이 네네 두 아마로 혹시분한
+[NeMo I 2025-05-23 01:19:40 wer:318] 
+    
+[NeMo I 2025-05-23 01:19:40 wer:319] reference:네
+[NeMo I 2025-05-23 01:19:40 wer:320] predicted:
+[NeMo I 2025-05-23 01:19:41 nemo_model_checkpoint:183] New .nemo model saved to: /AN202_data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Finetune/src/03.train/nemo_experiments/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2/2025-05-23_01-01-20/checkpoints/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2.nemo
+[NeMo I 2025-05-23 01:20:12 nemo_model_checkpoint:183] New .nemo model saved to: /AN202_data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Finetune/src/03.train/nemo_experiments/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2/2025-05-23_01-01-20/checkpoints/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2.nemo
+[NeMo I 2025-05-23 01:20:47 wer:318] 
+    
+[NeMo I 2025-05-23 01:20:47 wer:319] reference:칠성로
+[NeMo I 2025-05-23 01:20:47 wer:320] predicted:구 이
+[NeMo I 2025-05-23 01:20:48 wer:318] 
+    
+[NeMo I 2025-05-23 01:20:48 wer:319] reference:네 각각 두 개의 회원번호이시기 때문에 요청하시면은 네 그럼 카드나 자동이체로 변경 처리 진행해드릴까요
+[NeMo I 2025-05-23 01:20:48 wer:320] predicted:호호구 월습니다 가 에 될까요리 아 지금 반품드려아 혹시 오 감사합니다 어떻게 어라고 네네 두 아마로 혹시분한
+[NeMo I 2025-05-23 01:20:48 wer:318] 
+    
+[NeMo I 2025-05-23 01:20:48 wer:319] reference:네
+[NeMo I 2025-05-23 01:20:48 wer:320] predicted:
+[NeMo I 2025-05-23 01:20:48 nemo_model_checkpoint:183] New .nemo model saved to: /AN202_data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Finetune/src/03.train/nemo_experiments/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2/2025-05-23_01-01-20/checkpoints/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2.nemo
+[NeMo I 2025-05-23 01:21:19 nemo_model_checkpoint:183] New .nemo model saved to: /AN202_data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Finetune/src/03.train/nemo_experiments/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2/2025-05-23_01-01-20/checkpoints/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2.nemo
+[NeMo I 2025-05-23 01:21:54 wer:318] 
+    
+[NeMo I 2025-05-23 01:21:54 wer:319] reference:유세프구 후금요
+[NeMo I 2025-05-23 01:21:54 wer:320] predicted:
+[NeMo I 2025-05-23 01:21:55 wer:318] 
+    
+[NeMo I 2025-05-23 01:21:55 wer:319] reference:네 각각 두 개의 회원번호이시기 때문에 요청하시면은 네 그럼 카드나 자동이체로 변경 처리 진행해드릴까요
+[NeMo I 2025-05-23 01:21:55 wer:320] predicted:호호구습니다 가 에 될까요 아 지금 반품드려아 혹시 오 감사합니다 어떻게 어라고 네네 두로 혹시분
+[NeMo I 2025-05-23 01:21:55 wer:318] 
+    
+[NeMo I 2025-05-23 01:21:55 wer:319] reference:네
+[NeMo I 2025-05-23 01:21:55 wer:320] predicted:
+[NeMo I 2025-05-23 01:21:55 nemo_model_checkpoint:183] New .nemo model saved to: /AN202_data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Finetune/src/03.train/nemo_experiments/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2/2025-05-23_01-01-20/checkpoints/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2.nemo
+[NeMo I 2025-05-23 01:22:27 nemo_model_checkpoint:183] New .nemo model saved to: /AN202_data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Finetune/src/03.train/nemo_experiments/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2/2025-05-23_01-01-20/checkpoints/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2.nemo
+[NeMo I 2025-05-23 01:22:59 wer:318] 
+    
+[NeMo I 2025-05-23 01:22:59 wer:319] reference:네 확인 감사합니다 원전님 지금 두 건의 후원 내역으로 확인이 되셨는데요 우선 이전에 이만 원의 소중한 기금으로 세계 어린이 두끼 후원해주시고 계셨던 건 한 건과 최근에 길거리 캠핑 통해서 삼만 원으로 참여해주신 내용 확인되셨습니다
+[NeMo I 2025-05-23 01:22:59 wer:320] predicted:랑 네네근 호
+[NeMo I 2025-05-23 01:23:01 wer:318] 
+    
+[NeMo I 2025-05-23 01:23:01 wer:319] reference:네 각각 두 개의 회원번호이시기 때문에 요청하시면은 네 그럼 카드나 자동이체로 변경 처리 진행해드릴까요
+[NeMo I 2025-05-23 01:23:01 wer:320] predicted:호호구 가 에 될까요 아 지금드려아 혹시 오 감사합니다 어떻게 어로분
+[NeMo I 2025-05-23 01:23:01 wer:318] 
+    
+[NeMo I 2025-05-23 01:23:01 wer:319] reference:네
+[NeMo I 2025-05-23 01:23:01 wer:320] predicted:
+[NeMo I 2025-05-23 01:23:01 nemo_model_checkpoint:183] New .nemo model saved to: /AN202_data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Finetune/src/03.train/nemo_experiments/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2/2025-05-23_01-01-20/checkpoints/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2.nemo
+[NeMo I 2025-05-23 01:23:32 nemo_model_checkpoint:183] New .nemo model saved to: /AN202_data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Finetune/src/03.train/nemo_experiments/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2/2025-05-23_01-01-20/checkpoints/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2.nemo
+[NeMo I 2025-05-23 01:24:07 wer:318] 
+    
+[NeMo I 2025-05-23 01:24:07 wer:319] reference:아 지금은 김혜수님 개인명의로 후원 중이셔서
+[NeMo I 2025-05-23 01:24:07 wer:320] predicted:
+[NeMo I 2025-05-23 01:24:08 wer:318] 
+    
+[NeMo I 2025-05-23 01:24:08 wer:319] reference:네 각각 두 개의 회원번호이시기 때문에 요청하시면은 네 그럼 카드나 자동이체로 변경 처리 진행해드릴까요
+[NeMo I 2025-05-23 01:24:08 wer:320] predicted:호구 에 될까요 아 지금 혹시 오 감사합니다 어떻게 어로분
+[NeMo I 2025-05-23 01:24:08 wer:318] 
+    
+[NeMo I 2025-05-23 01:24:08 wer:319] reference:네
+[NeMo I 2025-05-23 01:24:08 wer:320] predicted:
+[NeMo I 2025-05-23 01:24:08 nemo_model_checkpoint:183] New .nemo model saved to: /AN202_data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Finetune/src/03.train/nemo_experiments/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2/2025-05-23_01-01-20/checkpoints/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2.nemo
+[NeMo I 2025-05-23 01:24:39 nemo_model_checkpoint:183] New .nemo model saved to: /AN202_data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Finetune/src/03.train/nemo_experiments/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2/2025-05-23_01-01-20/checkpoints/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2.nemo
+[NeMo I 2025-05-23 01:25:13 wer:318] 
+    
+[NeMo I 2025-05-23 01:25:13 wer:319] reference:예 왜냐면 제가 그 카페를 했는데
+[NeMo I 2025-05-23 01:25:13 wer:320] predicted:
+[NeMo I 2025-05-23 01:25:14 wer:318] 
+    
+[NeMo I 2025-05-23 01:25:14 wer:319] reference:네 각각 두 개의 회원번호이시기 때문에 요청하시면은 네 그럼 카드나 자동이체로 변경 처리 진행해드릴까요
+[NeMo I 2025-05-23 01:25:14 wer:320] predicted:구 에 될까요 지금 혹시 감사합니다 어떻게 어분
+[NeMo I 2025-05-23 01:25:14 wer:318] 
+    
+[NeMo I 2025-05-23 01:25:14 wer:319] reference:네
+[NeMo I 2025-05-23 01:25:14 wer:320] predicted:
+[NeMo I 2025-05-23 01:25:14 nemo_model_checkpoint:183] New .nemo model saved to: /AN202_data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Finetune/src/03.train/nemo_experiments/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2/2025-05-23_01-01-20/checkpoints/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2.nemo
+[NeMo I 2025-05-23 01:25:45 nemo_model_checkpoint:183] New .nemo model saved to: /AN202_data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Finetune/src/03.train/nemo_experiments/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2/2025-05-23_01-01-20/checkpoints/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2.nemo
+[NeMo I 2025-05-23 01:26:20 wer:318] 
+    
+[NeMo I 2025-05-23 01:26:20 wer:319] reference:거기 새를 새를 줘가지고 인제 다른 사람이 이렇게 운영을 하고 있어가지고 제가 지금 여기 사업자를 제가 지금 하고 있거든요
+[NeMo I 2025-05-23 01:26:20 wer:320] predicted:
+[NeMo I 2025-05-23 01:26:21 wer:318] 
+    
+[NeMo I 2025-05-23 01:26:21 wer:319] reference:네 각각 두 개의 회원번호이시기 때문에 요청하시면은 네 그럼 카드나 자동이체로 변경 처리 진행해드릴까요
+[NeMo I 2025-05-23 01:26:21 wer:320] predicted:될까요 지금 혹시 감사합니다 어
+[NeMo I 2025-05-23 01:26:21 wer:318] 
+    
+[NeMo I 2025-05-23 01:26:21 wer:319] reference:네
+[NeMo I 2025-05-23 01:26:21 wer:320] predicted:
+[NeMo I 2025-05-23 01:26:21 nemo_model_checkpoint:183] New .nemo model saved to: /AN202_data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Finetune/src/03.train/nemo_experiments/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2/2025-05-23_01-01-20/checkpoints/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2.nemo
+[NeMo I 2025-05-23 01:26:52 nemo_model_checkpoint:183] New .nemo model saved to: /AN202_data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Finetune/src/03.train/nemo_experiments/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2/2025-05-23_01-01-20/checkpoints/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2.nemo
+[NeMo I 2025-05-23 01:27:26 wer:318] 
+    
+[NeMo I 2025-05-23 01:27:26 wer:319] reference:영수증은 김혜수님 앞으로만 이제 발급이 되시는 부분이신데요 아니시면 사업자로 아예 변경을 해드려야 될까요
+[NeMo I 2025-05-23 01:27:26 wer:320] predicted:
+[NeMo I 2025-05-23 01:27:27 wer:318] 
+    
+[NeMo I 2025-05-23 01:27:27 wer:319] reference:네 각각 두 개의 회원번호이시기 때문에 요청하시면은 네 그럼 카드나 자동이체로 변경 처리 진행해드릴까요
+[NeMo I 2025-05-23 01:27:27 wer:320] predicted:될까요 지금 혹시어
+[NeMo I 2025-05-23 01:27:27 wer:318] 
+    
+[NeMo I 2025-05-23 01:27:27 wer:319] reference:네
+[NeMo I 2025-05-23 01:27:27 wer:320] predicted:
+[NeMo I 2025-05-23 01:27:28 nemo_model_checkpoint:183] New .nemo model saved to: /AN202_data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Finetune/src/03.train/nemo_experiments/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2/2025-05-23_01-01-20/checkpoints/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2.nemo
+[NeMo I 2025-05-23 01:27:58 nemo_model_checkpoint:183] New .nemo model saved to: /AN202_data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Finetune/src/03.train/nemo_experiments/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2/2025-05-23_01-01-20/checkpoints/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2.nemo
+[NeMo I 2025-05-23 01:28:32 wer:318] 
+    
+[NeMo I 2025-05-23 01:28:32 wer:319] reference:제 송장을 자꾸 이제 돈이 부족으로 해서 이렇게 빠지는데 그거 치 없이 그 유인거 치소 좀 신어주시겠어요
+[NeMo I 2025-05-23 01:28:32 wer:320] predicted:
+[NeMo I 2025-05-23 01:28:33 wer:318] 
+    
+[NeMo I 2025-05-23 01:28:33 wer:319] reference:네 각각 두 개의 회원번호이시기 때문에 요청하시면은 네 그럼 카드나 자동이체로 변경 처리 진행해드릴까요
+[NeMo I 2025-05-23 01:28:33 wer:320] predicted:
+[NeMo I 2025-05-23 01:28:33 wer:318] 
+    
+[NeMo I 2025-05-23 01:28:33 wer:319] reference:네
+[NeMo I 2025-05-23 01:28:33 wer:320] predicted:
+[NeMo I 2025-05-23 01:28:34 nemo_model_checkpoint:183] New .nemo model saved to: /AN202_data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Finetune/src/03.train/nemo_experiments/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2/2025-05-23_01-01-20/checkpoints/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2.nemo
+[NeMo I 2025-05-23 01:29:08 wer:318] 
+    
+[NeMo I 2025-05-23 01:29:08 wer:319] reference:이제 신청을 해두셨는데요 이제 말씀해주신 대로 이제 장고부족으로 계속 후원은 안되고 있으셨어요
+[NeMo I 2025-05-23 01:29:08 wer:320] predicted:
+[NeMo I 2025-05-23 01:29:09 wer:318] 
+    
+[NeMo I 2025-05-23 01:29:09 wer:319] reference:네 각각 두 개의 회원번호이시기 때문에 요청하시면은 네 그럼 카드나 자동이체로 변경 처리 진행해드릴까요
+[NeMo I 2025-05-23 01:29:09 wer:320] predicted:
+[NeMo I 2025-05-23 01:29:10 wer:318] 
+    
+[NeMo I 2025-05-23 01:29:10 wer:319] reference:네
+[NeMo I 2025-05-23 01:29:10 wer:320] predicted:
+[NeMo I 2025-05-23 01:29:10 nemo_model_checkpoint:183] New .nemo model saved to: /AN202_data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Finetune/src/03.train/nemo_experiments/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2/2025-05-23_01-01-20/checkpoints/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2.nemo
+[NeMo I 2025-05-23 01:29:44 wer:318] 
+    
+[NeMo I 2025-05-23 01:29:44 wer:319] reference:사백 일 호로 등록해드리면 될까요
+[NeMo I 2025-05-23 01:29:44 wer:320] predicted:
+[NeMo I 2025-05-23 01:29:45 wer:318] 
+    
+[NeMo I 2025-05-23 01:29:45 wer:319] reference:네 각각 두 개의 회원번호이시기 때문에 요청하시면은 네 그럼 카드나 자동이체로 변경 처리 진행해드릴까요
+[NeMo I 2025-05-23 01:29:45 wer:320] predicted:
+[NeMo I 2025-05-23 01:29:45 wer:318] 
+    
+[NeMo I 2025-05-23 01:29:45 wer:319] reference:네
+[NeMo I 2025-05-23 01:29:45 wer:320] predicted:
+[NeMo I 2025-05-23 01:29:46 nemo_model_checkpoint:183] New .nemo model saved to: /AN202_data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Finetune/src/03.train/nemo_experiments/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2/2025-05-23_01-01-20/checkpoints/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2.nemo
+[NeMo I 2025-05-23 01:30:20 wer:318] 
+    
+[NeMo I 2025-05-23 01:30:20 wer:319] reference:아 네네
+[NeMo I 2025-05-23 01:30:20 wer:320] predicted:
+[NeMo I 2025-05-23 01:30:21 wer:318] 
+    
+[NeMo I 2025-05-23 01:30:21 wer:319] reference:네 각각 두 개의 회원번호이시기 때문에 요청하시면은 네 그럼 카드나 자동이체로 변경 처리 진행해드릴까요
+[NeMo I 2025-05-23 01:30:21 wer:320] predicted:
+[NeMo I 2025-05-23 01:30:21 wer:318] 
+    
+[NeMo I 2025-05-23 01:30:21 wer:319] reference:네
+[NeMo I 2025-05-23 01:30:21 wer:320] predicted:
+[NeMo I 2025-05-23 01:30:22 nemo_model_checkpoint:183] New .nemo model saved to: /AN202_data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Finetune/src/03.train/nemo_experiments/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2/2025-05-23_01-01-20/checkpoints/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2.nemo
+[NeMo I 2025-05-23 01:30:57 wer:318] 
+    
+[NeMo I 2025-05-23 01:30:57 wer:319] reference:제 송장을 자꾸 이제 돈이 부족으로 해서 이렇게 빠지는데 그거 치 없이 그 유인거 치소 좀 신어주시겠어요
+[NeMo I 2025-05-23 01:30:57 wer:320] predicted:
+[NeMo I 2025-05-23 01:30:58 wer:318] 
+    
+[NeMo I 2025-05-23 01:30:58 wer:319] reference:네 각각 두 개의 회원번호이시기 때문에 요청하시면은 네 그럼 카드나 자동이체로 변경 처리 진행해드릴까요
+[NeMo I 2025-05-23 01:30:58 wer:320] predicted:
+[NeMo I 2025-05-23 01:30:58 wer:318] 
+    
+[NeMo I 2025-05-23 01:30:58 wer:319] reference:네
+[NeMo I 2025-05-23 01:30:58 wer:320] predicted:
+[NeMo I 2025-05-23 01:30:59 nemo_model_checkpoint:183] New .nemo model saved to: /AN202_data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Finetune/src/03.train/nemo_experiments/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2/2025-05-23_01-01-20/checkpoints/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2.nemo
+[NeMo I 2025-05-23 01:31:33 wer:318] 
+    
+[NeMo I 2025-05-23 01:31:33 wer:319] reference:네 감사합니다 좋거운 하루 보내세요
+[NeMo I 2025-05-23 01:31:33 wer:320] predicted:
+[NeMo I 2025-05-23 01:31:34 wer:318] 
+    
+[NeMo I 2025-05-23 01:31:34 wer:319] reference:네 각각 두 개의 회원번호이시기 때문에 요청하시면은 네 그럼 카드나 자동이체로 변경 처리 진행해드릴까요
+[NeMo I 2025-05-23 01:31:34 wer:320] predicted:
+[NeMo I 2025-05-23 01:31:34 wer:318] 
+    
+[NeMo I 2025-05-23 01:31:34 wer:319] reference:네
+[NeMo I 2025-05-23 01:31:34 wer:320] predicted:
+[NeMo I 2025-05-23 01:31:35 nemo_model_checkpoint:183] New .nemo model saved to: /AN202_data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Finetune/src/03.train/nemo_experiments/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2/2025-05-23_01-01-20/checkpoints/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2.nemo
+[NeMo I 2025-05-23 01:32:09 wer:318] 
+    
+[NeMo I 2025-05-23 01:32:09 wer:319] reference:네
+[NeMo I 2025-05-23 01:32:09 wer:320] predicted:
+[NeMo I 2025-05-23 01:32:11 wer:318] 
+    
+[NeMo I 2025-05-23 01:32:11 wer:319] reference:네 각각 두 개의 회원번호이시기 때문에 요청하시면은 네 그럼 카드나 자동이체로 변경 처리 진행해드릴까요
+[NeMo I 2025-05-23 01:32:11 wer:320] predicted:
+[NeMo I 2025-05-23 01:32:11 wer:318] 
+    
+[NeMo I 2025-05-23 01:32:11 wer:319] reference:네
+[NeMo I 2025-05-23 01:32:11 wer:320] predicted:
+[NeMo I 2025-05-23 01:32:11 nemo_model_checkpoint:183] New .nemo model saved to: /AN202_data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Finetune/src/03.train/nemo_experiments/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2/2025-05-23_01-01-20/checkpoints/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2.nemo
+[NeMo I 2025-05-23 01:32:45 wer:318] 
+    
+[NeMo I 2025-05-23 01:32:45 wer:319] reference:네네
+[NeMo I 2025-05-23 01:32:45 wer:320] predicted:
+[NeMo I 2025-05-23 01:32:46 wer:318] 
+    
+[NeMo I 2025-05-23 01:32:46 wer:319] reference:네 각각 두 개의 회원번호이시기 때문에 요청하시면은 네 그럼 카드나 자동이체로 변경 처리 진행해드릴까요
+[NeMo I 2025-05-23 01:32:46 wer:320] predicted:
+[NeMo I 2025-05-23 01:32:46 wer:318] 
+    
+[NeMo I 2025-05-23 01:32:46 wer:319] reference:네
+[NeMo I 2025-05-23 01:32:46 wer:320] predicted:
+[NeMo I 2025-05-23 01:32:47 nemo_model_checkpoint:183] New .nemo model saved to: /AN202_data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Finetune/src/03.train/nemo_experiments/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2/2025-05-23_01-01-20/checkpoints/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2.nemo
+[NeMo I 2025-05-23 01:33:22 wer:318] 
+    
+[NeMo I 2025-05-23 01:33:22 wer:319] reference:이제 신청을 해두셨는데요 이제 말씀해주신 대로 이제 장고부족으로 계속 후원은 안되고 있으셨어요
+[NeMo I 2025-05-23 01:33:22 wer:320] predicted:
+[NeMo I 2025-05-23 01:33:23 wer:318] 
+    
+[NeMo I 2025-05-23 01:33:23 wer:319] reference:네 각각 두 개의 회원번호이시기 때문에 요청하시면은 네 그럼 카드나 자동이체로 변경 처리 진행해드릴까요
+[NeMo I 2025-05-23 01:33:23 wer:320] predicted:
+[NeMo I 2025-05-23 01:33:23 wer:318] 
+    
+[NeMo I 2025-05-23 01:33:23 wer:319] reference:네
+[NeMo I 2025-05-23 01:33:23 wer:320] predicted:
+[NeMo I 2025-05-23 01:33:23 nemo_model_checkpoint:183] New .nemo model saved to: /AN202_data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Finetune/src/03.train/nemo_experiments/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2/2025-05-23_01-01-20/checkpoints/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2.nemo
+[NeMo I 2025-05-23 01:33:58 wer:318] 
+    
+[NeMo I 2025-05-23 01:33:58 wer:319] reference:영수증은 김혜수님 앞으로만 이제 발급이 되시는 부분이신데요 아니시면 사업자로 아예 변경을 해드려야 될까요
+[NeMo I 2025-05-23 01:33:58 wer:320] predicted:
+[NeMo I 2025-05-23 01:33:59 wer:318] 
+    
+[NeMo I 2025-05-23 01:33:59 wer:319] reference:네 각각 두 개의 회원번호이시기 때문에 요청하시면은 네 그럼 카드나 자동이체로 변경 처리 진행해드릴까요
+[NeMo I 2025-05-23 01:33:59 wer:320] predicted:
+[NeMo I 2025-05-23 01:33:59 wer:318] 
+    
+[NeMo I 2025-05-23 01:33:59 wer:319] reference:네
+[NeMo I 2025-05-23 01:33:59 wer:320] predicted:
+[NeMo I 2025-05-23 01:33:59 nemo_model_checkpoint:183] New .nemo model saved to: /AN202_data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Finetune/src/03.train/nemo_experiments/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2/2025-05-23_01-01-20/checkpoints/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2.nemo
+[NeMo I 2025-05-23 01:34:34 wer:318] 
+    
+[NeMo I 2025-05-23 01:34:34 wer:319] reference:아 예예
+[NeMo I 2025-05-23 01:34:34 wer:320] predicted:
+[NeMo I 2025-05-23 01:34:34 wer:318] 
+    
+[NeMo I 2025-05-23 01:34:34 wer:319] reference:네 각각 두 개의 회원번호이시기 때문에 요청하시면은 네 그럼 카드나 자동이체로 변경 처리 진행해드릴까요
+[NeMo I 2025-05-23 01:34:34 wer:320] predicted:
+[NeMo I 2025-05-23 01:34:35 wer:318] 
+    
+[NeMo I 2025-05-23 01:34:35 wer:319] reference:네
+[NeMo I 2025-05-23 01:34:35 wer:320] predicted:네
+[NeMo I 2025-05-23 01:34:35 nemo_model_checkpoint:183] New .nemo model saved to: /AN202_data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Finetune/src/03.train/nemo_experiments/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2/2025-05-23_01-01-20/checkpoints/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2.nemo
+[NeMo I 2025-05-23 01:35:06 nemo_model_checkpoint:183] New .nemo model saved to: /AN202_data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Finetune/src/03.train/nemo_experiments/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2/2025-05-23_01-01-20/checkpoints/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2.nemo
+[NeMo I 2025-05-23 01:35:39 wer:318] 
+    
+[NeMo I 2025-05-23 01:35:39 wer:319] reference:알겠습니다
+[NeMo I 2025-05-23 01:35:39 wer:320] predicted:네
+[NeMo I 2025-05-23 01:35:40 wer:318] 
+    
+[NeMo I 2025-05-23 01:35:40 wer:319] reference:네 각각 두 개의 회원번호이시기 때문에 요청하시면은 네 그럼 카드나 자동이체로 변경 처리 진행해드릴까요
+[NeMo I 2025-05-23 01:35:40 wer:320] predicted:
+[NeMo I 2025-05-23 01:35:41 wer:318] 
+    
+[NeMo I 2025-05-23 01:35:41 wer:319] reference:네
+[NeMo I 2025-05-23 01:35:41 wer:320] predicted:
+[NeMo I 2025-05-23 01:35:41 nemo_model_checkpoint:183] New .nemo model saved to: /AN202_data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Finetune/src/03.train/nemo_experiments/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2/2025-05-23_01-01-20/checkpoints/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2.nemo
+[NeMo I 2025-05-23 01:36:12 nemo_model_checkpoint:183] New .nemo model saved to: /AN202_data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Finetune/src/03.train/nemo_experiments/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2/2025-05-23_01-01-20/checkpoints/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2.nemo
+[NeMo I 2025-05-23 01:36:45 wer:318] 
+    
+[NeMo I 2025-05-23 01:36:45 wer:319] reference:칠성로
+[NeMo I 2025-05-23 01:36:45 wer:320] predicted:
+[NeMo I 2025-05-23 01:36:46 wer:318] 
+    
+[NeMo I 2025-05-23 01:36:46 wer:319] reference:네 각각 두 개의 회원번호이시기 때문에 요청하시면은 네 그럼 카드나 자동이체로 변경 처리 진행해드릴까요
+[NeMo I 2025-05-23 01:36:46 wer:320] predicted:
+[NeMo I 2025-05-23 01:36:46 wer:318] 
+    
+[NeMo I 2025-05-23 01:36:46 wer:319] reference:네
+[NeMo I 2025-05-23 01:36:46 wer:320] predicted:
+[NeMo I 2025-05-23 01:36:47 nemo_model_checkpoint:183] New .nemo model saved to: /AN202_data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Finetune/src/03.train/nemo_experiments/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2/2025-05-23_01-01-20/checkpoints/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2.nemo
+[NeMo I 2025-05-23 01:37:22 wer:318] 
+    
+[NeMo I 2025-05-23 01:37:22 wer:319] reference:어 저기 그 사자가
+[NeMo I 2025-05-23 01:37:22 wer:320] predicted:
+[NeMo I 2025-05-23 01:37:23 wer:318] 
+    
+[NeMo I 2025-05-23 01:37:23 wer:319] reference:네 각각 두 개의 회원번호이시기 때문에 요청하시면은 네 그럼 카드나 자동이체로 변경 처리 진행해드릴까요
+[NeMo I 2025-05-23 01:37:23 wer:320] predicted:
+[NeMo I 2025-05-23 01:37:23 wer:318] 
+    
+[NeMo I 2025-05-23 01:37:23 wer:319] reference:네
+[NeMo I 2025-05-23 01:37:23 wer:320] predicted:
+[NeMo I 2025-05-23 01:37:23 nemo_model_checkpoint:183] New .nemo model saved to: /AN202_data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Finetune/src/03.train/nemo_experiments/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2/2025-05-23_01-01-20/checkpoints/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2.nemo
+[NeMo I 2025-05-23 01:37:55 nemo_model_checkpoint:183] New .nemo model saved to: /AN202_data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Finetune/src/03.train/nemo_experiments/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2/2025-05-23_01-01-20/checkpoints/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2.nemo
+[NeMo I 2025-05-23 01:38:28 wer:318] 
+    
+[NeMo I 2025-05-23 01:38:28 wer:319] reference:네 네네 파표로 네네
+[NeMo I 2025-05-23 01:38:28 wer:320] predicted:
+[NeMo I 2025-05-23 01:38:29 wer:318] 
+    
+[NeMo I 2025-05-23 01:38:29 wer:319] reference:네 각각 두 개의 회원번호이시기 때문에 요청하시면은 네 그럼 카드나 자동이체로 변경 처리 진행해드릴까요
+[NeMo I 2025-05-23 01:38:29 wer:320] predicted:
+[NeMo I 2025-05-23 01:38:29 wer:318] 
+    
+[NeMo I 2025-05-23 01:38:29 wer:319] reference:네
+[NeMo I 2025-05-23 01:38:29 wer:320] predicted:네
+[NeMo I 2025-05-23 01:38:29 nemo_model_checkpoint:183] New .nemo model saved to: /AN202_data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Finetune/src/03.train/nemo_experiments/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2/2025-05-23_01-01-20/checkpoints/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2.nemo
+[NeMo I 2025-05-23 01:39:01 nemo_model_checkpoint:183] New .nemo model saved to: /AN202_data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Finetune/src/03.train/nemo_experiments/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2/2025-05-23_01-01-20/checkpoints/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2.nemo
+[NeMo I 2025-05-23 01:39:35 wer:318] 
+    
+[NeMo I 2025-05-23 01:39:35 wer:319] reference:칠성로
+[NeMo I 2025-05-23 01:39:35 wer:320] predicted:확인을
+[NeMo I 2025-05-23 01:39:36 wer:318] 
+    
+[NeMo I 2025-05-23 01:39:36 wer:319] reference:네 각각 두 개의 회원번호이시기 때문에 요청하시면은 네 그럼 카드나 자동이체로 변경 처리 진행해드릴까요
+[NeMo I 2025-05-23 01:39:36 wer:320] predicted:혹시
+[NeMo I 2025-05-23 01:39:36 wer:318] 
+    
+[NeMo I 2025-05-23 01:39:36 wer:319] reference:네
+[NeMo I 2025-05-23 01:39:36 wer:320] predicted:네
+[NeMo I 2025-05-23 01:39:36 nemo_model_checkpoint:183] New .nemo model saved to: /AN202_data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Finetune/src/03.train/nemo_experiments/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2/2025-05-23_01-01-20/checkpoints/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2.nemo
+[NeMo I 2025-05-23 01:40:11 wer:318] 
+    
+[NeMo I 2025-05-23 01:40:11 wer:319] reference:거기 새를 새를 줘가지고 인제 다른 사람이 이렇게 운영을 하고 있어가지고 제가 지금 여기 사업자를 제가 지금 하고 있거든요
+[NeMo I 2025-05-23 01:40:11 wer:320] predicted:
+[NeMo I 2025-05-23 01:40:12 wer:318] 
+    
+[NeMo I 2025-05-23 01:40:12 wer:319] reference:네 각각 두 개의 회원번호이시기 때문에 요청하시면은 네 그럼 카드나 자동이체로 변경 처리 진행해드릴까요
+[NeMo I 2025-05-23 01:40:12 wer:320] predicted:혹시어 될까요
+[NeMo I 2025-05-23 01:40:12 wer:318] 
+    
+[NeMo I 2025-05-23 01:40:12 wer:319] reference:네
+[NeMo I 2025-05-23 01:40:12 wer:320] predicted:네
+[NeMo I 2025-05-23 01:40:12 nemo_model_checkpoint:183] New .nemo model saved to: /AN202_data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Finetune/src/03.train/nemo_experiments/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2/2025-05-23_01-01-20/checkpoints/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2.nemo
+[NeMo I 2025-05-23 01:40:47 wer:318] 
+    
+[NeMo I 2025-05-23 01:40:47 wer:319] reference:네 그러시면 잠시만 기다려주십시오 네 작년 같은 경우에는 이미 회수연보가 마감이 되셨기 때문에 김혜수님 성함으로만 영수증 발급이 가능하세요
+[NeMo I 2025-05-23 01:40:47 wer:320] predicted:영
+[NeMo I 2025-05-23 01:40:48 wer:318] 
+    
+[NeMo I 2025-05-23 01:40:48 wer:319] reference:네 각각 두 개의 회원번호이시기 때문에 요청하시면은 네 그럼 카드나 자동이체로 변경 처리 진행해드릴까요
+[NeMo I 2025-05-23 01:40:48 wer:320] predicted:혹시 될까요
+[NeMo I 2025-05-23 01:40:48 wer:318] 
+    
+[NeMo I 2025-05-23 01:40:48 wer:319] reference:네
+[NeMo I 2025-05-23 01:40:48 wer:320] predicted:네
+[NeMo I 2025-05-23 01:40:48 nemo_model_checkpoint:183] New .nemo model saved to: /AN202_data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Finetune/src/03.train/nemo_experiments/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2/2025-05-23_01-01-20/checkpoints/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2.nemo
+[NeMo I 2025-05-23 01:41:19 nemo_model_checkpoint:183] New .nemo model saved to: /AN202_data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Finetune/src/03.train/nemo_experiments/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2/2025-05-23_01-01-20/checkpoints/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2.nemo
+[NeMo I 2025-05-23 01:41:53 wer:318] 
+    
+[NeMo I 2025-05-23 01:41:53 wer:319] reference:아 네네
+[NeMo I 2025-05-23 01:41:53 wer:320] predicted:아
+[NeMo I 2025-05-23 01:41:54 wer:318] 
+    
+[NeMo I 2025-05-23 01:41:54 wer:319] reference:네 각각 두 개의 회원번호이시기 때문에 요청하시면은 네 그럼 카드나 자동이체로 변경 처리 진행해드릴까요
+[NeMo I 2025-05-23 01:41:54 wer:320] predicted:네 혹시어로 될까요
+[NeMo I 2025-05-23 01:41:54 wer:318] 
+    
+[NeMo I 2025-05-23 01:41:54 wer:319] reference:네
+[NeMo I 2025-05-23 01:41:54 wer:320] predicted:
+[NeMo I 2025-05-23 01:41:55 nemo_model_checkpoint:183] New .nemo model saved to: /AN202_data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Finetune/src/03.train/nemo_experiments/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2/2025-05-23_01-01-20/checkpoints/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2.nemo
+[NeMo I 2025-05-23 01:42:26 nemo_model_checkpoint:183] New .nemo model saved to: /AN202_data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Finetune/src/03.train/nemo_experiments/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2/2025-05-23_01-01-20/checkpoints/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2.nemo
+[NeMo I 2025-05-23 01:42:59 wer:318] 
+    
+[NeMo I 2025-05-23 01:42:59 wer:319] reference:네네 네 확인 후 안내해드리겠습니다 전화 주신 번호로는 한 상의고원장님 확인되셨는데요 정보 확인 위해서 생년월일까지만 말씀 부탁드립니다
+[NeMo I 2025-05-23 01:42:59 wer:320] predicted:본인
+[NeMo I 2025-05-23 01:43:00 wer:318] 
+    
+[NeMo I 2025-05-23 01:43:00 wer:319] reference:네 각각 두 개의 회원번호이시기 때문에 요청하시면은 네 그럼 카드나 자동이체로 변경 처리 진행해드릴까요
+[NeMo I 2025-05-23 01:43:00 wer:320] predicted:지금 혹시어로 될까요
+[NeMo I 2025-05-23 01:43:00 wer:318] 
+    
+[NeMo I 2025-05-23 01:43:00 wer:319] reference:네
+[NeMo I 2025-05-23 01:43:00 wer:320] predicted:
+[NeMo I 2025-05-23 01:43:01 nemo_model_checkpoint:183] New .nemo model saved to: /AN202_data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Finetune/src/03.train/nemo_experiments/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2/2025-05-23_01-01-20/checkpoints/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2.nemo
+[NeMo I 2025-05-23 01:43:35 wer:318] 
+    
+[NeMo I 2025-05-23 01:43:35 wer:319] reference:예 그래서 제가 형상이 안 되는 안 안 되거든요
+[NeMo I 2025-05-23 01:43:35 wer:320] predicted:
+[NeMo I 2025-05-23 01:43:36 wer:318] 
+    
+[NeMo I 2025-05-23 01:43:36 wer:319] reference:네 각각 두 개의 회원번호이시기 때문에 요청하시면은 네 그럼 카드나 자동이체로 변경 처리 진행해드릴까요
+[NeMo I 2025-05-23 01:43:36 wer:320] predicted:네호 지금 혹시 어로 될까요
+[NeMo I 2025-05-23 01:43:36 wer:318] 
+    
+[NeMo I 2025-05-23 01:43:36 wer:319] reference:네
+[NeMo I 2025-05-23 01:43:36 wer:320] predicted:
+[NeMo I 2025-05-23 01:43:37 nemo_model_checkpoint:183] New .nemo model saved to: /AN202_data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Finetune/src/03.train/nemo_experiments/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2/2025-05-23_01-01-20/checkpoints/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2.nemo
+[NeMo I 2025-05-23 01:44:08 nemo_model_checkpoint:183] New .nemo model saved to: /AN202_data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Finetune/src/03.train/nemo_experiments/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2/2025-05-23_01-01-20/checkpoints/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2.nemo
+[NeMo I 2025-05-23 01:44:43 wer:318] 
+    
+[NeMo I 2025-05-23 01:44:43 wer:319] reference:네 확인 감사합니다 어 세계 어린이 지원으로 정기원 총 현재 오만 원의 기금으로
+[NeMo I 2025-05-23 01:44:43 wer:320] predicted:감사합니다
+[NeMo I 2025-05-23 01:44:44 wer:318] 
+    
+[NeMo I 2025-05-23 01:44:44 wer:319] reference:네 각각 두 개의 회원번호이시기 때문에 요청하시면은 네 그럼 카드나 자동이체로 변경 처리 진행해드릴까요
+[NeMo I 2025-05-23 01:44:44 wer:320] predicted:호에 지금 혹시 어로 될까요
+[NeMo I 2025-05-23 01:44:44 wer:318] 
+    
+[NeMo I 2025-05-23 01:44:44 wer:319] reference:네
+[NeMo I 2025-05-23 01:44:44 wer:320] predicted:
+[NeMo I 2025-05-23 01:44:44 nemo_model_checkpoint:183] New .nemo model saved to: /AN202_data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Finetune/src/03.train/nemo_experiments/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2/2025-05-23_01-01-20/checkpoints/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2.nemo
+[NeMo I 2025-05-23 01:45:17 nemo_model_checkpoint:183] New .nemo model saved to: /AN202_data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Finetune/src/03.train/nemo_experiments/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2/2025-05-23_01-01-20/checkpoints/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2.nemo
+[NeMo I 2025-05-23 01:45:55 wer:318] 
+    
+[NeMo I 2025-05-23 01:45:55 wer:319] reference:네 농협계좌 그대로 동일하게 등록을 해드리면 될까요
+[NeMo I 2025-05-23 01:45:55 wer:320] predicted:네 네로 될까요
+[NeMo I 2025-05-23 01:45:56 wer:318] 
+    
+[NeMo I 2025-05-23 01:45:56 wer:319] reference:네 각각 두 개의 회원번호이시기 때문에 요청하시면은 네 그럼 카드나 자동이체로 변경 처리 진행해드릴까요
+[NeMo I 2025-05-23 01:45:56 wer:320] predicted:네호에 지금 혹시 어로 될까요
+[NeMo I 2025-05-23 01:45:56 wer:318] 
+    
+[NeMo I 2025-05-23 01:45:56 wer:319] reference:네
+[NeMo I 2025-05-23 01:45:56 wer:320] predicted:네
+[NeMo I 2025-05-23 01:45:56 nemo_model_checkpoint:183] New .nemo model saved to: /AN202_data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Finetune/src/03.train/nemo_experiments/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2/2025-05-23_01-01-20/checkpoints/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2.nemo
+[NeMo I 2025-05-23 01:46:29 nemo_model_checkpoint:183] New .nemo model saved to: /AN202_data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Finetune/src/03.train/nemo_experiments/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2/2025-05-23_01-01-20/checkpoints/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2.nemo
+[NeMo I 2025-05-23 01:47:04 wer:318] 
+    
+[NeMo I 2025-05-23 01:47:04 wer:319] reference:예 그래서 제가 형상이 안 되는 안 안 되거든요
+[NeMo I 2025-05-23 01:47:04 wer:320] predicted:
+[NeMo I 2025-05-23 01:47:05 wer:318] 
+    
+[NeMo I 2025-05-23 01:47:05 wer:319] reference:네 각각 두 개의 회원번호이시기 때문에 요청하시면은 네 그럼 카드나 자동이체로 변경 처리 진행해드릴까요
+[NeMo I 2025-05-23 01:47:05 wer:320] predicted:네에 지금 혹시 어로 될까요
+[NeMo I 2025-05-23 01:47:05 wer:318] 
+    
+[NeMo I 2025-05-23 01:47:05 wer:319] reference:네
+[NeMo I 2025-05-23 01:47:05 wer:320] predicted:네 예
+[NeMo I 2025-05-23 01:47:05 nemo_model_checkpoint:183] New .nemo model saved to: /AN202_data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Finetune/src/03.train/nemo_experiments/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2/2025-05-23_01-01-20/checkpoints/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2.nemo
+[NeMo I 2025-05-23 01:47:36 nemo_model_checkpoint:183] New .nemo model saved to: /AN202_data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Finetune/src/03.train/nemo_experiments/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2/2025-05-23_01-01-20/checkpoints/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2.nemo
+[NeMo I 2025-05-23 01:48:10 wer:318] 
+    
+[NeMo I 2025-05-23 01:48:10 wer:319] reference:통영
+[NeMo I 2025-05-23 01:48:10 wer:320] predicted:
+[NeMo I 2025-05-23 01:48:12 wer:318] 
+    
+[NeMo I 2025-05-23 01:48:12 wer:319] reference:네 각각 두 개의 회원번호이시기 때문에 요청하시면은 네 그럼 카드나 자동이체로 변경 처리 진행해드릴까요
+[NeMo I 2025-05-23 01:48:12 wer:320] predicted:네에 혹시 어로 될까요
+[NeMo I 2025-05-23 01:48:12 wer:318] 
+    
+[NeMo I 2025-05-23 01:48:12 wer:319] reference:네
+[NeMo I 2025-05-23 01:48:12 wer:320] predicted:
+[NeMo I 2025-05-23 01:48:12 nemo_model_checkpoint:183] New .nemo model saved to: /AN202_data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Finetune/src/03.train/nemo_experiments/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2/2025-05-23_01-01-20/checkpoints/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2.nemo
+[NeMo I 2025-05-23 01:48:43 nemo_model_checkpoint:183] New .nemo model saved to: /AN202_data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Finetune/src/03.train/nemo_experiments/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2/2025-05-23_01-01-20/checkpoints/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2.nemo
+[NeMo I 2025-05-23 01:49:16 wer:318] 
+    
+[NeMo I 2025-05-23 01:49:16 wer:319] reference:네
+[NeMo I 2025-05-23 01:49:16 wer:320] predicted:예
+[NeMo I 2025-05-23 01:49:17 wer:318] 
+    
+[NeMo I 2025-05-23 01:49:17 wer:319] reference:네 각각 두 개의 회원번호이시기 때문에 요청하시면은 네 그럼 카드나 자동이체로 변경 처리 진행해드릴까요
+[NeMo I 2025-05-23 01:49:17 wer:320] predicted:네에 혹시 어로 될까요
+[NeMo I 2025-05-23 01:49:17 wer:318] 
+    
+[NeMo I 2025-05-23 01:49:17 wer:319] reference:네
+[NeMo I 2025-05-23 01:49:17 wer:320] predicted:예
+[NeMo I 2025-05-23 01:49:17 nemo_model_checkpoint:183] New .nemo model saved to: /AN202_data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Finetune/src/03.train/nemo_experiments/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2/2025-05-23_01-01-20/checkpoints/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2.nemo
+[NeMo I 2025-05-23 01:49:48 nemo_model_checkpoint:183] New .nemo model saved to: /AN202_data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Finetune/src/03.train/nemo_experiments/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2/2025-05-23_01-01-20/checkpoints/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2.nemo
+[NeMo I 2025-05-23 01:50:22 wer:318] 
+    
+[NeMo I 2025-05-23 01:50:22 wer:319] reference:네 확인 감사합니다 어 세계 어린이 지원으로 정기원 총 현재 오만 원의 기금으로
+[NeMo I 2025-05-23 01:50:22 wer:320] predicted:네 감사합니다 네 김원원 나
+[NeMo I 2025-05-23 01:50:24 wer:318] 
+    
+[NeMo I 2025-05-23 01:50:24 wer:319] reference:네 각각 두 개의 회원번호이시기 때문에 요청하시면은 네 그럼 카드나 자동이체로 변경 처리 진행해드릴까요
+[NeMo I 2025-05-23 01:50:24 wer:320] predicted:네에 지금 네 혹시 어로 될까요
+[NeMo I 2025-05-23 01:50:24 wer:318] 
+    
+[NeMo I 2025-05-23 01:50:24 wer:319] reference:네
+[NeMo I 2025-05-23 01:50:24 wer:320] predicted:네
+[NeMo I 2025-05-23 01:50:24 nemo_model_checkpoint:183] New .nemo model saved to: /AN202_data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Finetune/src/03.train/nemo_experiments/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2/2025-05-23_01-01-20/checkpoints/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2.nemo
+[NeMo I 2025-05-23 01:50:56 nemo_model_checkpoint:183] New .nemo model saved to: /AN202_data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Finetune/src/03.train/nemo_experiments/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2/2025-05-23_01-01-20/checkpoints/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2.nemo
+[NeMo I 2025-05-23 01:51:30 wer:318] 
+    
+[NeMo I 2025-05-23 01:51:30 wer:319] reference:아 네 본인 확인 위해 서 생년월일 말씀 부탁드립니다
+[NeMo I 2025-05-23 01:51:30 wer:320] predicted:아 네 네 확인 생 생 부탁드립니다
+[NeMo I 2025-05-23 01:51:31 wer:318] 
+    
+[NeMo I 2025-05-23 01:51:31 wer:319] reference:네 각각 두 개의 회원번호이시기 때문에 요청하시면은 네 그럼 카드나 자동이체로 변경 처리 진행해드릴까요
+[NeMo I 2025-05-23 01:51:31 wer:320] predicted:네 번호에 지금 네 혹시 어로 될까요
+[NeMo I 2025-05-23 01:51:31 wer:318] 
+    
+[NeMo I 2025-05-23 01:51:31 wer:319] reference:네
+[NeMo I 2025-05-23 01:51:31 wer:320] predicted:네
+[NeMo I 2025-05-23 01:51:31 nemo_model_checkpoint:183] New .nemo model saved to: /AN202_data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Finetune/src/03.train/nemo_experiments/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2/2025-05-23_01-01-20/checkpoints/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2.nemo
+[NeMo I 2025-05-23 01:52:02 nemo_model_checkpoint:183] New .nemo model saved to: /AN202_data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Finetune/src/03.train/nemo_experiments/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2/2025-05-23_01-01-20/checkpoints/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2.nemo
+[NeMo I 2025-05-23 01:52:36 wer:318] 
+    
+[NeMo I 2025-05-23 01:52:36 wer:319] reference:이 육
+[NeMo I 2025-05-23 01:52:36 wer:320] predicted:이 육
+[NeMo I 2025-05-23 01:52:38 wer:318] 
+    
+[NeMo I 2025-05-23 01:52:38 wer:319] reference:네 각각 두 개의 회원번호이시기 때문에 요청하시면은 네 그럼 카드나 자동이체로 변경 처리 진행해드릴까요
+[NeMo I 2025-05-23 01:52:38 wer:320] predicted:네 번호에 네 혹시 어로 될까요
+[NeMo I 2025-05-23 01:52:38 wer:318] 
+    
+[NeMo I 2025-05-23 01:52:38 wer:319] reference:네
+[NeMo I 2025-05-23 01:52:38 wer:320] predicted:네 네
+[NeMo I 2025-05-23 01:52:38 nemo_model_checkpoint:183] New .nemo model saved to: /AN202_data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Finetune/src/03.train/nemo_experiments/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2/2025-05-23_01-01-20/checkpoints/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2.nemo
+[NeMo I 2025-05-23 01:53:10 nemo_model_checkpoint:183] New .nemo model saved to: /AN202_data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Finetune/src/03.train/nemo_experiments/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2/2025-05-23_01-01-20/checkpoints/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2.nemo
+[NeMo I 2025-05-23 01:53:42 wer:318] 
+    
+[NeMo I 2025-05-23 01:53:42 wer:319] reference:네 그러시다면 길거리 캠페인 산여 건은 지금 유 월 십 오 일에 첫투원 예정이셨는데 네 첫투어은 유 월 십 일 자로 변경 처리되시고 매달 만 원으로 진행될 수 있도록 변경하겠습니다 다른 문의사항은 없으실까요
+[NeMo I 2025-05-23 01:53:42 wer:320] predicted:네 지금 십 이제 원 건 될까요
+[NeMo I 2025-05-23 01:53:43 wer:318] 
+    
+[NeMo I 2025-05-23 01:53:43 wer:319] reference:네 각각 두 개의 회원번호이시기 때문에 요청하시면은 네 그럼 카드나 자동이체로 변경 처리 진행해드릴까요
+[NeMo I 2025-05-23 01:53:43 wer:320] predicted:네 번호에리 네 혹시 어 두로 될까요
+[NeMo I 2025-05-23 01:53:44 wer:318] 
+    
+[NeMo I 2025-05-23 01:53:44 wer:319] reference:네
+[NeMo I 2025-05-23 01:53:44 wer:320] predicted:네
+[NeMo I 2025-05-23 01:53:44 nemo_model_checkpoint:183] New .nemo model saved to: /AN202_data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Finetune/src/03.train/nemo_experiments/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2/2025-05-23_01-01-20/checkpoints/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2.nemo
+[NeMo I 2025-05-23 01:54:15 nemo_model_checkpoint:183] New .nemo model saved to: /AN202_data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Finetune/src/03.train/nemo_experiments/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2/2025-05-23_01-01-20/checkpoints/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2.nemo
+[NeMo I 2025-05-23 01:54:49 wer:318] 
+    
+[NeMo I 2025-05-23 01:54:49 wer:319] reference:예 어 예예예 같이 이용해주세요
+[NeMo I 2025-05-23 01:54:49 wer:320] predicted:어시
+[NeMo I 2025-05-23 01:54:50 wer:318] 
+    
+[NeMo I 2025-05-23 01:54:50 wer:319] reference:네 각각 두 개의 회원번호이시기 때문에 요청하시면은 네 그럼 카드나 자동이체로 변경 처리 진행해드릴까요
+[NeMo I 2025-05-23 01:54:50 wer:320] predicted:네 번호에리 네 혹시 어 두로 될까요
+[NeMo I 2025-05-23 01:54:50 wer:318] 
+    
+[NeMo I 2025-05-23 01:54:50 wer:319] reference:네
+[NeMo I 2025-05-23 01:54:50 wer:320] predicted:네
+[NeMo I 2025-05-23 01:54:51 nemo_model_checkpoint:183] New .nemo model saved to: /AN202_data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Finetune/src/03.train/nemo_experiments/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2/2025-05-23_01-01-20/checkpoints/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2.nemo
+[NeMo I 2025-05-23 01:55:22 nemo_model_checkpoint:183] New .nemo model saved to: /AN202_data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Finetune/src/03.train/nemo_experiments/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2/2025-05-23_01-01-20/checkpoints/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2.nemo
+[NeMo I 2025-05-23 01:55:56 wer:318] 
+    
+[NeMo I 2025-05-23 01:55:56 wer:319] reference:네 감사합니다
+[NeMo I 2025-05-23 01:55:56 wer:320] predicted:네 감사합니다
+[NeMo I 2025-05-23 01:55:57 wer:318] 
+    
+[NeMo I 2025-05-23 01:55:57 wer:319] reference:네 각각 두 개의 회원번호이시기 때문에 요청하시면은 네 그럼 카드나 자동이체로 변경 처리 진행해드릴까요
+[NeMo I 2025-05-23 01:55:57 wer:320] predicted:네 번호에리 네 혹시 어로 될까요
+[NeMo I 2025-05-23 01:55:57 wer:318] 
+    
+[NeMo I 2025-05-23 01:55:57 wer:319] reference:네
+[NeMo I 2025-05-23 01:55:57 wer:320] predicted:네
+[NeMo I 2025-05-23 01:55:58 nemo_model_checkpoint:183] New .nemo model saved to: /AN202_data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Finetune/src/03.train/nemo_experiments/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2/2025-05-23_01-01-20/checkpoints/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2.nemo
+[NeMo I 2025-05-23 01:56:29 nemo_model_checkpoint:183] New .nemo model saved to: /AN202_data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Finetune/src/03.train/nemo_experiments/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2/2025-05-23_01-01-20/checkpoints/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2.nemo
+[NeMo I 2025-05-23 01:57:03 wer:318] 
+    
+[NeMo I 2025-05-23 01:57:03 wer:319] reference:제 송장을 자꾸 이제 돈이 부족으로 해서 이렇게 빠지는데 그거 치 없이 그 유인거 치소 좀 신어주시겠어요
+[NeMo I 2025-05-23 01:57:03 wer:320] predicted:예 그러시면은 그치주시
+[NeMo I 2025-05-23 01:57:04 wer:318] 
+    
+[NeMo I 2025-05-23 01:57:04 wer:319] reference:네 각각 두 개의 회원번호이시기 때문에 요청하시면은 네 그럼 카드나 자동이체로 변경 처리 진행해드릴까요
+[NeMo I 2025-05-23 01:57:04 wer:320] predicted:네 번호에 될까요 네 혹시 어로 될까요
+[NeMo I 2025-05-23 01:57:04 wer:318] 
+    
+[NeMo I 2025-05-23 01:57:04 wer:319] reference:네
+[NeMo I 2025-05-23 01:57:04 wer:320] predicted:네
+[NeMo I 2025-05-23 01:57:04 nemo_model_checkpoint:183] New .nemo model saved to: /AN202_data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Finetune/src/03.train/nemo_experiments/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2/2025-05-23_01-01-20/checkpoints/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2.nemo
+[NeMo I 2025-05-23 01:57:36 nemo_model_checkpoint:183] New .nemo model saved to: /AN202_data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Finetune/src/03.train/nemo_experiments/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2/2025-05-23_01-01-20/checkpoints/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2.nemo
+[NeMo I 2025-05-23 01:58:09 wer:318] 
+    
+[NeMo I 2025-05-23 01:58:09 wer:319] reference:지금은 제가 장금이 없어서
+[NeMo I 2025-05-23 01:58:09 wer:320] predicted:지금 제가이
+[NeMo I 2025-05-23 01:58:10 wer:318] 
+    
+[NeMo I 2025-05-23 01:58:10 wer:319] reference:네 각각 두 개의 회원번호이시기 때문에 요청하시면은 네 그럼 카드나 자동이체로 변경 처리 진행해드릴까요
+[NeMo I 2025-05-23 01:58:10 wer:320] predicted:네 번호에 지금 네 혹시 어로 될까요
+[NeMo I 2025-05-23 01:58:10 wer:318] 
+    
+[NeMo I 2025-05-23 01:58:10 wer:319] reference:네
+[NeMo I 2025-05-23 01:58:10 wer:320] predicted:네
+[NeMo I 2025-05-23 01:58:10 nemo_model_checkpoint:183] New .nemo model saved to: /AN202_data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Finetune/src/03.train/nemo_experiments/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2/2025-05-23_01-01-20/checkpoints/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2.nemo
+[NeMo I 2025-05-23 01:58:41 nemo_model_checkpoint:183] New .nemo model saved to: /AN202_data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Finetune/src/03.train/nemo_experiments/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2/2025-05-23_01-01-20/checkpoints/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2.nemo
+[NeMo I 2025-05-23 01:59:16 wer:318] 
+    
+[NeMo I 2025-05-23 01:59:16 wer:319] reference:알겠습니다
+[NeMo I 2025-05-23 01:59:16 wer:320] predicted:
+[NeMo I 2025-05-23 01:59:17 wer:318] 
+    
+[NeMo I 2025-05-23 01:59:17 wer:319] reference:네 각각 두 개의 회원번호이시기 때문에 요청하시면은 네 그럼 카드나 자동이체로 변경 처리 진행해드릴까요
+[NeMo I 2025-05-23 01:59:17 wer:320] predicted:네 번호에 네 혹시 어로 될까요
+[NeMo I 2025-05-23 01:59:17 wer:318] 
+    
+[NeMo I 2025-05-23 01:59:17 wer:319] reference:네
+[NeMo I 2025-05-23 01:59:17 wer:320] predicted:네
+[NeMo I 2025-05-23 01:59:17 nemo_model_checkpoint:183] New .nemo model saved to: /AN202_data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Finetune/src/03.train/nemo_experiments/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2/2025-05-23_01-01-20/checkpoints/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2.nemo
+[NeMo I 2025-05-23 01:59:49 nemo_model_checkpoint:183] New .nemo model saved to: /AN202_data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Finetune/src/03.train/nemo_experiments/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2/2025-05-23_01-01-20/checkpoints/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2.nemo
+[NeMo I 2025-05-23 02:00:22 wer:318] 
+    
+[NeMo I 2025-05-23 02:00:22 wer:319] reference:네네 네 지금 그런데 확인해보니 한 건은 신용카드로 후원 중이시고 다른 최근에 참용하셨던 내용은 자동이체로 후원 중이신 걸로 확인이 되셨어요
+[NeMo I 2025-05-23 02:00:22 wer:320] predicted:지금 한후원 다른근 후원
+[NeMo I 2025-05-23 02:00:23 wer:318] 
+    
+[NeMo I 2025-05-23 02:00:23 wer:319] reference:네 각각 두 개의 회원번호이시기 때문에 요청하시면은 네 그럼 카드나 자동이체로 변경 처리 진행해드릴까요
+[NeMo I 2025-05-23 02:00:23 wer:320] predicted:네 번호에 네 혹시 어해드리면 될까요
+[NeMo I 2025-05-23 02:00:23 wer:318] 
+    
+[NeMo I 2025-05-23 02:00:23 wer:319] reference:네
+[NeMo I 2025-05-23 02:00:23 wer:320] predicted:네
+[NeMo I 2025-05-23 02:00:23 nemo_model_checkpoint:183] New .nemo model saved to: /AN202_data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Finetune/src/03.train/nemo_experiments/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2/2025-05-23_01-01-20/checkpoints/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2.nemo
+[NeMo I 2025-05-23 02:00:54 nemo_model_checkpoint:183] New .nemo model saved to: /AN202_data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Finetune/src/03.train/nemo_experiments/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2/2025-05-23_01-01-20/checkpoints/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2.nemo
+[NeMo I 2025-05-23 02:01:28 wer:318] 
+    
+[NeMo I 2025-05-23 02:01:28 wer:319] reference:예
+[NeMo I 2025-05-23 02:01:28 wer:320] predicted:예예
+[NeMo I 2025-05-23 02:01:30 wer:318] 
+    
+[NeMo I 2025-05-23 02:01:30 wer:319] reference:네 각각 두 개의 회원번호이시기 때문에 요청하시면은 네 그럼 카드나 자동이체로 변경 처리 진행해드릴까요
+[NeMo I 2025-05-23 02:01:30 wer:320] predicted:네 월 번호에리 네 혹시 어해드리면 될까요
+[NeMo I 2025-05-23 02:01:30 wer:318] 
+    
+[NeMo I 2025-05-23 02:01:30 wer:319] reference:네
+[NeMo I 2025-05-23 02:01:30 wer:320] predicted:네
+[NeMo I 2025-05-23 02:01:31 nemo_model_checkpoint:183] New .nemo model saved to: /AN202_data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Finetune/src/03.train/nemo_experiments/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2/2025-05-23_01-01-20/checkpoints/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2.nemo
+[NeMo I 2025-05-23 02:02:02 nemo_model_checkpoint:183] New .nemo model saved to: /AN202_data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Finetune/src/03.train/nemo_experiments/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2/2025-05-23_01-01-20/checkpoints/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2.nemo
+[NeMo I 2025-05-23 02:02:35 wer:318] 
+    
+[NeMo I 2025-05-23 02:02:35 wer:319] reference:네 잘 알겠습니다
+[NeMo I 2025-05-23 02:02:35 wer:320] predicted:네 알겠습니다
+[NeMo I 2025-05-23 02:02:36 wer:318] 
+    
+[NeMo I 2025-05-23 02:02:36 wer:319] reference:네 각각 두 개의 회원번호이시기 때문에 요청하시면은 네 그럼 카드나 자동이체로 변경 처리 진행해드릴까요
+[NeMo I 2025-05-23 02:02:36 wer:320] predicted:네 번호에 때문에 네 혹시 어 처리로해드리면 될까요
+[NeMo I 2025-05-23 02:02:37 wer:318] 
+    
+[NeMo I 2025-05-23 02:02:37 wer:319] reference:네
+[NeMo I 2025-05-23 02:02:37 wer:320] predicted:네
+[NeMo I 2025-05-23 02:02:37 nemo_model_checkpoint:183] New .nemo model saved to: /AN202_data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Finetune/src/03.train/nemo_experiments/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2/2025-05-23_01-01-20/checkpoints/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2.nemo
+[NeMo I 2025-05-23 02:03:08 nemo_model_checkpoint:183] New .nemo model saved to: /AN202_data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Finetune/src/03.train/nemo_experiments/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2/2025-05-23_01-01-20/checkpoints/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2.nemo
+[NeMo I 2025-05-23 02:03:43 wer:318] 
+    
+[NeMo I 2025-05-23 02:03:43 wer:319] reference:네
+[NeMo I 2025-05-23 02:03:43 wer:320] predicted:네
+[NeMo I 2025-05-23 02:03:44 wer:318] 
+    
+[NeMo I 2025-05-23 02:03:44 wer:319] reference:네 각각 두 개의 회원번호이시기 때문에 요청하시면은 네 그럼 카드나 자동이체로 변경 처리 진행해드릴까요
+[NeMo I 2025-05-23 02:03:44 wer:320] predicted:네 번호에 때문에 네 혹시 어 처리해드리면 될까요
+[NeMo I 2025-05-23 02:03:44 wer:318] 
+    
+[NeMo I 2025-05-23 02:03:44 wer:319] reference:네
+[NeMo I 2025-05-23 02:03:44 wer:320] predicted:네
+[NeMo I 2025-05-23 02:03:44 nemo_model_checkpoint:183] New .nemo model saved to: /AN202_data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Finetune/src/03.train/nemo_experiments/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2/2025-05-23_01-01-20/checkpoints/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2.nemo
+[NeMo I 2025-05-23 02:04:15 nemo_model_checkpoint:183] New .nemo model saved to: /AN202_data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Finetune/src/03.train/nemo_experiments/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2/2025-05-23_01-01-20/checkpoints/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2.nemo
+[NeMo I 2025-05-23 02:04:48 wer:318] 
+    
+[NeMo I 2025-05-23 02:04:48 wer:319] reference:네 감사합니다 다음에 다시 주문 기이 되실 때 참명 부탁드리겠습니다 네 감사합니다
+[NeMo I 2025-05-23 02:04:48 wer:320] predicted:감사합니다 다음에 네 감사합니다
+[NeMo I 2025-05-23 02:04:49 wer:318] 
+    
+[NeMo I 2025-05-23 02:04:49 wer:319] reference:네 각각 두 개의 회원번호이시기 때문에 요청하시면은 네 그럼 카드나 자동이체로 변경 처리 진행해드릴까요
+[NeMo I 2025-05-23 02:04:49 wer:320] predicted:네 번호에 때문에 네 혹시 어 처리해드리면 될까요
+[NeMo I 2025-05-23 02:04:49 wer:318] 
+    
+[NeMo I 2025-05-23 02:04:49 wer:319] reference:네
+[NeMo I 2025-05-23 02:04:49 wer:320] predicted:네
+[NeMo I 2025-05-23 02:04:49 nemo_model_checkpoint:183] New .nemo model saved to: /AN202_data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Finetune/src/03.train/nemo_experiments/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2/2025-05-23_01-01-20/checkpoints/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2.nemo
+[NeMo I 2025-05-23 02:05:20 nemo_model_checkpoint:183] New .nemo model saved to: /AN202_data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Finetune/src/03.train/nemo_experiments/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2/2025-05-23_01-01-20/checkpoints/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2.nemo
+[NeMo I 2025-05-23 02:05:55 wer:318] 
+    
+[NeMo I 2025-05-23 02:05:55 wer:319] reference:포항시 북구
+[NeMo I 2025-05-23 02:05:55 wer:320] predicted:포시구
+[NeMo I 2025-05-23 02:05:56 wer:318] 
+    
+[NeMo I 2025-05-23 02:05:56 wer:319] reference:네 각각 두 개의 회원번호이시기 때문에 요청하시면은 네 그럼 카드나 자동이체로 변경 처리 진행해드릴까요
+[NeMo I 2025-05-23 02:05:56 wer:320] predicted:네 번호에 때문에 네 어 변경 처리 진행해드리면 될까요
+[NeMo I 2025-05-23 02:05:56 wer:318] 
+    
+[NeMo I 2025-05-23 02:05:56 wer:319] reference:네
+[NeMo I 2025-05-23 02:05:56 wer:320] predicted:네
+[NeMo I 2025-05-23 02:05:57 nemo_model_checkpoint:183] New .nemo model saved to: /AN202_data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Finetune/src/03.train/nemo_experiments/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2/2025-05-23_01-01-20/checkpoints/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2.nemo
+[NeMo I 2025-05-23 02:06:27 nemo_model_checkpoint:183] New .nemo model saved to: /AN202_data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Finetune/src/03.train/nemo_experiments/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2/2025-05-23_01-01-20/checkpoints/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2.nemo
+[NeMo I 2025-05-23 02:07:01 wer:318] 
+    
+[NeMo I 2025-05-23 02:07:01 wer:319] reference:고고를 혹시 금액을 만 원만 할 수 있어요
+[NeMo I 2025-05-23 02:07:01 wer:320] predicted:고고 혹시 금액이 만 만 원만 할 수 있어요
+[NeMo I 2025-05-23 02:07:02 wer:318] 
+    
+[NeMo I 2025-05-23 02:07:02 wer:319] reference:네 각각 두 개의 회원번호이시기 때문에 요청하시면은 네 그럼 카드나 자동이체로 변경 처리 진행해드릴까요
+[NeMo I 2025-05-23 02:07:02 wer:320] predicted:네 번호기 때문에 네 혹시 어 변경 처리 진행해드리면 될까요
+[NeMo I 2025-05-23 02:07:03 wer:318] 
+    
+[NeMo I 2025-05-23 02:07:03 wer:319] reference:네
+[NeMo I 2025-05-23 02:07:03 wer:320] predicted:네
+[NeMo I 2025-05-23 02:07:03 nemo_model_checkpoint:183] New .nemo model saved to: /AN202_data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Finetune/src/03.train/nemo_experiments/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2/2025-05-23_01-01-20/checkpoints/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2.nemo
+[NeMo I 2025-05-23 02:07:34 nemo_model_checkpoint:183] New .nemo model saved to: /AN202_data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Finetune/src/03.train/nemo_experiments/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2/2025-05-23_01-01-20/checkpoints/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2.nemo
+[NeMo I 2025-05-23 02:08:08 wer:318] 
+    
+[NeMo I 2025-05-23 02:08:08 wer:319] reference:예
+[NeMo I 2025-05-23 02:08:08 wer:320] predicted:예예
+[NeMo I 2025-05-23 02:08:10 wer:318] 
+    
+[NeMo I 2025-05-23 02:08:10 wer:319] reference:네 각각 두 개의 회원번호이시기 때문에 요청하시면은 네 그럼 카드나 자동이체로 변경 처리 진행해드릴까요
+[NeMo I 2025-05-23 02:08:10 wer:320] predicted:네 번호기 때문에 네 어 변경 처리 진행해드리면 될까요
+[NeMo I 2025-05-23 02:08:10 wer:318] 
+    
+[NeMo I 2025-05-23 02:08:10 wer:319] reference:네
+[NeMo I 2025-05-23 02:08:10 wer:320] predicted:네
+[NeMo I 2025-05-23 02:08:10 nemo_model_checkpoint:183] New .nemo model saved to: /AN202_data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Finetune/src/03.train/nemo_experiments/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2/2025-05-23_01-01-20/checkpoints/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2.nemo

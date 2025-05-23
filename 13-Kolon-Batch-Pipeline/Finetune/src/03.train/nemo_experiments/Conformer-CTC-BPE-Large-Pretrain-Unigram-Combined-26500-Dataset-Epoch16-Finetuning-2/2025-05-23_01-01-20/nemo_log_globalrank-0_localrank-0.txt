@@ -1,0 +1,1179 @@
+[NeMo W 2025-05-23 01:01:16 nemo_logging:349] /home/aithe209/anaconda3/envs/kynd_nemo_200/lib/python3.10/site-packages/megatron/core/tensor_parallel/layers.py:254: FutureWarning: `torch.cuda.amp.custom_fwd(args...)` is deprecated. Please use `torch.amp.custom_fwd(args..., device_type='cuda')` instead.
+      def forward(
+    
+[NeMo W 2025-05-23 01:01:16 nemo_logging:349] /home/aithe209/anaconda3/envs/kynd_nemo_200/lib/python3.10/site-packages/megatron/core/tensor_parallel/layers.py:265: FutureWarning: `torch.cuda.amp.custom_bwd(args...)` is deprecated. Please use `torch.amp.custom_bwd(args..., device_type='cuda')` instead.
+      def backward(ctx, grad_output):
+    
+[NeMo W 2025-05-23 01:01:16 nemo_logging:349] /home/aithe209/anaconda3/envs/kynd_nemo_200/lib/python3.10/site-packages/megatron/core/tensor_parallel/layers.py:325: FutureWarning: `torch.cuda.amp.custom_fwd(args...)` is deprecated. Please use `torch.amp.custom_fwd(args..., device_type='cuda')` instead.
+      def forward(
+    
+[NeMo W 2025-05-23 01:01:16 nemo_logging:349] /home/aithe209/anaconda3/envs/kynd_nemo_200/lib/python3.10/site-packages/megatron/core/tensor_parallel/layers.py:360: FutureWarning: `torch.cuda.amp.custom_bwd(args...)` is deprecated. Please use `torch.amp.custom_bwd(args..., device_type='cuda')` instead.
+      def backward(ctx, grad_output):
+    
+[NeMo W 2025-05-23 01:01:20 nemo_logging:349] /home/aithe209/anaconda3/envs/kynd_nemo_200/lib/python3.10/site-packages/hydra/_internal/hydra.py:119: UserWarning: Future Hydra versions will no longer change working directory at job runtime by default.
+    See https://hydra.cc/docs/1.2/upgrades/1.1_to_1.2/changes_to_job_working_dir/ for more information.
+      ret = run_job(
+    
+[NeMo I 2025-05-23 01:01:20 speech_to_text_bpe:87] Hydra config: name: Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2
+    init_from_nemo_model:
+      model:
+        path: /AN202_data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Finetune/src/03.train/base/2024-09-05_14-47-08-epoch16.nemo
+    model:
+      sample_rate: 16000
+      log_prediction: true
+      ctc_reduction: mean_batch
+      skip_nan_grad: false
+      train_ds:
+        manifest_filepath: /AN202_data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Finetune/Manifest/filtering_SKShieldus_manifest_train.json
+        sample_rate: ${model.sample_rate}
+        batch_size: 6
+        shuffle: true
+        num_workers: 16
+        pin_memory: true
+        use_start_end_token: false
+        trim_silence: false
+        max_duration: 30
+        min_duration: 0.5
+        is_tarred: false
+        tarred_audio_filepaths: null
+        shuffle_n: 2048
+        bucketing_strategy: synced_randomized
+        bucketing_batch_size: null
+      validation_ds:
+        manifest_filepath: /AN202_data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Finetune/Manifest/filtering_SKShieldus_manifest_validation.json
+        sample_rate: ${model.sample_rate}
+        batch_size: 6
+        shuffle: false
+        num_workers: 8
+        pin_memory: true
+        use_start_end_token: false
+      test_ds:
+        manifest_filepath: null
+        sample_rate: ${model.sample_rate}
+        batch_size: 6
+        shuffle: false
+        num_workers: 8
+        pin_memory: true
+        use_start_end_token: false
+      tokenizer:
+        dir: /AN202_data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Finetune/src/03.train/create_tokens/tok_output_unigram/tokenizer_spe_unigram_v2354
+        type: bpe
+      preprocessor:
+        _target_: nemo.collections.asr.modules.AudioToMelSpectrogramPreprocessor
+        sample_rate: ${model.sample_rate}
+        normalize: per_feature
+        window_size: 0.025
+        window_stride: 0.01
+        window: hann
+        features: 80
+        n_fft: 512
+        log: true
+        frame_splicing: 1
+        dither: 1.0e-05
+        pad_to: 0
+        pad_value: 0.0
+      spec_augment:
+        _target_: nemo.collections.asr.modules.SpectrogramAugmentation
+        freq_masks: 2
+        time_masks: 10
+        freq_width: 27
+        time_width: 0.05
+      encoder:
+        _target_: nemo.collections.asr.modules.ConformerEncoder
+        feat_in: ${model.preprocessor.features}
+        feat_out: -1
+        n_layers: 18
+        d_model: 512
+        subsampling: striding
+        subsampling_factor: 4
+        subsampling_conv_channels: -1
+        causal_downsampling: false
+        ff_expansion_factor: 4
+        self_attention_model: rel_pos
+        n_heads: 8
+        att_context_size:
+        - -1
+        - -1
+        att_context_style: regular
+        xscaling: true
+        untie_biases: true
+        pos_emb_max_len: 5000
+        conv_kernel_size: 31
+        conv_norm_type: batch_norm
+        conv_context_size: null
+        dropout: 0.1
+        dropout_pre_encoder: 0.1
+        dropout_emb: 0.0
+        dropout_att: 0.1
+      decoder:
+        _target_: nemo.collections.asr.modules.ConvASRDecoder
+        feat_in: null
+        num_classes: -1
+        vocabulary: []
+      optim:
+        name: adamw
+        lr: 0.5
+        betas:
+        - 0.9
+        - 0.98
+        weight_decay: 0.001
+        sched:
+          name: NoamAnnealing
+          d_model: ${model.encoder.d_model}
+          warmup_steps: 5000
+          warmup_ratio: null
+          min_lr: 1.0e-06
+    trainer:
+      devices:
+      - 0
+      - 1
+      num_nodes: 1
+      max_epochs: 1000
+      max_steps: -1
+      val_check_interval: 1.0
+      accelerator: auto
+      strategy: ddp
+      accumulate_grad_batches: 1
+      gradient_clip_val: 0.0
+      precision: 32
+      log_every_n_steps: 10
+      enable_progress_bar: true
+      num_sanity_val_steps: 0
+      check_val_every_n_epoch: 1
+      sync_batchnorm: true
+      enable_checkpointing: false
+      logger: false
+      benchmark: false
+    exp_manager:
+      exp_dir: null
+      name: ${name}
+      create_tensorboard_logger: true
+      create_checkpoint_callback: true
+      checkpoint_callback_params:
+        monitor: val_wer
+        mode: min
+        save_top_k: 5
+        always_save_nemo: true
+      resume_if_exists: false
+      resume_ignore_no_checkpoint: false
+      create_wandb_logger: false
+      wandb_logger_kwargs:
+        name: null
+        project: null
+    
+[NeMo I 2025-05-23 01:01:20 exp_manager:396] Experiments will be logged at /AN202_data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Finetune/src/03.train/nemo_experiments/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2/2025-05-23_01-01-20
+[NeMo I 2025-05-23 01:01:20 exp_manager:842] TensorboardLogger has been set up
+[NeMo I 2025-05-23 01:01:21 mixins:172] Tokenizer SentencePieceTokenizer initialized with 2354 tokens
+[NeMo I 2025-05-23 01:01:21 ctc_bpe_models:66] 
+    Replacing placeholder number of classes (-1) with actual number of classes - 2354
+[NeMo I 2025-05-23 01:01:21 collections:196] Dataset loaded with 130 files totalling 0.16 hours
+[NeMo I 2025-05-23 01:01:21 collections:197] 0 files were filtered totalling 0.00 hours
+[NeMo I 2025-05-23 01:01:22 collections:196] Dataset loaded with 16 files totalling 0.02 hours
+[NeMo I 2025-05-23 01:01:22 collections:197] 0 files were filtered totalling 0.00 hours
+[NeMo W 2025-05-23 01:01:22 audio_to_text_dataset:830] Could not load dataset as `manifest_filepath` was None. Provided config : {'manifest_filepath': None, 'sample_rate': 16000, 'batch_size': 6, 'shuffle': False, 'num_workers': 8, 'pin_memory': True, 'use_start_end_token': False}
+[NeMo I 2025-05-23 01:01:22 features:289] PADDING: 0
+[NeMo I 2025-05-23 01:01:29 mixins:172] Tokenizer SentencePieceTokenizer initialized with 2354 tokens
+[NeMo W 2025-05-23 01:01:30 modelPT:165] If you intend to do training or fine-tuning, please call the ModelPT.setup_training_data() method and provide a valid configuration file to setup the train data loader.
+    Train config : 
+    manifest_filepath: /data3/stt_240903/CombinedDataManifest/training_manifest_combined/a_combined_all_manifest_training_modified.json
+    sample_rate: 16000
+    batch_size: 6
+    shuffle: true
+    num_workers: 32
+    pin_memory: true
+    use_start_end_token: false
+    trim_silence: false
+    max_duration: 30
+    min_duration: 0.5
+    is_tarred: false
+    tarred_audio_filepaths: null
+    shuffle_n: 2048
+    bucketing_strategy: synced_randomized
+    bucketing_batch_size: null
+    
+[NeMo W 2025-05-23 01:01:30 modelPT:172] If you intend to do validation, please call the ModelPT.setup_validation_data() or ModelPT.setup_multiple_validation_data() method and provide a valid configuration file to setup the validation data loader(s). 
+    Validation config : 
+    manifest_filepath: /data3/stt_240903/CombinedDataManifest/validation_manifest_combined/a_combined_manifest_validation_half1_modified.json
+    sample_rate: 16000
+    batch_size: 6
+    shuffle: false
+    num_workers: 16
+    pin_memory: true
+    use_start_end_token: false
+    
+[NeMo W 2025-05-23 01:01:30 modelPT:178] Please call the ModelPT.setup_test_data() or ModelPT.setup_multiple_test_data() method and provide a valid configuration file to setup the test data loader(s).
+    Test config : 
+    manifest_filepath: null
+    sample_rate: 16000
+    batch_size: 18
+    shuffle: false
+    num_workers: 8
+    pin_memory: true
+    use_start_end_token: false
+    
+[NeMo I 2025-05-23 01:01:30 features:289] PADDING: 0
+[NeMo W 2025-05-23 01:01:31 nemo_logging:349] /home/aithe209/anaconda3/envs/kynd_nemo_200/lib/python3.10/site-packages/nemo/core/connectors/save_restore_connector.py:571: FutureWarning: You are using `torch.load` with `weights_only=False` (the current default value), which uses the default pickle module implicitly. It is possible to construct malicious pickle data which will execute arbitrary code during unpickling (See https://github.com/pytorch/pytorch/blob/main/SECURITY.md#untrusted-models for more details). In a future release, the default value for `weights_only` will be flipped to `True`. This limits the functions that could be executed during unpickling. Arbitrary objects will no longer be allowed to be loaded via this mode unless they are explicitly allowlisted by the user via `torch.serialization.add_safe_globals`. We recommend you start setting `weights_only=True` for any use case where you don't have full control of the loaded file. Please open an issue on GitHub for any issues related to this experimental feature.
+      return torch.load(model_weights, map_location='cpu')
+    
+[NeMo I 2025-05-23 01:01:32 save_restore_connector:249] Model EncDecCTCModelBPE was successfully restored from /AN202_data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Finetune/src/03.train/base/2024-09-05_14-47-08-epoch16.nemo.
+[NeMo I 2025-05-23 01:01:32 modelPT:1145] Model checkpoint partially restored from nemo file with path `/AN202_data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Finetune/src/03.train/base/2024-09-05_14-47-08-epoch16.nemo`
+[NeMo I 2025-05-23 01:01:50 modelPT:723] Optimizer config = AdamW (
+    Parameter Group 0
+        amsgrad: False
+        betas: [0.9, 0.98]
+        capturable: False
+        differentiable: False
+        eps: 1e-08
+        foreach: None
+        fused: None
+        lr: 0.5
+        maximize: False
+        weight_decay: 0.001
+    )
+[NeMo I 2025-05-23 01:01:50 lr_scheduler:915] Scheduler "<nemo.core.optim.lr_scheduler.NoamAnnealing object at 0x7f736d11b2b0>" 
+    will be used during training (effective maximum steps = 11000) - 
+    Parameters : 
+    (d_model: 512
+    warmup_steps: 5000
+    warmup_ratio: null
+    min_lr: 1.0e-06
+    max_steps: 11000
+    )
+[NeMo W 2025-05-23 01:01:53 nemo_logging:349] /home/aithe209/anaconda3/envs/kynd_nemo_200/lib/python3.10/site-packages/nemo/collections/asr/parts/preprocessing/features.py:417: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+      with torch.cuda.amp.autocast(enabled=False):
+    
+[NeMo I 2025-05-23 01:01:56 wer:318] 
+    
+[NeMo I 2025-05-23 01:01:56 wer:319] reference:공 오 사
+[NeMo I 2025-05-23 01:01:56 wer:320] predicted:네 그 안내 네 일
+[NeMo I 2025-05-23 01:01:57 wer:318] 
+    
+[NeMo I 2025-05-23 01:01:57 wer:319] reference:아 제가 지금 일을 안 해서요
+[NeMo I 2025-05-23 01:01:57 wer:320] predicted:네만 네 예예 고객님 네요 음 저희가이 네 그리고 네로는 지금
+[NeMo I 2025-05-23 01:01:58 wer:318] 
+    
+[NeMo I 2025-05-23 01:01:58 wer:319] reference:네 확인 감사합니다 지금 현재 삼만 원 세계 어린이들 도움 주 수 있는 걸로 신청해주신 거 맞으시구요
+[NeMo I 2025-05-23 01:01:58 wer:320] predicted:네에서 네 아예 좀 네실 배송하시는 한 일 네요 음 네 나되 네드린도 네 월 네일 요거 네 뭐 해지 서 네 어 안녕하십니까 네 면도날 네기 네 되세요 예 네수 이 네 하나 반품로를 하나 네 그럼 네 고맙습니다이요 안 그 지금
+[NeMo W 2025-05-23 01:01:58 nemo_logging:349] /home/aithe209/anaconda3/envs/kynd_nemo_200/lib/python3.10/site-packages/pytorch_lightning/trainer/connectors/logger_connector/result.py:433: PossibleUserWarning: It is recommended to use `self.log('global_step', ..., sync_dist=True)` when logging on epoch level in distributed setting to accumulate the metric across devices.
+      warning_cache.warn(
+    
+[NeMo W 2025-05-23 01:01:58 nemo_logging:349] /home/aithe209/anaconda3/envs/kynd_nemo_200/lib/python3.10/site-packages/pytorch_lightning/trainer/connectors/logger_connector/result.py:433: PossibleUserWarning: It is recommended to use `self.log('val_loss', ..., sync_dist=True)` when logging on epoch level in distributed setting to accumulate the metric across devices.
+      warning_cache.warn(
+    
+[NeMo W 2025-05-23 01:01:58 nemo_logging:349] /home/aithe209/anaconda3/envs/kynd_nemo_200/lib/python3.10/site-packages/pytorch_lightning/trainer/connectors/logger_connector/result.py:433: PossibleUserWarning: It is recommended to use `self.log('val_wer', ..., sync_dist=True)` when logging on epoch level in distributed setting to accumulate the metric across devices.
+      warning_cache.warn(
+    
+[NeMo I 2025-05-23 01:02:06 nemo_model_checkpoint:183] New .nemo model saved to: /AN202_data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Finetune/src/03.train/nemo_experiments/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2/2025-05-23_01-01-20/checkpoints/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2.nemo
+[NeMo I 2025-05-23 01:02:36 nemo_model_checkpoint:183] New .nemo model saved to: /AN202_data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Finetune/src/03.train/nemo_experiments/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2/2025-05-23_01-01-20/checkpoints/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2.nemo
+[NeMo I 2025-05-23 01:03:02 wer:318] 
+    
+[NeMo I 2025-05-23 01:03:02 wer:319] reference:그리고 숫자 구 공
+[NeMo I 2025-05-23 01:03:02 wer:320] predicted:네  이은아 그
+[NeMo I 2025-05-23 01:03:03 wer:318] 
+    
+[NeMo I 2025-05-23 01:03:03 wer:319] reference:아 제가 지금 일을 안 해서요
+[NeMo I 2025-05-23 01:03:03 wer:320] predicted:네만 네 예예 고객님 네요 음 저희가이 네 그리고 네로는 지금
+[NeMo I 2025-05-23 01:03:03 wer:318] 
+    
+[NeMo I 2025-05-23 01:03:03 wer:319] reference:네 확인 감사합니다 지금 현재 삼만 원 세계 어린이들 도움 주 수 있는 걸로 신청해주신 거 맞으시구요
+[NeMo I 2025-05-23 01:03:03 wer:320] predicted:네에서 네 아예 좀 네실 배송하시는 한 일 네요 음 네 나되 네드린도 네 월 네일 요거 네 뭐 해지 서 네 어 안녕하십니까 네 면도날기 네 되세요 예 네수 이 네 하나 반품로를 하나 네 그럼 네 고맙습니다이요 안 그 지금
+[NeMo I 2025-05-23 01:03:11 nemo_model_checkpoint:183] New .nemo model saved to: /AN202_data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Finetune/src/03.train/nemo_experiments/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2/2025-05-23_01-01-20/checkpoints/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2.nemo
+[NeMo I 2025-05-23 01:03:42 nemo_model_checkpoint:183] New .nemo model saved to: /AN202_data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Finetune/src/03.train/nemo_experiments/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2/2025-05-23_01-01-20/checkpoints/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2.nemo
+[NeMo I 2025-05-23 01:04:08 wer:318] 
+    
+[NeMo I 2025-05-23 01:04:08 wer:319] reference:예 그래서 제가 형상이 안 되는 안 안 되거든요
+[NeMo I 2025-05-23 01:04:08 wer:320] predicted:네  네 즐거운 네 예예 고객님 네 네 전 있는  네 그리고 네 너무 예 네 그리고 네 너무 예 지금
+[NeMo I 2025-05-23 01:04:09 wer:318] 
+    
+[NeMo I 2025-05-23 01:04:09 wer:319] reference:아 제가 지금 일을 안 해서요
+[NeMo I 2025-05-23 01:04:09 wer:320] predicted:네만 네 예예 고객님 네요 음 저희가이 네 그리고 네로는 지금
+[NeMo I 2025-05-23 01:04:09 wer:318] 
+    
+[NeMo I 2025-05-23 01:04:09 wer:319] reference:네 확인 감사합니다 지금 현재 삼만 원 세계 어린이들 도움 주 수 있는 걸로 신청해주신 거 맞으시구요
+[NeMo I 2025-05-23 01:04:09 wer:320] predicted:네에서 네 아예 좀 네실 배송하시는 한 일 네요 음 네 나되 네드린도 네 월 네일 요거 네 뭐 해지 서 네 어 안녕하십니까 네 면도날기 네 되세요 예 네수 이 네 하나 반품로를 하나 네 그럼 네 고맙습니다이요 안 그 지금
+[NeMo I 2025-05-23 01:04:19 nemo_model_checkpoint:183] New .nemo model saved to: /AN202_data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Finetune/src/03.train/nemo_experiments/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2/2025-05-23_01-01-20/checkpoints/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2.nemo
+[NeMo I 2025-05-23 01:04:48 nemo_model_checkpoint:183] New .nemo model saved to: /AN202_data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Finetune/src/03.train/nemo_experiments/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2/2025-05-23_01-01-20/checkpoints/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2.nemo
+[NeMo I 2025-05-23 01:05:14 wer:318] 
+    
+[NeMo I 2025-05-23 01:05:14 wer:319] reference:네 네 좋은 하루 되세요 인니세프 그림이었습니다
+[NeMo I 2025-05-23 01:05:14 wer:320] predicted:네에서 네에서 네순 제가고 확인을 네 너무일 지금 네 좀일 팔 네 않  변경잖아요 한 일
+[NeMo I 2025-05-23 01:05:15 wer:318] 
+    
+[NeMo I 2025-05-23 01:05:15 wer:319] reference:아 제가 지금 일을 안 해서요
+[NeMo I 2025-05-23 01:05:15 wer:320] predicted:네만 네 예예 고객님 네요 음 저희가이 네 그리고 네로는 지금
+[NeMo I 2025-05-23 01:05:15 wer:318] 
+    
+[NeMo I 2025-05-23 01:05:15 wer:319] reference:네 확인 감사합니다 지금 현재 삼만 원 세계 어린이들 도움 주 수 있는 걸로 신청해주신 거 맞으시구요
+[NeMo I 2025-05-23 01:05:15 wer:320] predicted:네에서 네 아예 좀 네실 배송하시는 한 일 네요 음 네 나되 네드린도 월 네일 요거 네 뭐 해지 서 네 어 안녕하십니까 네 면도날기 네 되세요 예 네수 이 네 하나 반품로를 하나 네 그럼 네 고맙습니다이요 안 그 지금
+[NeMo I 2025-05-23 01:05:23 nemo_model_checkpoint:183] New .nemo model saved to: /AN202_data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Finetune/src/03.train/nemo_experiments/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2/2025-05-23_01-01-20/checkpoints/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2.nemo
+[NeMo I 2025-05-23 01:05:55 nemo_model_checkpoint:183] New .nemo model saved to: /AN202_data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Finetune/src/03.train/nemo_experiments/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2/2025-05-23_01-01-20/checkpoints/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2.nemo
+[NeMo I 2025-05-23 01:06:21 wer:318] 
+    
+[NeMo I 2025-05-23 01:06:21 wer:319] reference:아 네네
+[NeMo I 2025-05-23 01:06:21 wer:320] predicted:네만 한에서
+[NeMo I 2025-05-23 01:06:22 wer:318] 
+    
+[NeMo I 2025-05-23 01:06:22 wer:319] reference:아 제가 지금 일을 안 해서요
+[NeMo I 2025-05-23 01:06:22 wer:320] predicted:네만 네 예예 고객님 네요 음 저희가이 네 그리고 네로는 지금
+[NeMo I 2025-05-23 01:06:22 wer:318] 
+    
+[NeMo I 2025-05-23 01:06:22 wer:319] reference:네 확인 감사합니다 지금 현재 삼만 원 세계 어린이들 도움 주 수 있는 걸로 신청해주신 거 맞으시구요
+[NeMo I 2025-05-23 01:06:22 wer:320] predicted:네에서 네 아예 좀 네실 배송하시는 한 일 네요 음 네 나되 네드린도 월 네일 요거 네 뭐 해지 서 네 어 안녕하십니까 네 면도날기 네 되세요 예 네수 이 네 하나 반품로를 하나 네 그럼 네 고맙습니다이요 안 그 지금
+[NeMo I 2025-05-23 01:06:30 nemo_model_checkpoint:183] New .nemo model saved to: /AN202_data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Finetune/src/03.train/nemo_experiments/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2/2025-05-23_01-01-20/checkpoints/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2.nemo
+[NeMo I 2025-05-23 01:07:02 nemo_model_checkpoint:183] New .nemo model saved to: /AN202_data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Finetune/src/03.train/nemo_experiments/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2/2025-05-23_01-01-20/checkpoints/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2.nemo
+[NeMo I 2025-05-23 01:07:28 wer:318] 
+    
+[NeMo I 2025-05-23 01:07:28 wer:319] reference:네
+[NeMo I 2025-05-23 01:07:28 wer:320] predicted:네 따로
+[NeMo I 2025-05-23 01:07:29 wer:318] 
+    
+[NeMo I 2025-05-23 01:07:29 wer:319] reference:아 제가 지금 일을 안 해서요
+[NeMo I 2025-05-23 01:07:29 wer:320] predicted:네만 네 예예 고객님 네요 음 저희가이 네 그리고 네로는 지금
+[NeMo I 2025-05-23 01:07:29 wer:318] 
+    
+[NeMo I 2025-05-23 01:07:29 wer:319] reference:네 확인 감사합니다 지금 현재 삼만 원 세계 어린이들 도움 주 수 있는 걸로 신청해주신 거 맞으시구요
+[NeMo I 2025-05-23 01:07:29 wer:320] predicted:네에서 네 아예 좀 네실 배송하시는 한 일 네요 음 네 나되 네드린도 월 네일 요거 네 뭐 해지 서 네 어 안녕하십니까 네 면도날기 네 되세요 예 네수 이 네 하나 반품로를 하나 네 그럼 네 고맙습니다이요 안 그 지금
+[NeMo I 2025-05-23 01:07:37 nemo_model_checkpoint:183] New .nemo model saved to: /AN202_data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Finetune/src/03.train/nemo_experiments/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2/2025-05-23_01-01-20/checkpoints/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2.nemo
+[NeMo I 2025-05-23 01:08:09 nemo_model_checkpoint:183] New .nemo model saved to: /AN202_data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Finetune/src/03.train/nemo_experiments/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2/2025-05-23_01-01-20/checkpoints/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2.nemo
+[NeMo I 2025-05-23 01:08:34 wer:318] 
+    
+[NeMo I 2025-05-23 01:08:34 wer:319] reference:네네
+[NeMo I 2025-05-23 01:08:34 wer:320] predicted:네에서에서
+[NeMo I 2025-05-23 01:08:35 wer:318] 
+    
+[NeMo I 2025-05-23 01:08:35 wer:319] reference:아 제가 지금 일을 안 해서요
+[NeMo I 2025-05-23 01:08:35 wer:320] predicted:네만 네 예예 고객님 네요 음 저희가이 네 그리고 네로는 지금
+[NeMo I 2025-05-23 01:08:35 wer:318] 
+    
+[NeMo I 2025-05-23 01:08:35 wer:319] reference:네 확인 감사합니다 지금 현재 삼만 원 세계 어린이들 도움 주 수 있는 걸로 신청해주신 거 맞으시구요
+[NeMo I 2025-05-23 01:08:35 wer:320] predicted:네에서 네 아예 좀 네실 배송하시는 한 일 네요 음 네 나되 네드린도 월 네일 요거 네 뭐 해지 서 네 어 안녕하십니까 네 면도날기 되세요 예 네수 이 네 하나 반품로를 하나 네 그럼 네 고맙습니다이요 안 그 지금
+[NeMo I 2025-05-23 01:08:44 nemo_model_checkpoint:183] New .nemo model saved to: /AN202_data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Finetune/src/03.train/nemo_experiments/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2/2025-05-23_01-01-20/checkpoints/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2.nemo
+[NeMo I 2025-05-23 01:09:15 nemo_model_checkpoint:183] New .nemo model saved to: /AN202_data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Finetune/src/03.train/nemo_experiments/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2/2025-05-23_01-01-20/checkpoints/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2.nemo
+[NeMo I 2025-05-23 01:09:41 wer:318] 
+    
+[NeMo I 2025-05-23 01:09:41 wer:319] reference:아 중단은 바로 가능하신데 혹시나 해서 안내 말씀드리자면 환전는 저희는 오천 원부터도 호환이 가능하시거든요
+[NeMo I 2025-05-23 01:09:41 wer:320] predicted:네만 네 두 확인 제가 네 그러세요 이 네 고객님 추가고 하나 한번 네 있을 안 오로는 네 그리고 진행 네원 오래이 혹시 하나 일을 네 않 정보 예 네 사용셔서 예 네 전화 저 월 구 월  네 고객님 추가고 안 그럼진 지금
+[NeMo I 2025-05-23 01:09:42 wer:318] 
+    
+[NeMo I 2025-05-23 01:09:42 wer:319] reference:아 제가 지금 일을 안 해서요
+[NeMo I 2025-05-23 01:09:42 wer:320] predicted:네만 네 예예 고객님 네요 음 저희가이 네 그리고 네로는 지금
+[NeMo I 2025-05-23 01:09:42 wer:318] 
+    
+[NeMo I 2025-05-23 01:09:42 wer:319] reference:네 확인 감사합니다 지금 현재 삼만 원 세계 어린이들 도움 주 수 있는 걸로 신청해주신 거 맞으시구요
+[NeMo I 2025-05-23 01:09:42 wer:320] predicted:네에서 네 아예 좀 네실 배송하시는 한 일 네요 음 네 나되 네드린도 월 네일 요거 네 뭐 해지 서 네 어 안녕하십니까 네 면도날기 되세요 예 네수 이 네 하나 반품로를 하나 네 그럼 네 고맙습니다이요 안 그 지금
+[NeMo I 2025-05-23 01:09:50 nemo_model_checkpoint:183] New .nemo model saved to: /AN202_data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Finetune/src/03.train/nemo_experiments/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2/2025-05-23_01-01-20/checkpoints/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2.nemo
+[NeMo I 2025-05-23 01:10:22 nemo_model_checkpoint:183] New .nemo model saved to: /AN202_data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Finetune/src/03.train/nemo_experiments/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2/2025-05-23_01-01-20/checkpoints/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2.nemo
+[NeMo I 2025-05-23 01:10:48 wer:318] 
+    
+[NeMo I 2025-05-23 01:10:48 wer:319] reference:감사합니다 제프 이연희입니다
+[NeMo I 2025-05-23 01:10:48 wer:320] predicted:네실 배송하시는 한 일 네으로거든요  나셔서 회수 한 일
+[NeMo I 2025-05-23 01:10:49 wer:318] 
+    
+[NeMo I 2025-05-23 01:10:49 wer:319] reference:아 제가 지금 일을 안 해서요
+[NeMo I 2025-05-23 01:10:49 wer:320] predicted:네만 네 예예 고객님요 음 저희가이 네 그리고 네로는 지금
+[NeMo I 2025-05-23 01:10:49 wer:318] 
+    
+[NeMo I 2025-05-23 01:10:49 wer:319] reference:네 확인 감사합니다 지금 현재 삼만 원 세계 어린이들 도움 주 수 있는 걸로 신청해주신 거 맞으시구요
+[NeMo I 2025-05-23 01:10:49 wer:320] predicted:네에서 네 아예 좀 네실 배송하시는 한 일 네요 음 네 나되 네드린도 월 네일 요거 네 뭐 해지 서 네 어 안녕하십니까 네 면도날기 되세요 예 네수 이 네 하나 반품로를 하나 네 그럼 네 고맙습니다이요 안 그 지금
+[NeMo I 2025-05-23 01:10:57 nemo_model_checkpoint:183] New .nemo model saved to: /AN202_data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Finetune/src/03.train/nemo_experiments/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2/2025-05-23_01-01-20/checkpoints/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2.nemo
+[NeMo I 2025-05-23 01:11:28 nemo_model_checkpoint:183] New .nemo model saved to: /AN202_data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Finetune/src/03.train/nemo_experiments/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2/2025-05-23_01-01-20/checkpoints/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2.nemo
+[NeMo I 2025-05-23 01:11:54 wer:318] 
+    
+[NeMo I 2025-05-23 01:11:54 wer:319] reference:어 혹시 괜찮으시다면 좀 부담되지 않은 소액 단위로 금액을 변경해보시는 건 어떠실까요
+[NeMo I 2025-05-23 01:11:54 wer:320] predicted:네 없  네 개가 모르겠이요 안 일 네시 중 혹시 네 아니 박스 그냥용 이 않 박혜영이었습니다 아 일 안로 알겠습니다 안 예 정보 네 뭐이나이한 지금
+[NeMo I 2025-05-23 01:11:55 wer:318] 
+    
+[NeMo I 2025-05-23 01:11:55 wer:319] reference:아 제가 지금 일을 안 해서요
+[NeMo I 2025-05-23 01:11:55 wer:320] predicted:네만 네 예예 고객님요 음 저희가이 네 그리고 네로는 지금
+[NeMo I 2025-05-23 01:11:56 wer:318] 
+    
+[NeMo I 2025-05-23 01:11:56 wer:319] reference:네 확인 감사합니다 지금 현재 삼만 원 세계 어린이들 도움 주 수 있는 걸로 신청해주신 거 맞으시구요
+[NeMo I 2025-05-23 01:11:56 wer:320] predicted:네에서 네 아예 좀 네실 배송하시는 한 일 네요 음 네 나되 네드린도 월 네일 요거 네 뭐 해지 서 네 어 안녕하십니까 면도날기 되세요 예수 이 네 하나 반품로를 하나 그럼 네 고맙습니다이요 안 칠 지금
+[NeMo I 2025-05-23 01:12:04 nemo_model_checkpoint:183] New .nemo model saved to: /AN202_data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Finetune/src/03.train/nemo_experiments/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2/2025-05-23_01-01-20/checkpoints/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2.nemo
+[NeMo I 2025-05-23 01:12:34 nemo_model_checkpoint:183] New .nemo model saved to: /AN202_data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Finetune/src/03.train/nemo_experiments/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2/2025-05-23_01-01-20/checkpoints/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2.nemo
+[NeMo I 2025-05-23 01:13:01 wer:318] 
+    
+[NeMo I 2025-05-23 01:13:01 wer:319] reference:네
+[NeMo I 2025-05-23 01:13:01 wer:320] predicted:
+[NeMo I 2025-05-23 01:13:02 wer:318] 
+    
+[NeMo I 2025-05-23 01:13:02 wer:319] reference:아 제가 지금 일을 안 해서요
+[NeMo I 2025-05-23 01:13:02 wer:320] predicted:네만 네 예예 고객님요 음 저희가이 네 그리고 네로는 지금
+[NeMo I 2025-05-23 01:13:02 wer:318] 
+    
+[NeMo I 2025-05-23 01:13:02 wer:319] reference:네 확인 감사합니다 지금 현재 삼만 원 세계 어린이들 도움 주 수 있는 걸로 신청해주신 거 맞으시구요
+[NeMo I 2025-05-23 01:13:02 wer:320] predicted:네에서 네 아예 좀실 배송하시는 한 일 네요 음 네 나되 네드린도 월일 요거 네 뭐 해지 서 네 어 안녕하십니까 면도날기 되세요 예수 이 네 하나 반품로를 하나 그럼 네 고맙습니다이요 안 칠 지금
+[NeMo I 2025-05-23 01:13:11 nemo_model_checkpoint:183] New .nemo model saved to: /AN202_data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Finetune/src/03.train/nemo_experiments/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2/2025-05-23_01-01-20/checkpoints/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2.nemo
+[NeMo I 2025-05-23 01:13:41 nemo_model_checkpoint:183] New .nemo model saved to: /AN202_data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Finetune/src/03.train/nemo_experiments/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2/2025-05-23_01-01-20/checkpoints/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2.nemo
+[NeMo I 2025-05-23 01:14:07 wer:318] 
+    
+[NeMo I 2025-05-23 01:14:07 wer:319] reference:네네
+[NeMo I 2025-05-23 01:14:07 wer:320] predicted:네에서에서
+[NeMo I 2025-05-23 01:14:08 wer:318] 
+    
+[NeMo I 2025-05-23 01:14:08 wer:319] reference:아 제가 지금 일을 안 해서요
+[NeMo I 2025-05-23 01:14:08 wer:320] predicted:네만 네 예예 고객님요 음 저희가이 그리고로는 지금
+[NeMo I 2025-05-23 01:14:09 wer:318] 
+    
+[NeMo I 2025-05-23 01:14:09 wer:319] reference:네 확인 감사합니다 지금 현재 삼만 원 세계 어린이들 도움 주 수 있는 걸로 신청해주신 거 맞으시구요
+[NeMo I 2025-05-23 01:14:09 wer:320] predicted:네에서 네 아예 좀실 배송하시는 한 일요 음 네 나되 네드린도 월일 요거 네 뭐 해지 서 네 어 안녕하십니까 면도날기 되세요 예수 이 네 하나 반품로를 하나 그럼 네 고맙습니다이요 안 그 지금
+[NeMo I 2025-05-23 01:14:17 nemo_model_checkpoint:183] New .nemo model saved to: /AN202_data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Finetune/src/03.train/nemo_experiments/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2/2025-05-23_01-01-20/checkpoints/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2.nemo
+[NeMo I 2025-05-23 01:14:48 nemo_model_checkpoint:183] New .nemo model saved to: /AN202_data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Finetune/src/03.train/nemo_experiments/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2/2025-05-23_01-01-20/checkpoints/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2.nemo
+[NeMo I 2025-05-23 01:15:14 wer:318] 
+    
+[NeMo I 2025-05-23 01:15:14 wer:319] reference:예 그면 예 다음에 제가 어떻 해볼게요
+[NeMo I 2025-05-23 01:15:14 wer:320] predicted:일 걸로 아천로 세 사 지금
+[NeMo I 2025-05-23 01:15:15 wer:318] 
+    
+[NeMo I 2025-05-23 01:15:15 wer:319] reference:아 제가 지금 일을 안 해서요
+[NeMo I 2025-05-23 01:15:15 wer:320] predicted:네만 네 예예 고객님요 음 저희가이 그리고로는 지금
+[NeMo I 2025-05-23 01:15:15 wer:318] 
+    
+[NeMo I 2025-05-23 01:15:15 wer:319] reference:네 확인 감사합니다 지금 현재 삼만 원 세계 어린이들 도움 주 수 있는 걸로 신청해주신 거 맞으시구요
+[NeMo I 2025-05-23 01:15:15 wer:320] predicted:네에서 네 아예 좀실 배송하시는 한 일요 음 네 나되 네드린도 월일 요거 뭐 해지 서 네 어 안녕하십니까 면도날 되세요 예수 이 네 하나 반품로를 하나 그럼 네 고맙습니다이요 안 그 지금
+[NeMo I 2025-05-23 01:15:24 nemo_model_checkpoint:183] New .nemo model saved to: /AN202_data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Finetune/src/03.train/nemo_experiments/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2/2025-05-23_01-01-20/checkpoints/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2.nemo
+[NeMo I 2025-05-23 01:15:54 nemo_model_checkpoint:183] New .nemo model saved to: /AN202_data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Finetune/src/03.train/nemo_experiments/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2/2025-05-23_01-01-20/checkpoints/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2.nemo
+[NeMo I 2025-05-23 01:16:20 wer:318] 
+    
+[NeMo I 2025-05-23 01:16:20 wer:319] reference:안녕하세요
+[NeMo I 2025-05-23 01:16:20 wer:320] predicted:
+[NeMo I 2025-05-23 01:16:21 wer:318] 
+    
+[NeMo I 2025-05-23 01:16:21 wer:319] reference:아 제가 지금 일을 안 해서요
+[NeMo I 2025-05-23 01:16:21 wer:320] predicted:네만 네 예예 고객님 음 저희가이 그리고로는 지금
+[NeMo I 2025-05-23 01:16:21 wer:318] 
+    
+[NeMo I 2025-05-23 01:16:21 wer:319] reference:네 확인 감사합니다 지금 현재 삼만 원 세계 어린이들 도움 주 수 있는 걸로 신청해주신 거 맞으시구요
+[NeMo I 2025-05-23 01:16:21 wer:320] predicted:네에서 아예 좀실 배송하시는 한 일 음 나되 네드린도 월일 요거 뭐 해지 서 네 어 안녕하십니까 면도날 되세요 예수 이 네 하나 반품로를 하나 그럼 고맙습니다이요 안 그 지금
+[NeMo I 2025-05-23 01:16:29 nemo_model_checkpoint:183] New .nemo model saved to: /AN202_data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Finetune/src/03.train/nemo_experiments/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2/2025-05-23_01-01-20/checkpoints/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2.nemo
+[NeMo I 2025-05-23 01:17:00 nemo_model_checkpoint:183] New .nemo model saved to: /AN202_data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Finetune/src/03.train/nemo_experiments/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2/2025-05-23_01-01-20/checkpoints/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2.nemo
+[NeMo I 2025-05-23 01:17:27 wer:318] 
+    
+[NeMo I 2025-05-23 01:17:27 wer:319] reference:예 왜냐면 제가 그 카페를 했는데
+[NeMo I 2025-05-23 01:17:27 wer:320] predicted:않아 대가 수 예 한번
+[NeMo I 2025-05-23 01:17:28 wer:318] 
+    
+[NeMo I 2025-05-23 01:17:28 wer:319] reference:아 제가 지금 일을 안 해서요
+[NeMo I 2025-05-23 01:17:28 wer:320] predicted:네만 네 예예 고객님 음 저희가이 그리고로는 지금
+[NeMo I 2025-05-23 01:17:28 wer:318] 
+    
+[NeMo I 2025-05-23 01:17:28 wer:319] reference:네 확인 감사합니다 지금 현재 삼만 원 세계 어린이들 도움 주 수 있는 걸로 신청해주신 거 맞으시구요
+[NeMo I 2025-05-23 01:17:28 wer:320] predicted:네에서 아예 좀실 배송하시는 한 일 음 나되드린도 월일 뭐 해지 서 네 어 안녕하십니까를 예수 이 네 하나 반품로를 하나 그럼 고맙습니다이요 안 그
+[NeMo I 2025-05-23 01:17:37 nemo_model_checkpoint:183] New .nemo model saved to: /AN202_data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Finetune/src/03.train/nemo_experiments/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2/2025-05-23_01-01-20/checkpoints/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2.nemo
+[NeMo I 2025-05-23 01:18:07 nemo_model_checkpoint:183] New .nemo model saved to: /AN202_data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Finetune/src/03.train/nemo_experiments/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2/2025-05-23_01-01-20/checkpoints/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2.nemo
+[NeMo I 2025-05-23 01:18:33 wer:318] 
+    
+[NeMo I 2025-05-23 01:18:33 wer:319] reference:네네네
+[NeMo I 2025-05-23 01:18:33 wer:320] predicted:네으면
+[NeMo I 2025-05-23 01:18:34 wer:318] 
+    
+[NeMo I 2025-05-23 01:18:34 wer:319] reference:아 제가 지금 일을 안 해서요
+[NeMo I 2025-05-23 01:18:34 wer:320] predicted:네만 예예 고객님 음 저희가이 그리고로는 지금
+[NeMo I 2025-05-23 01:18:34 wer:318] 
+    
+[NeMo I 2025-05-23 01:18:34 wer:319] reference:네 확인 감사합니다 지금 현재 삼만 원 세계 어린이들 도움 주 수 있는 걸로 신청해주신 거 맞으시구요
+[NeMo I 2025-05-23 01:18:34 wer:320] predicted:네 아예 좀실 배송하시는되드린도 월일 뭐 해지 서 어 안녕하십니까 예수 네 하나 반품로를 하나 고맙습니다이요 안 그
+[NeMo I 2025-05-23 01:18:42 nemo_model_checkpoint:183] New .nemo model saved to: /AN202_data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Finetune/src/03.train/nemo_experiments/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2/2025-05-23_01-01-20/checkpoints/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2.nemo
+[NeMo I 2025-05-23 01:19:13 nemo_model_checkpoint:183] New .nemo model saved to: /AN202_data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Finetune/src/03.train/nemo_experiments/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2/2025-05-23_01-01-20/checkpoints/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2.nemo
+[NeMo I 2025-05-23 01:19:39 wer:318] 
+    
+[NeMo I 2025-05-23 01:19:39 wer:319] reference:네네 네 확인 후 안내해드리겠습니다 전화 주신 번호로는 한 상의고원장님 확인되셨는데요 정보 확인 위해서 생년월일까지만 말씀 부탁드립니다
+[NeMo I 2025-05-23 01:19:39 wer:320] predicted:네네 취소 하나 가 확인 공 십 예 즐거운저 육한요 네원 어제
+[NeMo I 2025-05-23 01:19:40 wer:318] 
+    
+[NeMo I 2025-05-23 01:19:40 wer:319] reference:아 제가 지금 일을 안 해서요
+[NeMo I 2025-05-23 01:19:40 wer:320] predicted:네만 예예 저희가이 그리고로는
+[NeMo I 2025-05-23 01:19:40 wer:318] 
+    
+[NeMo I 2025-05-23 01:19:40 wer:319] reference:네 확인 감사합니다 지금 현재 삼만 원 세계 어린이들 도움 주 수 있는 걸로 신청해주신 거 맞으시구요
+[NeMo I 2025-05-23 01:19:40 wer:320] predicted:아예 좀되드린도 월일 뭐 해지 서 어 안녕하십니까 예수 네 하나 반품로를 고맙습니다이요 그
+[NeMo I 2025-05-23 01:19:49 nemo_model_checkpoint:183] New .nemo model saved to: /AN202_data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Finetune/src/03.train/nemo_experiments/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2/2025-05-23_01-01-20/checkpoints/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2.nemo
+[NeMo I 2025-05-23 01:20:20 nemo_model_checkpoint:183] New .nemo model saved to: /AN202_data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Finetune/src/03.train/nemo_experiments/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2/2025-05-23_01-01-20/checkpoints/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2.nemo
+[NeMo I 2025-05-23 01:20:47 wer:318] 
+    
+[NeMo I 2025-05-23 01:20:47 wer:319] reference:공 오 사
+[NeMo I 2025-05-23 01:20:47 wer:320] predicted:
+[NeMo I 2025-05-23 01:20:48 wer:318] 
+    
+[NeMo I 2025-05-23 01:20:48 wer:319] reference:아 제가 지금 일을 안 해서요
+[NeMo I 2025-05-23 01:20:48 wer:320] predicted:네만 예예 저희가이 그리고로는
+[NeMo I 2025-05-23 01:20:48 wer:318] 
+    
+[NeMo I 2025-05-23 01:20:48 wer:319] reference:네 확인 감사합니다 지금 현재 삼만 원 세계 어린이들 도움 주 수 있는 걸로 신청해주신 거 맞으시구요
+[NeMo I 2025-05-23 01:20:48 wer:320] predicted:되도 뭐 해지 서 어 예수 하나 반품로를 고맙습니다
+[NeMo I 2025-05-23 01:20:56 nemo_model_checkpoint:183] New .nemo model saved to: /AN202_data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Finetune/src/03.train/nemo_experiments/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2/2025-05-23_01-01-20/checkpoints/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2.nemo
+[NeMo I 2025-05-23 01:21:27 nemo_model_checkpoint:183] New .nemo model saved to: /AN202_data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Finetune/src/03.train/nemo_experiments/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2/2025-05-23_01-01-20/checkpoints/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2.nemo
+[NeMo I 2025-05-23 01:21:54 wer:318] 
+    
+[NeMo I 2025-05-23 01:21:54 wer:319] reference:네 어 그러시면은 개인사업자신 걸까요
+[NeMo I 2025-05-23 01:21:54 wer:320] predicted:요거 좀 배송 처리 감사합니다
+[NeMo I 2025-05-23 01:21:55 wer:318] 
+    
+[NeMo I 2025-05-23 01:21:55 wer:319] reference:아 제가 지금 일을 안 해서요
+[NeMo I 2025-05-23 01:21:55 wer:320] predicted:네만 예예 저희가이 그리고로
+[NeMo I 2025-05-23 01:21:55 wer:318] 
+    
+[NeMo I 2025-05-23 01:21:55 wer:319] reference:네 확인 감사합니다 지금 현재 삼만 원 세계 어린이들 도움 주 수 있는 걸로 신청해주신 거 맞으시구요
+[NeMo I 2025-05-23 01:21:55 wer:320] predicted:해지 서 어 예수 하나 반품로
+[NeMo I 2025-05-23 01:22:03 nemo_model_checkpoint:183] New .nemo model saved to: /AN202_data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Finetune/src/03.train/nemo_experiments/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2/2025-05-23_01-01-20/checkpoints/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2.nemo
+[NeMo I 2025-05-23 01:22:33 nemo_model_checkpoint:183] New .nemo model saved to: /AN202_data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Finetune/src/03.train/nemo_experiments/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2/2025-05-23_01-01-20/checkpoints/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2.nemo
+[NeMo I 2025-05-23 01:22:59 wer:318] 
+    
+[NeMo I 2025-05-23 01:22:59 wer:319] reference:지금 그 명의를 아예 변경을 하셔야 된단 말씀이세요
+[NeMo I 2025-05-23 01:22:59 wer:320] predicted:네원 
+[NeMo I 2025-05-23 01:23:01 wer:318] 
+    
+[NeMo I 2025-05-23 01:23:01 wer:319] reference:아 제가 지금 일을 안 해서요
+[NeMo I 2025-05-23 01:23:01 wer:320] predicted:네만 예예 저희가이로
+[NeMo I 2025-05-23 01:23:01 wer:318] 
+    
+[NeMo I 2025-05-23 01:23:01 wer:319] reference:네 확인 감사합니다 지금 현재 삼만 원 세계 어린이들 도움 주 수 있는 걸로 신청해주신 거 맞으시구요
+[NeMo I 2025-05-23 01:23:01 wer:320] predicted:되  어 예수 하나로
+[NeMo I 2025-05-23 01:23:09 nemo_model_checkpoint:183] New .nemo model saved to: /AN202_data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Finetune/src/03.train/nemo_experiments/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2/2025-05-23_01-01-20/checkpoints/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2.nemo
+[NeMo I 2025-05-23 01:23:40 nemo_model_checkpoint:183] New .nemo model saved to: /AN202_data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Finetune/src/03.train/nemo_experiments/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2/2025-05-23_01-01-20/checkpoints/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2.nemo
+[NeMo I 2025-05-23 01:24:07 wer:318] 
+    
+[NeMo I 2025-05-23 01:24:07 wer:319] reference:감사합니다 임스프 정해진입니다
+[NeMo I 2025-05-23 01:24:07 wer:320] predicted:
+[NeMo I 2025-05-23 01:24:08 wer:318] 
+    
+[NeMo I 2025-05-23 01:24:08 wer:319] reference:아 제가 지금 일을 안 해서요
+[NeMo I 2025-05-23 01:24:08 wer:320] predicted:네만 저희가이로
+[NeMo I 2025-05-23 01:24:08 wer:318] 
+    
+[NeMo I 2025-05-23 01:24:08 wer:319] reference:네 확인 감사합니다 지금 현재 삼만 원 세계 어린이들 도움 주 수 있는 걸로 신청해주신 거 맞으시구요
+[NeMo I 2025-05-23 01:24:08 wer:320] predicted:수 하나로
+[NeMo I 2025-05-23 01:24:16 nemo_model_checkpoint:183] New .nemo model saved to: /AN202_data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Finetune/src/03.train/nemo_experiments/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2/2025-05-23_01-01-20/checkpoints/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2.nemo
+[NeMo I 2025-05-23 01:24:47 nemo_model_checkpoint:183] New .nemo model saved to: /AN202_data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Finetune/src/03.train/nemo_experiments/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2/2025-05-23_01-01-20/checkpoints/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2.nemo
+[NeMo I 2025-05-23 01:25:13 wer:318] 
+    
+[NeMo I 2025-05-23 01:25:13 wer:319] reference:그러시고요
+[NeMo I 2025-05-23 01:25:13 wer:320] predicted:
+[NeMo I 2025-05-23 01:25:14 wer:318] 
+    
+[NeMo I 2025-05-23 01:25:14 wer:319] reference:아 제가 지금 일을 안 해서요
+[NeMo I 2025-05-23 01:25:14 wer:320] predicted:만이로
+[NeMo I 2025-05-23 01:25:14 wer:318] 
+    
+[NeMo I 2025-05-23 01:25:14 wer:319] reference:네 확인 감사합니다 지금 현재 삼만 원 세계 어린이들 도움 주 수 있는 걸로 신청해주신 거 맞으시구요
+[NeMo I 2025-05-23 01:25:14 wer:320] predicted:수 하나
+[NeMo I 2025-05-23 01:25:22 nemo_model_checkpoint:183] New .nemo model saved to: /AN202_data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Finetune/src/03.train/nemo_experiments/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2/2025-05-23_01-01-20/checkpoints/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2.nemo
+[NeMo I 2025-05-23 01:25:53 nemo_model_checkpoint:183] New .nemo model saved to: /AN202_data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Finetune/src/03.train/nemo_experiments/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2/2025-05-23_01-01-20/checkpoints/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2.nemo
+[NeMo I 2025-05-23 01:26:20 wer:318] 
+    
+[NeMo I 2025-05-23 01:26:20 wer:319] reference:예 오 공 오 사
+[NeMo I 2025-05-23 01:26:20 wer:320] predicted:
+[NeMo I 2025-05-23 01:26:21 wer:318] 
+    
+[NeMo I 2025-05-23 01:26:21 wer:319] reference:아 제가 지금 일을 안 해서요
+[NeMo I 2025-05-23 01:26:21 wer:320] predicted:이로
+[NeMo I 2025-05-23 01:26:21 wer:318] 
+    
+[NeMo I 2025-05-23 01:26:21 wer:319] reference:네 확인 감사합니다 지금 현재 삼만 원 세계 어린이들 도움 주 수 있는 걸로 신청해주신 거 맞으시구요
+[NeMo I 2025-05-23 01:26:21 wer:320] predicted:수 하나
+[NeMo I 2025-05-23 01:26:29 nemo_model_checkpoint:183] New .nemo model saved to: /AN202_data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Finetune/src/03.train/nemo_experiments/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2/2025-05-23_01-01-20/checkpoints/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2.nemo
+[NeMo I 2025-05-23 01:27:00 nemo_model_checkpoint:183] New .nemo model saved to: /AN202_data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Finetune/src/03.train/nemo_experiments/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2/2025-05-23_01-01-20/checkpoints/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2.nemo
+[NeMo I 2025-05-23 01:27:26 wer:318] 
+    
+[NeMo I 2025-05-23 01:27:26 wer:319] reference:아이고 상관은 없어요
+[NeMo I 2025-05-23 01:27:26 wer:320] predicted:중
+[NeMo I 2025-05-23 01:27:27 wer:318] 
+    
+[NeMo I 2025-05-23 01:27:27 wer:319] reference:아 제가 지금 일을 안 해서요
+[NeMo I 2025-05-23 01:27:27 wer:320] predicted:이
+[NeMo I 2025-05-23 01:27:27 wer:318] 
+    
+[NeMo I 2025-05-23 01:27:27 wer:319] reference:네 확인 감사합니다 지금 현재 삼만 원 세계 어린이들 도움 주 수 있는 걸로 신청해주신 거 맞으시구요
+[NeMo I 2025-05-23 01:27:27 wer:320] predicted:
+[NeMo I 2025-05-23 01:27:36 nemo_model_checkpoint:183] New .nemo model saved to: /AN202_data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Finetune/src/03.train/nemo_experiments/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2/2025-05-23_01-01-20/checkpoints/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2.nemo
+[NeMo I 2025-05-23 01:28:06 nemo_model_checkpoint:183] New .nemo model saved to: /AN202_data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Finetune/src/03.train/nemo_experiments/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2/2025-05-23_01-01-20/checkpoints/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2.nemo
+[NeMo I 2025-05-23 01:28:32 wer:318] 
+    
+[NeMo I 2025-05-23 01:28:32 wer:319] reference:네네
+[NeMo I 2025-05-23 01:28:32 wer:320] predicted:
+[NeMo I 2025-05-23 01:28:33 wer:318] 
+    
+[NeMo I 2025-05-23 01:28:33 wer:319] reference:아 제가 지금 일을 안 해서요
+[NeMo I 2025-05-23 01:28:33 wer:320] predicted:
+[NeMo I 2025-05-23 01:28:33 wer:318] 
+    
+[NeMo I 2025-05-23 01:28:33 wer:319] reference:네 확인 감사합니다 지금 현재 삼만 원 세계 어린이들 도움 주 수 있는 걸로 신청해주신 거 맞으시구요
+[NeMo I 2025-05-23 01:28:33 wer:320] predicted:
+[NeMo I 2025-05-23 01:28:42 nemo_model_checkpoint:183] New .nemo model saved to: /AN202_data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Finetune/src/03.train/nemo_experiments/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2/2025-05-23_01-01-20/checkpoints/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2.nemo
+[NeMo I 2025-05-23 01:29:08 wer:318] 
+    
+[NeMo I 2025-05-23 01:29:08 wer:319] reference:안녕하세요
+[NeMo I 2025-05-23 01:29:08 wer:320] predicted:
+[NeMo I 2025-05-23 01:29:09 wer:318] 
+    
+[NeMo I 2025-05-23 01:29:09 wer:319] reference:아 제가 지금 일을 안 해서요
+[NeMo I 2025-05-23 01:29:09 wer:320] predicted:
+[NeMo I 2025-05-23 01:29:10 wer:318] 
+    
+[NeMo I 2025-05-23 01:29:10 wer:319] reference:네 확인 감사합니다 지금 현재 삼만 원 세계 어린이들 도움 주 수 있는 걸로 신청해주신 거 맞으시구요
+[NeMo I 2025-05-23 01:29:10 wer:320] predicted:
+[NeMo I 2025-05-23 01:29:18 nemo_model_checkpoint:183] New .nemo model saved to: /AN202_data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Finetune/src/03.train/nemo_experiments/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2/2025-05-23_01-01-20/checkpoints/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2.nemo
+[NeMo I 2025-05-23 01:29:44 wer:318] 
+    
+[NeMo I 2025-05-23 01:29:44 wer:319] reference:네
+[NeMo I 2025-05-23 01:29:44 wer:320] predicted:
+[NeMo I 2025-05-23 01:29:45 wer:318] 
+    
+[NeMo I 2025-05-23 01:29:45 wer:319] reference:아 제가 지금 일을 안 해서요
+[NeMo I 2025-05-23 01:29:45 wer:320] predicted:
+[NeMo I 2025-05-23 01:29:45 wer:318] 
+    
+[NeMo I 2025-05-23 01:29:45 wer:319] reference:네 확인 감사합니다 지금 현재 삼만 원 세계 어린이들 도움 주 수 있는 걸로 신청해주신 거 맞으시구요
+[NeMo I 2025-05-23 01:29:45 wer:320] predicted:
+[NeMo I 2025-05-23 01:29:54 nemo_model_checkpoint:183] New .nemo model saved to: /AN202_data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Finetune/src/03.train/nemo_experiments/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2/2025-05-23_01-01-20/checkpoints/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2.nemo
+[NeMo I 2025-05-23 01:30:20 wer:318] 
+    
+[NeMo I 2025-05-23 01:30:20 wer:319] reference:고고를 혹시 금액을 만 원만 할 수 있어요
+[NeMo I 2025-05-23 01:30:20 wer:320] predicted:건
+[NeMo I 2025-05-23 01:30:21 wer:318] 
+    
+[NeMo I 2025-05-23 01:30:21 wer:319] reference:아 제가 지금 일을 안 해서요
+[NeMo I 2025-05-23 01:30:21 wer:320] predicted:
+[NeMo I 2025-05-23 01:30:21 wer:318] 
+    
+[NeMo I 2025-05-23 01:30:21 wer:319] reference:네 확인 감사합니다 지금 현재 삼만 원 세계 어린이들 도움 주 수 있는 걸로 신청해주신 거 맞으시구요
+[NeMo I 2025-05-23 01:30:21 wer:320] predicted:
+[NeMo I 2025-05-23 01:30:30 nemo_model_checkpoint:183] New .nemo model saved to: /AN202_data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Finetune/src/03.train/nemo_experiments/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2/2025-05-23_01-01-20/checkpoints/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2.nemo
+[NeMo I 2025-05-23 01:30:57 wer:318] 
+    
+[NeMo I 2025-05-23 01:30:57 wer:319] reference:그리고 그 사업자 번호는 팔 일 구
+[NeMo I 2025-05-23 01:30:57 wer:320] predicted:
+[NeMo I 2025-05-23 01:30:58 wer:318] 
+    
+[NeMo I 2025-05-23 01:30:58 wer:319] reference:아 제가 지금 일을 안 해서요
+[NeMo I 2025-05-23 01:30:58 wer:320] predicted:
+[NeMo I 2025-05-23 01:30:58 wer:318] 
+    
+[NeMo I 2025-05-23 01:30:58 wer:319] reference:네 확인 감사합니다 지금 현재 삼만 원 세계 어린이들 도움 주 수 있는 걸로 신청해주신 거 맞으시구요
+[NeMo I 2025-05-23 01:30:58 wer:320] predicted:
+[NeMo I 2025-05-23 01:31:07 nemo_model_checkpoint:183] New .nemo model saved to: /AN202_data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Finetune/src/03.train/nemo_experiments/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2/2025-05-23_01-01-20/checkpoints/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2.nemo
+[NeMo I 2025-05-23 01:31:33 wer:318] 
+    
+[NeMo I 2025-05-23 01:31:33 wer:319] reference:네 감사합니다
+[NeMo I 2025-05-23 01:31:33 wer:320] predicted:
+[NeMo I 2025-05-23 01:31:34 wer:318] 
+    
+[NeMo I 2025-05-23 01:31:34 wer:319] reference:아 제가 지금 일을 안 해서요
+[NeMo I 2025-05-23 01:31:34 wer:320] predicted:
+[NeMo I 2025-05-23 01:31:34 wer:318] 
+    
+[NeMo I 2025-05-23 01:31:34 wer:319] reference:네 확인 감사합니다 지금 현재 삼만 원 세계 어린이들 도움 주 수 있는 걸로 신청해주신 거 맞으시구요
+[NeMo I 2025-05-23 01:31:34 wer:320] predicted:
+[NeMo I 2025-05-23 01:31:43 nemo_model_checkpoint:183] New .nemo model saved to: /AN202_data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Finetune/src/03.train/nemo_experiments/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2/2025-05-23_01-01-20/checkpoints/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2.nemo
+[NeMo I 2025-05-23 01:32:09 wer:318] 
+    
+[NeMo I 2025-05-23 01:32:09 wer:319] reference:아 네 그러시면은 성함과 생년월일이 어떻게 되세요
+[NeMo I 2025-05-23 01:32:09 wer:320] predicted:
+[NeMo I 2025-05-23 01:32:10 wer:318] 
+    
+[NeMo I 2025-05-23 01:32:10 wer:319] reference:아 제가 지금 일을 안 해서요
+[NeMo I 2025-05-23 01:32:10 wer:320] predicted:
+[NeMo I 2025-05-23 01:32:11 wer:318] 
+    
+[NeMo I 2025-05-23 01:32:11 wer:319] reference:네 확인 감사합니다 지금 현재 삼만 원 세계 어린이들 도움 주 수 있는 걸로 신청해주신 거 맞으시구요
+[NeMo I 2025-05-23 01:32:11 wer:320] predicted:
+[NeMo I 2025-05-23 01:32:19 nemo_model_checkpoint:183] New .nemo model saved to: /AN202_data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Finetune/src/03.train/nemo_experiments/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2/2025-05-23_01-01-20/checkpoints/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2.nemo
+[NeMo I 2025-05-23 01:32:45 wer:318] 
+    
+[NeMo I 2025-05-23 01:32:45 wer:319] reference:칠성로
+[NeMo I 2025-05-23 01:32:45 wer:320] predicted:
+[NeMo I 2025-05-23 01:32:46 wer:318] 
+    
+[NeMo I 2025-05-23 01:32:46 wer:319] reference:아 제가 지금 일을 안 해서요
+[NeMo I 2025-05-23 01:32:46 wer:320] predicted:
+[NeMo I 2025-05-23 01:32:46 wer:318] 
+    
+[NeMo I 2025-05-23 01:32:46 wer:319] reference:네 확인 감사합니다 지금 현재 삼만 원 세계 어린이들 도움 주 수 있는 걸로 신청해주신 거 맞으시구요
+[NeMo I 2025-05-23 01:32:46 wer:320] predicted:
+[NeMo I 2025-05-23 01:32:55 nemo_model_checkpoint:183] New .nemo model saved to: /AN202_data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Finetune/src/03.train/nemo_experiments/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2/2025-05-23_01-01-20/checkpoints/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2.nemo
+[NeMo I 2025-05-23 01:33:22 wer:318] 
+    
+[NeMo I 2025-05-23 01:33:22 wer:319] reference:네 감사합니다 다음에 다시 주문 기이 되실 때 참명 부탁드리겠습니다 네 감사합니다
+[NeMo I 2025-05-23 01:33:22 wer:320] predicted:
+[NeMo I 2025-05-23 01:33:23 wer:318] 
+    
+[NeMo I 2025-05-23 01:33:23 wer:319] reference:아 제가 지금 일을 안 해서요
+[NeMo I 2025-05-23 01:33:23 wer:320] predicted:
+[NeMo I 2025-05-23 01:33:23 wer:318] 
+    
+[NeMo I 2025-05-23 01:33:23 wer:319] reference:네 확인 감사합니다 지금 현재 삼만 원 세계 어린이들 도움 주 수 있는 걸로 신청해주신 거 맞으시구요
+[NeMo I 2025-05-23 01:33:23 wer:320] predicted:
+[NeMo I 2025-05-23 01:33:31 nemo_model_checkpoint:183] New .nemo model saved to: /AN202_data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Finetune/src/03.train/nemo_experiments/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2/2025-05-23_01-01-20/checkpoints/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2.nemo
+[NeMo I 2025-05-23 01:33:58 wer:318] 
+    
+[NeMo I 2025-05-23 01:33:58 wer:319] reference:공 오 사
+[NeMo I 2025-05-23 01:33:58 wer:320] predicted:
+[NeMo I 2025-05-23 01:33:58 wer:318] 
+    
+[NeMo I 2025-05-23 01:33:58 wer:319] reference:아 제가 지금 일을 안 해서요
+[NeMo I 2025-05-23 01:33:58 wer:320] predicted:
+[NeMo I 2025-05-23 01:33:59 wer:318] 
+    
+[NeMo I 2025-05-23 01:33:59 wer:319] reference:네 확인 감사합니다 지금 현재 삼만 원 세계 어린이들 도움 주 수 있는 걸로 신청해주신 거 맞으시구요
+[NeMo I 2025-05-23 01:33:59 wer:320] predicted:
+[NeMo I 2025-05-23 01:34:07 nemo_model_checkpoint:183] New .nemo model saved to: /AN202_data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Finetune/src/03.train/nemo_experiments/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2/2025-05-23_01-01-20/checkpoints/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2.nemo
+[NeMo I 2025-05-23 01:34:34 wer:318] 
+    
+[NeMo I 2025-05-23 01:34:34 wer:319] reference:근데 제가 지금 그 불형편이 아닌데 어 소편이 그냥 뭐 설문조사 이런 식인지 알았는데
+[NeMo I 2025-05-23 01:34:34 wer:320] predicted:
+[NeMo I 2025-05-23 01:34:34 wer:318] 
+    
+[NeMo I 2025-05-23 01:34:34 wer:319] reference:아 제가 지금 일을 안 해서요
+[NeMo I 2025-05-23 01:34:34 wer:320] predicted:네
+[NeMo I 2025-05-23 01:34:35 wer:318] 
+    
+[NeMo I 2025-05-23 01:34:35 wer:319] reference:네 확인 감사합니다 지금 현재 삼만 원 세계 어린이들 도움 주 수 있는 걸로 신청해주신 거 맞으시구요
+[NeMo I 2025-05-23 01:34:35 wer:320] predicted:
+[NeMo I 2025-05-23 01:34:43 nemo_model_checkpoint:183] New .nemo model saved to: /AN202_data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Finetune/src/03.train/nemo_experiments/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2/2025-05-23_01-01-20/checkpoints/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2.nemo
+[NeMo I 2025-05-23 01:35:13 nemo_model_checkpoint:183] New .nemo model saved to: /AN202_data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Finetune/src/03.train/nemo_experiments/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2/2025-05-23_01-01-20/checkpoints/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2.nemo
+[NeMo I 2025-05-23 01:35:39 wer:318] 
+    
+[NeMo I 2025-05-23 01:35:39 wer:319] reference:유세프구 후금요
+[NeMo I 2025-05-23 01:35:39 wer:320] predicted:
+[NeMo I 2025-05-23 01:35:40 wer:318] 
+    
+[NeMo I 2025-05-23 01:35:40 wer:319] reference:아 제가 지금 일을 안 해서요
+[NeMo I 2025-05-23 01:35:40 wer:320] predicted:네
+[NeMo I 2025-05-23 01:35:41 wer:318] 
+    
+[NeMo I 2025-05-23 01:35:41 wer:319] reference:네 확인 감사합니다 지금 현재 삼만 원 세계 어린이들 도움 주 수 있는 걸로 신청해주신 거 맞으시구요
+[NeMo I 2025-05-23 01:35:41 wer:320] predicted:
+[NeMo I 2025-05-23 01:35:49 nemo_model_checkpoint:183] New .nemo model saved to: /AN202_data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Finetune/src/03.train/nemo_experiments/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2/2025-05-23_01-01-20/checkpoints/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2.nemo
+[NeMo I 2025-05-23 01:36:19 nemo_model_checkpoint:183] New .nemo model saved to: /AN202_data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Finetune/src/03.train/nemo_experiments/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2/2025-05-23_01-01-20/checkpoints/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2.nemo
+[NeMo I 2025-05-23 01:36:45 wer:318] 
+    
+[NeMo I 2025-05-23 01:36:45 wer:319] reference:네
+[NeMo I 2025-05-23 01:36:45 wer:320] predicted:
+[NeMo I 2025-05-23 01:36:46 wer:318] 
+    
+[NeMo I 2025-05-23 01:36:46 wer:319] reference:아 제가 지금 일을 안 해서요
+[NeMo I 2025-05-23 01:36:46 wer:320] predicted:
+[NeMo I 2025-05-23 01:36:46 wer:318] 
+    
+[NeMo I 2025-05-23 01:36:46 wer:319] reference:네 확인 감사합니다 지금 현재 삼만 원 세계 어린이들 도움 주 수 있는 걸로 신청해주신 거 맞으시구요
+[NeMo I 2025-05-23 01:36:46 wer:320] predicted:
+[NeMo I 2025-05-23 01:36:55 nemo_model_checkpoint:183] New .nemo model saved to: /AN202_data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Finetune/src/03.train/nemo_experiments/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2/2025-05-23_01-01-20/checkpoints/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2.nemo
+[NeMo I 2025-05-23 01:37:22 wer:318] 
+    
+[NeMo I 2025-05-23 01:37:22 wer:319] reference:그러시고요
+[NeMo I 2025-05-23 01:37:22 wer:320] predicted:
+[NeMo I 2025-05-23 01:37:23 wer:318] 
+    
+[NeMo I 2025-05-23 01:37:23 wer:319] reference:아 제가 지금 일을 안 해서요
+[NeMo I 2025-05-23 01:37:23 wer:320] predicted:네이
+[NeMo I 2025-05-23 01:37:23 wer:318] 
+    
+[NeMo I 2025-05-23 01:37:23 wer:319] reference:네 확인 감사합니다 지금 현재 삼만 원 세계 어린이들 도움 주 수 있는 걸로 신청해주신 거 맞으시구요
+[NeMo I 2025-05-23 01:37:23 wer:320] predicted:
+[NeMo I 2025-05-23 01:37:32 nemo_model_checkpoint:183] New .nemo model saved to: /AN202_data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Finetune/src/03.train/nemo_experiments/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2/2025-05-23_01-01-20/checkpoints/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2.nemo
+[NeMo I 2025-05-23 01:38:02 nemo_model_checkpoint:183] New .nemo model saved to: /AN202_data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Finetune/src/03.train/nemo_experiments/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2/2025-05-23_01-01-20/checkpoints/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2.nemo
+[NeMo I 2025-05-23 01:38:28 wer:318] 
+    
+[NeMo I 2025-05-23 01:38:28 wer:319] reference:네
+[NeMo I 2025-05-23 01:38:28 wer:320] predicted:
+[NeMo I 2025-05-23 01:38:29 wer:318] 
+    
+[NeMo I 2025-05-23 01:38:29 wer:319] reference:아 제가 지금 일을 안 해서요
+[NeMo I 2025-05-23 01:38:29 wer:320] predicted:네이
+[NeMo I 2025-05-23 01:38:29 wer:318] 
+    
+[NeMo I 2025-05-23 01:38:29 wer:319] reference:네 확인 감사합니다 지금 현재 삼만 원 세계 어린이들 도움 주 수 있는 걸로 신청해주신 거 맞으시구요
+[NeMo I 2025-05-23 01:38:29 wer:320] predicted:
+[NeMo I 2025-05-23 01:38:38 nemo_model_checkpoint:183] New .nemo model saved to: /AN202_data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Finetune/src/03.train/nemo_experiments/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2/2025-05-23_01-01-20/checkpoints/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2.nemo
+[NeMo I 2025-05-23 01:39:08 nemo_model_checkpoint:183] New .nemo model saved to: /AN202_data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Finetune/src/03.train/nemo_experiments/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2/2025-05-23_01-01-20/checkpoints/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2.nemo
+[NeMo I 2025-05-23 01:39:35 wer:318] 
+    
+[NeMo I 2025-05-23 01:39:35 wer:319] reference:다른 문의사항 없으세요
+[NeMo I 2025-05-23 01:39:35 wer:320] predicted:
+[NeMo I 2025-05-23 01:39:36 wer:318] 
+    
+[NeMo I 2025-05-23 01:39:36 wer:319] reference:아 제가 지금 일을 안 해서요
+[NeMo I 2025-05-23 01:39:36 wer:320] predicted:네이로
+[NeMo I 2025-05-23 01:39:36 wer:318] 
+    
+[NeMo I 2025-05-23 01:39:36 wer:319] reference:네 확인 감사합니다 지금 현재 삼만 원 세계 어린이들 도움 주 수 있는 걸로 신청해주신 거 맞으시구요
+[NeMo I 2025-05-23 01:39:36 wer:320] predicted:
+[NeMo I 2025-05-23 01:39:44 nemo_model_checkpoint:183] New .nemo model saved to: /AN202_data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Finetune/src/03.train/nemo_experiments/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2/2025-05-23_01-01-20/checkpoints/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2.nemo
+[NeMo I 2025-05-23 01:40:11 wer:318] 
+    
+[NeMo I 2025-05-23 01:40:11 wer:319] reference:아 네 네 그러시면 원 진행되지 않도록 오늘 정교원은 중단해드리고요 다른 문의사항은 없으실까요
+[NeMo I 2025-05-23 01:40:11 wer:320] predicted:
+[NeMo I 2025-05-23 01:40:12 wer:318] 
+    
+[NeMo I 2025-05-23 01:40:12 wer:319] reference:아 제가 지금 일을 안 해서요
+[NeMo I 2025-05-23 01:40:12 wer:320] predicted:네이로
+[NeMo I 2025-05-23 01:40:12 wer:318] 
+    
+[NeMo I 2025-05-23 01:40:12 wer:319] reference:네 확인 감사합니다 지금 현재 삼만 원 세계 어린이들 도움 주 수 있는 걸로 신청해주신 거 맞으시구요
+[NeMo I 2025-05-23 01:40:12 wer:320] predicted:
+[NeMo I 2025-05-23 01:40:20 nemo_model_checkpoint:183] New .nemo model saved to: /AN202_data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Finetune/src/03.train/nemo_experiments/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2/2025-05-23_01-01-20/checkpoints/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2.nemo
+[NeMo I 2025-05-23 01:40:47 wer:318] 
+    
+[NeMo I 2025-05-23 01:40:47 wer:319] reference:알겠습니다
+[NeMo I 2025-05-23 01:40:47 wer:320] predicted:
+[NeMo I 2025-05-23 01:40:48 wer:318] 
+    
+[NeMo I 2025-05-23 01:40:48 wer:319] reference:아 제가 지금 일을 안 해서요
+[NeMo I 2025-05-23 01:40:48 wer:320] predicted:네 아이로
+[NeMo I 2025-05-23 01:40:48 wer:318] 
+    
+[NeMo I 2025-05-23 01:40:48 wer:319] reference:네 확인 감사합니다 지금 현재 삼만 원 세계 어린이들 도움 주 수 있는 걸로 신청해주신 거 맞으시구요
+[NeMo I 2025-05-23 01:40:48 wer:320] predicted:
+[NeMo I 2025-05-23 01:40:56 nemo_model_checkpoint:183] New .nemo model saved to: /AN202_data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Finetune/src/03.train/nemo_experiments/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2/2025-05-23_01-01-20/checkpoints/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2.nemo
+[NeMo I 2025-05-23 01:41:27 nemo_model_checkpoint:183] New .nemo model saved to: /AN202_data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Finetune/src/03.train/nemo_experiments/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2/2025-05-23_01-01-20/checkpoints/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2.nemo
+[NeMo I 2025-05-23 01:41:53 wer:318] 
+    
+[NeMo I 2025-05-23 01:41:53 wer:319] reference:어 혹시 괜찮으시다면 좀 부담되지 않은 소액 단위로 금액을 변경해보시는 건 어떠실까요
+[NeMo I 2025-05-23 01:41:53 wer:320] predicted:
+[NeMo I 2025-05-23 01:41:54 wer:318] 
+    
+[NeMo I 2025-05-23 01:41:54 wer:319] reference:아 제가 지금 일을 안 해서요
+[NeMo I 2025-05-23 01:41:54 wer:320] predicted:네 아 네이로
+[NeMo I 2025-05-23 01:41:54 wer:318] 
+    
+[NeMo I 2025-05-23 01:41:54 wer:319] reference:네 확인 감사합니다 지금 현재 삼만 원 세계 어린이들 도움 주 수 있는 걸로 신청해주신 거 맞으시구요
+[NeMo I 2025-05-23 01:41:54 wer:320] predicted:감사합니다되
+[NeMo I 2025-05-23 01:42:03 nemo_model_checkpoint:183] New .nemo model saved to: /AN202_data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Finetune/src/03.train/nemo_experiments/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2/2025-05-23_01-01-20/checkpoints/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2.nemo
+[NeMo I 2025-05-23 01:42:33 nemo_model_checkpoint:183] New .nemo model saved to: /AN202_data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Finetune/src/03.train/nemo_experiments/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2/2025-05-23_01-01-20/checkpoints/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2.nemo
+[NeMo I 2025-05-23 01:42:59 wer:318] 
+    
+[NeMo I 2025-05-23 01:42:59 wer:319] reference:예 예 어 팔 일 구
+[NeMo I 2025-05-23 01:42:59 wer:320] predicted:되실
+[NeMo I 2025-05-23 01:43:00 wer:318] 
+    
+[NeMo I 2025-05-23 01:43:00 wer:319] reference:아 제가 지금 일을 안 해서요
+[NeMo I 2025-05-23 01:43:00 wer:320] predicted:네 아이로
+[NeMo I 2025-05-23 01:43:00 wer:318] 
+    
+[NeMo I 2025-05-23 01:43:00 wer:319] reference:네 확인 감사합니다 지금 현재 삼만 원 세계 어린이들 도움 주 수 있는 걸로 신청해주신 거 맞으시구요
+[NeMo I 2025-05-23 01:43:00 wer:320] predicted:감사합니다되
+[NeMo I 2025-05-23 01:43:09 nemo_model_checkpoint:183] New .nemo model saved to: /AN202_data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Finetune/src/03.train/nemo_experiments/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2/2025-05-23_01-01-20/checkpoints/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2.nemo
+[NeMo I 2025-05-23 01:43:35 wer:318] 
+    
+[NeMo I 2025-05-23 01:43:35 wer:319] reference:그러시고요
+[NeMo I 2025-05-23 01:43:35 wer:320] predicted:
+[NeMo I 2025-05-23 01:43:36 wer:318] 
+    
+[NeMo I 2025-05-23 01:43:36 wer:319] reference:아 제가 지금 일을 안 해서요
+[NeMo I 2025-05-23 01:43:36 wer:320] predicted:아이로
+[NeMo I 2025-05-23 01:43:36 wer:318] 
+    
+[NeMo I 2025-05-23 01:43:36 wer:319] reference:네 확인 감사합니다 지금 현재 삼만 원 세계 어린이들 도움 주 수 있는 걸로 신청해주신 거 맞으시구요
+[NeMo I 2025-05-23 01:43:36 wer:320] predicted:감사합니다되
+[NeMo I 2025-05-23 01:43:45 nemo_model_checkpoint:183] New .nemo model saved to: /AN202_data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Finetune/src/03.train/nemo_experiments/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2/2025-05-23_01-01-20/checkpoints/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2.nemo
+[NeMo I 2025-05-23 01:44:16 nemo_model_checkpoint:183] New .nemo model saved to: /AN202_data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Finetune/src/03.train/nemo_experiments/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2/2025-05-23_01-01-20/checkpoints/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2.nemo
+[NeMo I 2025-05-23 01:44:43 wer:318] 
+    
+[NeMo I 2025-05-23 01:44:43 wer:319] reference:네 감사합니다 좋거운 하루 보내세요
+[NeMo I 2025-05-23 01:44:43 wer:320] predicted:네
+[NeMo I 2025-05-23 01:44:44 wer:318] 
+    
+[NeMo I 2025-05-23 01:44:44 wer:319] reference:아 제가 지금 일을 안 해서요
+[NeMo I 2025-05-23 01:44:44 wer:320] predicted:아이로
+[NeMo I 2025-05-23 01:44:44 wer:318] 
+    
+[NeMo I 2025-05-23 01:44:44 wer:319] reference:네 확인 감사합니다 지금 현재 삼만 원 세계 어린이들 도움 주 수 있는 걸로 신청해주신 거 맞으시구요
+[NeMo I 2025-05-23 01:44:44 wer:320] predicted:감사합니다되 로
+[NeMo I 2025-05-23 01:44:53 nemo_model_checkpoint:183] New .nemo model saved to: /AN202_data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Finetune/src/03.train/nemo_experiments/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2/2025-05-23_01-01-20/checkpoints/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2.nemo
+[NeMo I 2025-05-23 01:45:26 nemo_model_checkpoint:183] New .nemo model saved to: /AN202_data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Finetune/src/03.train/nemo_experiments/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2/2025-05-23_01-01-20/checkpoints/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2.nemo
+[NeMo I 2025-05-23 01:45:55 wer:318] 
+    
+[NeMo I 2025-05-23 01:45:55 wer:319] reference:그러 그런데 이제 두 가지 회원보호이시기 때문에 각각 네 이만 원 만 원으로 승인 처리되셔서 후원 진행되실 거구요 주소지 회원전이 지금
+[NeMo I 2025-05-23 01:45:55 wer:320] predicted:
+[NeMo I 2025-05-23 01:45:56 wer:318] 
+    
+[NeMo I 2025-05-23 01:45:56 wer:319] reference:아 제가 지금 일을 안 해서요
+[NeMo I 2025-05-23 01:45:56 wer:320] predicted:네 아 저희가이로
+[NeMo I 2025-05-23 01:45:56 wer:318] 
+    
+[NeMo I 2025-05-23 01:45:56 wer:319] reference:네 확인 감사합니다 지금 현재 삼만 원 세계 어린이들 도움 주 수 있는 걸로 신청해주신 거 맞으시구요
+[NeMo I 2025-05-23 01:45:56 wer:320] predicted:네 감사합니다되 로
+[NeMo I 2025-05-23 01:46:05 nemo_model_checkpoint:183] New .nemo model saved to: /AN202_data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Finetune/src/03.train/nemo_experiments/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2/2025-05-23_01-01-20/checkpoints/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2.nemo
+[NeMo I 2025-05-23 01:46:37 nemo_model_checkpoint:183] New .nemo model saved to: /AN202_data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Finetune/src/03.train/nemo_experiments/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2/2025-05-23_01-01-20/checkpoints/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2.nemo
+[NeMo I 2025-05-23 01:47:04 wer:318] 
+    
+[NeMo I 2025-05-23 01:47:04 wer:319] reference:예 예에 예
+[NeMo I 2025-05-23 01:47:04 wer:320] predicted:예 예 예
+[NeMo I 2025-05-23 01:47:05 wer:318] 
+    
+[NeMo I 2025-05-23 01:47:05 wer:319] reference:아 제가 지금 일을 안 해서요
+[NeMo I 2025-05-23 01:47:05 wer:320] predicted:아 저희가이로
+[NeMo I 2025-05-23 01:47:05 wer:318] 
+    
+[NeMo I 2025-05-23 01:47:05 wer:319] reference:네 확인 감사합니다 지금 현재 삼만 원 세계 어린이들 도움 주 수 있는 걸로 신청해주신 거 맞으시구요
+[NeMo I 2025-05-23 01:47:05 wer:320] predicted:네 감사합니다되 로
+[NeMo I 2025-05-23 01:47:13 nemo_model_checkpoint:183] New .nemo model saved to: /AN202_data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Finetune/src/03.train/nemo_experiments/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2/2025-05-23_01-01-20/checkpoints/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2.nemo
+[NeMo I 2025-05-23 01:47:44 nemo_model_checkpoint:183] New .nemo model saved to: /AN202_data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Finetune/src/03.train/nemo_experiments/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2/2025-05-23_01-01-20/checkpoints/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2.nemo
+[NeMo I 2025-05-23 01:48:10 wer:318] 
+    
+[NeMo I 2025-05-23 01:48:10 wer:319] reference:네 그러시면 잠시만 기다려주십시오 네 작년 같은 경우에는 이미 회수연보가 마감이 되셨기 때문에 김혜수님 성함으로만 영수증 발급이 가능하세요
+[NeMo I 2025-05-23 01:48:10 wer:320] predicted:
+[NeMo I 2025-05-23 01:48:11 wer:318] 
+    
+[NeMo I 2025-05-23 01:48:11 wer:319] reference:아 제가 지금 일을 안 해서요
+[NeMo I 2025-05-23 01:48:11 wer:320] predicted:아 저희가이로
+[NeMo I 2025-05-23 01:48:12 wer:318] 
+    
+[NeMo I 2025-05-23 01:48:12 wer:319] reference:네 확인 감사합니다 지금 현재 삼만 원 세계 어린이들 도움 주 수 있는 걸로 신청해주신 거 맞으시구요
+[NeMo I 2025-05-23 01:48:12 wer:320] predicted:네 감사합니다되만 
+[NeMo I 2025-05-23 01:48:20 nemo_model_checkpoint:183] New .nemo model saved to: /AN202_data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Finetune/src/03.train/nemo_experiments/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2/2025-05-23_01-01-20/checkpoints/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2.nemo
+[NeMo I 2025-05-23 01:48:50 nemo_model_checkpoint:183] New .nemo model saved to: /AN202_data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Finetune/src/03.train/nemo_experiments/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2/2025-05-23_01-01-20/checkpoints/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2.nemo
+[NeMo I 2025-05-23 01:49:16 wer:318] 
+    
+[NeMo I 2025-05-23 01:49:16 wer:319] reference:예금주 정보 입력을 해야 되기 때문에 김혜수님 생년월일로 입력해주시면 되시구요 어 제가 명의변경으로 처리 진행해드리겠습니다
+[NeMo I 2025-05-23 01:49:16 wer:320] predicted:의로
+[NeMo I 2025-05-23 01:49:17 wer:318] 
+    
+[NeMo I 2025-05-23 01:49:17 wer:319] reference:아 제가 지금 일을 안 해서요
+[NeMo I 2025-05-23 01:49:17 wer:320] predicted:아 지금 저희가이로
+[NeMo I 2025-05-23 01:49:17 wer:318] 
+    
+[NeMo I 2025-05-23 01:49:17 wer:319] reference:네 확인 감사합니다 지금 현재 삼만 원 세계 어린이들 도움 주 수 있는 걸로 신청해주신 거 맞으시구요
+[NeMo I 2025-05-23 01:49:17 wer:320] predicted:네 감사합니다되만 
+[NeMo I 2025-05-23 01:49:25 nemo_model_checkpoint:183] New .nemo model saved to: /AN202_data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Finetune/src/03.train/nemo_experiments/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2/2025-05-23_01-01-20/checkpoints/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2.nemo
+[NeMo I 2025-05-23 01:49:57 nemo_model_checkpoint:183] New .nemo model saved to: /AN202_data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Finetune/src/03.train/nemo_experiments/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2/2025-05-23_01-01-20/checkpoints/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2.nemo
+[NeMo I 2025-05-23 01:50:22 wer:318] 
+    
+[NeMo I 2025-05-23 01:50:22 wer:319] reference:어 혹시 괜찮으시다면 좀 부담되지 않은 소액 단위로 금액을 변경해보시는 건 어떠실까요
+[NeMo I 2025-05-23 01:50:22 wer:320] predicted:중 될까요
+[NeMo I 2025-05-23 01:50:24 wer:318] 
+    
+[NeMo I 2025-05-23 01:50:24 wer:319] reference:아 제가 지금 일을 안 해서요
+[NeMo I 2025-05-23 01:50:24 wer:320] predicted:아 지금 저희가이로
+[NeMo I 2025-05-23 01:50:24 wer:318] 
+    
+[NeMo I 2025-05-23 01:50:24 wer:319] reference:네 확인 감사합니다 지금 현재 삼만 원 세계 어린이들 도움 주 수 있는 걸로 신청해주신 거 맞으시구요
+[NeMo I 2025-05-23 01:50:24 wer:320] predicted:네 감사합니다 나되만일 
+[NeMo I 2025-05-23 01:50:32 nemo_model_checkpoint:183] New .nemo model saved to: /AN202_data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Finetune/src/03.train/nemo_experiments/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2/2025-05-23_01-01-20/checkpoints/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2.nemo
+[NeMo I 2025-05-23 01:51:04 nemo_model_checkpoint:183] New .nemo model saved to: /AN202_data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Finetune/src/03.train/nemo_experiments/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2/2025-05-23_01-01-20/checkpoints/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2.nemo
+[NeMo I 2025-05-23 01:51:30 wer:318] 
+    
+[NeMo I 2025-05-23 01:51:30 wer:319] reference:네 그러면 요청하신 대로 제가 진행 처리해드릴 텐데요 자동이체 후원 건을 카드로 변경해드리면 될까요
+[NeMo I 2025-05-23 01:51:30 wer:320] predicted:네로해드리면 될까요
+[NeMo I 2025-05-23 01:51:31 wer:318] 
+    
+[NeMo I 2025-05-23 01:51:31 wer:319] reference:아 제가 지금 일을 안 해서요
+[NeMo I 2025-05-23 01:51:31 wer:320] predicted:아 지금 저희가이로
+[NeMo I 2025-05-23 01:51:31 wer:318] 
+    
+[NeMo I 2025-05-23 01:51:31 wer:319] reference:네 확인 감사합니다 지금 현재 삼만 원 세계 어린이들 도움 주 수 있는 걸로 신청해주신 거 맞으시구요
+[NeMo I 2025-05-23 01:51:31 wer:320] predicted:네 감사합니다 지금 나되 삼만일 
+[NeMo I 2025-05-23 01:51:39 nemo_model_checkpoint:183] New .nemo model saved to: /AN202_data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Finetune/src/03.train/nemo_experiments/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2/2025-05-23_01-01-20/checkpoints/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2.nemo
+[NeMo I 2025-05-23 01:52:10 nemo_model_checkpoint:183] New .nemo model saved to: /AN202_data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Finetune/src/03.train/nemo_experiments/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2/2025-05-23_01-01-20/checkpoints/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2.nemo
+[NeMo I 2025-05-23 01:52:36 wer:318] 
+    
+[NeMo I 2025-05-23 01:52:36 wer:319] reference:포항시 북구
+[NeMo I 2025-05-23 01:52:36 wer:320] predicted:자포구
+[NeMo I 2025-05-23 01:52:38 wer:318] 
+    
+[NeMo I 2025-05-23 01:52:38 wer:319] reference:아 제가 지금 일을 안 해서요
+[NeMo I 2025-05-23 01:52:38 wer:320] predicted:아 지금 저희가이로
+[NeMo I 2025-05-23 01:52:38 wer:318] 
+    
+[NeMo I 2025-05-23 01:52:38 wer:319] reference:네 확인 감사합니다 지금 현재 삼만 원 세계 어린이들 도움 주 수 있는 걸로 신청해주신 거 맞으시구요
+[NeMo I 2025-05-23 01:52:38 wer:320] predicted:네 감사합니다 지금 나되만 
+[NeMo I 2025-05-23 01:52:46 nemo_model_checkpoint:183] New .nemo model saved to: /AN202_data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Finetune/src/03.train/nemo_experiments/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2/2025-05-23_01-01-20/checkpoints/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2.nemo
+[NeMo I 2025-05-23 01:53:16 nemo_model_checkpoint:183] New .nemo model saved to: /AN202_data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Finetune/src/03.train/nemo_experiments/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2/2025-05-23_01-01-20/checkpoints/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2.nemo
+[NeMo I 2025-05-23 01:53:42 wer:318] 
+    
+[NeMo I 2025-05-23 01:53:42 wer:319] reference:그걸 들었나 봐요
+[NeMo I 2025-05-23 01:53:42 wer:320] predicted:
+[NeMo I 2025-05-23 01:53:43 wer:318] 
+    
+[NeMo I 2025-05-23 01:53:43 wer:319] reference:아 제가 지금 일을 안 해서요
+[NeMo I 2025-05-23 01:53:43 wer:320] predicted:아 지금 저희가이로
+[NeMo I 2025-05-23 01:53:44 wer:318] 
+    
+[NeMo I 2025-05-23 01:53:44 wer:319] reference:네 확인 감사합니다 지금 현재 삼만 원 세계 어린이들 도움 주 수 있는 걸로 신청해주신 거 맞으시구요
+[NeMo I 2025-05-23 01:53:44 wer:320] predicted:네 감사합니다 지금 나되 삼만 
+[NeMo I 2025-05-23 01:53:52 nemo_model_checkpoint:183] New .nemo model saved to: /AN202_data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Finetune/src/03.train/nemo_experiments/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2/2025-05-23_01-01-20/checkpoints/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2.nemo
+[NeMo I 2025-05-23 01:54:23 nemo_model_checkpoint:183] New .nemo model saved to: /AN202_data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Finetune/src/03.train/nemo_experiments/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2/2025-05-23_01-01-20/checkpoints/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2.nemo
+[NeMo I 2025-05-23 01:54:49 wer:318] 
+    
+[NeMo I 2025-05-23 01:54:49 wer:319] reference:예 예 어 팔 일 구
+[NeMo I 2025-05-23 01:54:49 wer:320] predicted:예 예 어 팔 이 구
+[NeMo I 2025-05-23 01:54:50 wer:318] 
+    
+[NeMo I 2025-05-23 01:54:50 wer:319] reference:아 제가 지금 일을 안 해서요
+[NeMo I 2025-05-23 01:54:50 wer:320] predicted:아 지금 저희가이로
+[NeMo I 2025-05-23 01:54:50 wer:318] 
+    
+[NeMo I 2025-05-23 01:54:50 wer:319] reference:네 확인 감사합니다 지금 현재 삼만 원 세계 어린이들 도움 주 수 있는 걸로 신청해주신 거 맞으시구요
+[NeMo I 2025-05-23 01:54:50 wer:320] predicted:네 감사합니다 지금 나되 삼만 
+[NeMo I 2025-05-23 01:54:59 nemo_model_checkpoint:183] New .nemo model saved to: /AN202_data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Finetune/src/03.train/nemo_experiments/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2/2025-05-23_01-01-20/checkpoints/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2.nemo
+[NeMo I 2025-05-23 01:55:30 nemo_model_checkpoint:183] New .nemo model saved to: /AN202_data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Finetune/src/03.train/nemo_experiments/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2/2025-05-23_01-01-20/checkpoints/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2.nemo
+[NeMo I 2025-05-23 01:55:56 wer:318] 
+    
+[NeMo I 2025-05-23 01:55:56 wer:319] reference:네 본인 확인 차 생년월일 말씀 부탁드릴게요
+[NeMo I 2025-05-23 01:55:56 wer:320] predicted:네일 생
+[NeMo I 2025-05-23 01:55:57 wer:318] 
+    
+[NeMo I 2025-05-23 01:55:57 wer:319] reference:아 제가 지금 일을 안 해서요
+[NeMo I 2025-05-23 01:55:57 wer:320] predicted:아 지금 저희가이로
+[NeMo I 2025-05-23 01:55:57 wer:318] 
+    
+[NeMo I 2025-05-23 01:55:57 wer:319] reference:네 확인 감사합니다 지금 현재 삼만 원 세계 어린이들 도움 주 수 있는 걸로 신청해주신 거 맞으시구요
+[NeMo I 2025-05-23 01:55:57 wer:320] predicted:네 감사합니다 지금 나되 삼만 
+[NeMo I 2025-05-23 01:56:06 nemo_model_checkpoint:183] New .nemo model saved to: /AN202_data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Finetune/src/03.train/nemo_experiments/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2/2025-05-23_01-01-20/checkpoints/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2.nemo
+[NeMo I 2025-05-23 01:56:36 nemo_model_checkpoint:183] New .nemo model saved to: /AN202_data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Finetune/src/03.train/nemo_experiments/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2/2025-05-23_01-01-20/checkpoints/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2.nemo
+[NeMo I 2025-05-23 01:57:03 wer:318] 
+    
+[NeMo I 2025-05-23 01:57:03 wer:319] reference:네 네네 파표로 네네
+[NeMo I 2025-05-23 01:57:03 wer:320] predicted:네네 네네 사자로
+[NeMo I 2025-05-23 01:57:04 wer:318] 
+    
+[NeMo I 2025-05-23 01:57:04 wer:319] reference:아 제가 지금 일을 안 해서요
+[NeMo I 2025-05-23 01:57:04 wer:320] predicted:아 지금 저희가이로
+[NeMo I 2025-05-23 01:57:04 wer:318] 
+    
+[NeMo I 2025-05-23 01:57:04 wer:319] reference:네 확인 감사합니다 지금 현재 삼만 원 세계 어린이들 도움 주 수 있는 걸로 신청해주신 거 맞으시구요
+[NeMo I 2025-05-23 01:57:04 wer:320] predicted:네 감사합니다 지금 나되 삼만 
+[NeMo I 2025-05-23 01:57:13 nemo_model_checkpoint:183] New .nemo model saved to: /AN202_data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Finetune/src/03.train/nemo_experiments/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2/2025-05-23_01-01-20/checkpoints/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2.nemo
+[NeMo I 2025-05-23 01:57:43 nemo_model_checkpoint:183] New .nemo model saved to: /AN202_data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Finetune/src/03.train/nemo_experiments/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2/2025-05-23_01-01-20/checkpoints/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2.nemo
+[NeMo I 2025-05-23 01:58:09 wer:318] 
+    
+[NeMo I 2025-05-23 01:58:09 wer:319] reference:예금주 정보 입력을 해야 되기 때문에 김혜수님 생년월일로 입력해주시면 되시구요 어 제가 명의변경으로 처리 진행해드리겠습니다
+[NeMo I 2025-05-23 01:58:09 wer:320] predicted:로 때문에 김의수 차명로
+[NeMo I 2025-05-23 01:58:10 wer:318] 
+    
+[NeMo I 2025-05-23 01:58:10 wer:319] reference:아 제가 지금 일을 안 해서요
+[NeMo I 2025-05-23 01:58:10 wer:320] predicted:아 지금 저희가이로
+[NeMo I 2025-05-23 01:58:10 wer:318] 
+    
+[NeMo I 2025-05-23 01:58:10 wer:319] reference:네 확인 감사합니다 지금 현재 삼만 원 세계 어린이들 도움 주 수 있는 걸로 신청해주신 거 맞으시구요
+[NeMo I 2025-05-23 01:58:10 wer:320] predicted:네 감사합니다 지금 나되 삼만 
+[NeMo I 2025-05-23 01:58:18 nemo_model_checkpoint:183] New .nemo model saved to: /AN202_data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Finetune/src/03.train/nemo_experiments/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2/2025-05-23_01-01-20/checkpoints/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2.nemo
+[NeMo I 2025-05-23 01:58:49 nemo_model_checkpoint:183] New .nemo model saved to: /AN202_data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Finetune/src/03.train/nemo_experiments/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2/2025-05-23_01-01-20/checkpoints/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2.nemo
+[NeMo I 2025-05-23 01:59:16 wer:318] 
+    
+[NeMo I 2025-05-23 01:59:16 wer:319] reference:네
+[NeMo I 2025-05-23 01:59:16 wer:320] predicted:
+[NeMo I 2025-05-23 01:59:17 wer:318] 
+    
+[NeMo I 2025-05-23 01:59:17 wer:319] reference:아 제가 지금 일을 안 해서요
+[NeMo I 2025-05-23 01:59:17 wer:320] predicted:아 제가 지금 저희가이로
+[NeMo I 2025-05-23 01:59:17 wer:318] 
+    
+[NeMo I 2025-05-23 01:59:17 wer:319] reference:네 확인 감사합니다 지금 현재 삼만 원 세계 어린이들 도움 주 수 있는 걸로 신청해주신 거 맞으시구요
+[NeMo I 2025-05-23 01:59:17 wer:320] predicted:네 감사합니다 지금 나되 삼만 
+[NeMo I 2025-05-23 01:59:26 nemo_model_checkpoint:183] New .nemo model saved to: /AN202_data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Finetune/src/03.train/nemo_experiments/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2/2025-05-23_01-01-20/checkpoints/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2.nemo
+[NeMo I 2025-05-23 01:59:56 nemo_model_checkpoint:183] New .nemo model saved to: /AN202_data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Finetune/src/03.train/nemo_experiments/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2/2025-05-23_01-01-20/checkpoints/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2.nemo
+[NeMo I 2025-05-23 02:00:22 wer:318] 
+    
+[NeMo I 2025-05-23 02:00:22 wer:319] reference:네네
+[NeMo I 2025-05-23 02:00:22 wer:320] predicted:네
+[NeMo I 2025-05-23 02:00:23 wer:318] 
+    
+[NeMo I 2025-05-23 02:00:23 wer:319] reference:아 제가 지금 일을 안 해서요
+[NeMo I 2025-05-23 02:00:23 wer:320] predicted:아 제가 지금 저희가이 안로
+[NeMo I 2025-05-23 02:00:23 wer:318] 
+    
+[NeMo I 2025-05-23 02:00:23 wer:319] reference:네 확인 감사합니다 지금 현재 삼만 원 세계 어린이들 도움 주 수 있는 걸로 신청해주신 거 맞으시구요
+[NeMo I 2025-05-23 02:00:23 wer:320] predicted:네 감사합니다 지금 나되 삼만 
+[NeMo I 2025-05-23 02:00:31 nemo_model_checkpoint:183] New .nemo model saved to: /AN202_data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Finetune/src/03.train/nemo_experiments/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2/2025-05-23_01-01-20/checkpoints/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2.nemo
+[NeMo I 2025-05-23 02:01:02 nemo_model_checkpoint:183] New .nemo model saved to: /AN202_data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Finetune/src/03.train/nemo_experiments/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2/2025-05-23_01-01-20/checkpoints/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2.nemo
+[NeMo I 2025-05-23 02:01:28 wer:318] 
+    
+[NeMo I 2025-05-23 02:01:28 wer:319] reference:그것 좀 새로 한 거 좀 취소 좀 하고 주소 이전 좀 확인할게요
+[NeMo I 2025-05-23 02:01:28 wer:320] predicted:좀 새로 거 좀 잘 좀 좀 좀할게요
+[NeMo I 2025-05-23 02:01:30 wer:318] 
+    
+[NeMo I 2025-05-23 02:01:30 wer:319] reference:아 제가 지금 일을 안 해서요
+[NeMo I 2025-05-23 02:01:30 wer:320] predicted:아 제가 지금 저희가이 안로
+[NeMo I 2025-05-23 02:01:30 wer:318] 
+    
+[NeMo I 2025-05-23 02:01:30 wer:319] reference:네 확인 감사합니다 지금 현재 삼만 원 세계 어린이들 도움 주 수 있는 걸로 신청해주신 거 맞으시구요
+[NeMo I 2025-05-23 02:01:30 wer:320] predicted:네 감사합니다 지금 나되 삼만 이
+[NeMo I 2025-05-23 02:01:39 nemo_model_checkpoint:183] New .nemo model saved to: /AN202_data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Finetune/src/03.train/nemo_experiments/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2/2025-05-23_01-01-20/checkpoints/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2.nemo
+[NeMo I 2025-05-23 02:02:09 nemo_model_checkpoint:183] New .nemo model saved to: /AN202_data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Finetune/src/03.train/nemo_experiments/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2/2025-05-23_01-01-20/checkpoints/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2.nemo
+[NeMo I 2025-05-23 02:02:35 wer:318] 
+    
+[NeMo I 2025-05-23 02:02:35 wer:319] reference:예 오 공 오 사
+[NeMo I 2025-05-23 02:02:35 wer:320] predicted:예 오 공 오 사
+[NeMo I 2025-05-23 02:02:36 wer:318] 
+    
+[NeMo I 2025-05-23 02:02:36 wer:319] reference:아 제가 지금 일을 안 해서요
+[NeMo I 2025-05-23 02:02:36 wer:320] predicted:아 제가 지금 저희가이 안로
+[NeMo I 2025-05-23 02:02:37 wer:318] 
+    
+[NeMo I 2025-05-23 02:02:37 wer:319] reference:네 확인 감사합니다 지금 현재 삼만 원 세계 어린이들 도움 주 수 있는 걸로 신청해주신 거 맞으시구요
+[NeMo I 2025-05-23 02:02:37 wer:320] predicted:네 감사합니다 지금 나되 삼만 이
+[NeMo I 2025-05-23 02:02:45 nemo_model_checkpoint:183] New .nemo model saved to: /AN202_data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Finetune/src/03.train/nemo_experiments/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2/2025-05-23_01-01-20/checkpoints/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2.nemo
+[NeMo I 2025-05-23 02:03:16 nemo_model_checkpoint:183] New .nemo model saved to: /AN202_data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Finetune/src/03.train/nemo_experiments/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2/2025-05-23_01-01-20/checkpoints/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2.nemo
+[NeMo I 2025-05-23 02:03:43 wer:318] 
+    
+[NeMo I 2025-05-23 02:03:43 wer:319] reference:사백 일 호로 등록해드리면 될까요
+[NeMo I 2025-05-23 02:03:43 wer:320] predicted:팔 그래서로 등록해드리면 될까요
+[NeMo I 2025-05-23 02:03:44 wer:318] 
+    
+[NeMo I 2025-05-23 02:03:44 wer:319] reference:아 제가 지금 일을 안 해서요
+[NeMo I 2025-05-23 02:03:44 wer:320] predicted:아 제가 지금 저희가이 안로
+[NeMo I 2025-05-23 02:03:44 wer:318] 
+    
+[NeMo I 2025-05-23 02:03:44 wer:319] reference:네 확인 감사합니다 지금 현재 삼만 원 세계 어린이들 도움 주 수 있는 걸로 신청해주신 거 맞으시구요
+[NeMo I 2025-05-23 02:03:44 wer:320] predicted:네 감사합니다 지금 나되 삼만계 이
+[NeMo I 2025-05-23 02:03:52 nemo_model_checkpoint:183] New .nemo model saved to: /AN202_data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Finetune/src/03.train/nemo_experiments/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2/2025-05-23_01-01-20/checkpoints/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2.nemo
+[NeMo I 2025-05-23 02:04:22 nemo_model_checkpoint:183] New .nemo model saved to: /AN202_data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Finetune/src/03.train/nemo_experiments/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2/2025-05-23_01-01-20/checkpoints/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2.nemo
+[NeMo I 2025-05-23 02:04:48 wer:318] 
+    
+[NeMo I 2025-05-23 02:04:48 wer:319] reference:칠성로
+[NeMo I 2025-05-23 02:04:48 wer:320] predicted:칠성로
+[NeMo I 2025-05-23 02:04:49 wer:318] 
+    
+[NeMo I 2025-05-23 02:04:49 wer:319] reference:아 제가 지금 일을 안 해서요
+[NeMo I 2025-05-23 02:04:49 wer:320] predicted:아 제가 지금 저희가이 안로
+[NeMo I 2025-05-23 02:04:49 wer:318] 
+    
+[NeMo I 2025-05-23 02:04:49 wer:319] reference:네 확인 감사합니다 지금 현재 삼만 원 세계 어린이들 도움 주 수 있는 걸로 신청해주신 거 맞으시구요
+[NeMo I 2025-05-23 02:04:49 wer:320] predicted:네 감사합니다 지금 나되 삼만 어 이
+[NeMo I 2025-05-23 02:04:58 nemo_model_checkpoint:183] New .nemo model saved to: /AN202_data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Finetune/src/03.train/nemo_experiments/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2/2025-05-23_01-01-20/checkpoints/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2.nemo
+[NeMo I 2025-05-23 02:05:29 nemo_model_checkpoint:183] New .nemo model saved to: /AN202_data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Finetune/src/03.train/nemo_experiments/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2/2025-05-23_01-01-20/checkpoints/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2.nemo
+[NeMo I 2025-05-23 02:05:55 wer:318] 
+    
+[NeMo I 2025-05-23 02:05:55 wer:319] reference:네 확인 감사합니다 어 세계 어린이 지원으로 정기원 총 현재 오만 원의 기금으로
+[NeMo I 2025-05-23 02:05:55 wer:320] predicted:확인 감사합니다 어 어원로원 현재 오만
+[NeMo I 2025-05-23 02:05:56 wer:318] 
+    
+[NeMo I 2025-05-23 02:05:56 wer:319] reference:아 제가 지금 일을 안 해서요
+[NeMo I 2025-05-23 02:05:56 wer:320] predicted:아 제가 지금 저희가이 안로
+[NeMo I 2025-05-23 02:05:56 wer:318] 
+    
+[NeMo I 2025-05-23 02:05:56 wer:319] reference:네 확인 감사합니다 지금 현재 삼만 원 세계 어린이들 도움 주 수 있는 걸로 신청해주신 거 맞으시구요
+[NeMo I 2025-05-23 02:05:56 wer:320] predicted:네 감사합니다 지금 나되 삼만 어 이
+[NeMo I 2025-05-23 02:06:05 nemo_model_checkpoint:183] New .nemo model saved to: /AN202_data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Finetune/src/03.train/nemo_experiments/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2/2025-05-23_01-01-20/checkpoints/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2.nemo
+[NeMo I 2025-05-23 02:06:35 nemo_model_checkpoint:183] New .nemo model saved to: /AN202_data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Finetune/src/03.train/nemo_experiments/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2/2025-05-23_01-01-20/checkpoints/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2.nemo
+[NeMo I 2025-05-23 02:07:01 wer:318] 
+    
+[NeMo I 2025-05-23 02:07:01 wer:319] reference:칠성로
+[NeMo I 2025-05-23 02:07:01 wer:320] predicted:칠상로
+[NeMo I 2025-05-23 02:07:02 wer:318] 
+    
+[NeMo I 2025-05-23 02:07:02 wer:319] reference:아 제가 지금 일을 안 해서요
+[NeMo I 2025-05-23 02:07:02 wer:320] predicted:아 제가 지금 저희가이 안로
+[NeMo I 2025-05-23 02:07:03 wer:318] 
+    
+[NeMo I 2025-05-23 02:07:03 wer:319] reference:네 확인 감사합니다 지금 현재 삼만 원 세계 어린이들 도움 주 수 있는 걸로 신청해주신 거 맞으시구요
+[NeMo I 2025-05-23 02:07:03 wer:320] predicted:네 감사합니다 지금 나되 삼만  어 이
+[NeMo I 2025-05-23 02:07:11 nemo_model_checkpoint:183] New .nemo model saved to: /AN202_data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Finetune/src/03.train/nemo_experiments/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2/2025-05-23_01-01-20/checkpoints/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2.nemo
+[NeMo I 2025-05-23 02:07:42 nemo_model_checkpoint:183] New .nemo model saved to: /AN202_data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Finetune/src/03.train/nemo_experiments/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2/2025-05-23_01-01-20/checkpoints/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2.nemo
+[NeMo I 2025-05-23 02:08:08 wer:318] 
+    
+[NeMo I 2025-05-23 02:08:08 wer:319] reference:예
+[NeMo I 2025-05-23 02:08:08 wer:320] predicted:예
+[NeMo I 2025-05-23 02:08:10 wer:318] 
+    
+[NeMo I 2025-05-23 02:08:10 wer:319] reference:아 제가 지금 일을 안 해서요
+[NeMo I 2025-05-23 02:08:10 wer:320] predicted:아 제가 지금 저희가이 안로
+[NeMo I 2025-05-23 02:08:10 wer:318] 
+    
+[NeMo I 2025-05-23 02:08:10 wer:319] reference:네 확인 감사합니다 지금 현재 삼만 원 세계 어린이들 도움 주 수 있는 걸로 신청해주신 거 맞으시구요
+[NeMo I 2025-05-23 02:08:10 wer:320] predicted:네 감사합니다 지금 나되 삼만  어 이
+[NeMo I 2025-05-23 02:08:18 nemo_model_checkpoint:183] New .nemo model saved to: /AN202_data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Finetune/src/03.train/nemo_experiments/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2/2025-05-23_01-01-20/checkpoints/Conformer-CTC-BPE-Large-Pretrain-Unigram-Combined-26500-Dataset-Epoch16-Finetuning-2.nemo
+[NeMo W 2025-05-23 02:08:40 nemo_logging:349] /home/aithe209/anaconda3/envs/kynd_nemo_200/lib/python3.10/site-packages/pytorch_lightning/trainer/call.py:53: UserWarning: Detected KeyboardInterrupt, attempting graceful shutdown...
+      rank_zero_warn("Detected KeyboardInterrupt, attempting graceful shutdown...")
+    
