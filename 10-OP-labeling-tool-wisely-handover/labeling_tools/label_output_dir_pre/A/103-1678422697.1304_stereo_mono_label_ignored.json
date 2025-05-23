@@ -1,0 +1,180 @@
+{
+    "is_ignored": true,
+    "labeler_id": "A",
+    "call_id": "103-1678422697.1304_stereo_mono",
+    "label_time": "2025-04-28 09:53:51.232527",
+    "sentiment": "긍정",
+    "topic": [],
+    "stt_label": [
+        {
+            "audio_filepath": "/nas2/voice/data/kynd/AItheDaisy/08-1-MetaM_Labeling_Prepare/data_pyannotate/splited_speaker_data_metam_pyannotate_change_rx_tx/split_mono_left/mono/103-1678422697.1304_stereo_mono/chunk00000_counselor_345.wav",
+            "pred_text": "직거 경험 아이들링 김지현입니다 무엇을 도와드릴까요",
+            "label_text": "직거 경험 아이들링 김지현입니다 무엇을 도와드릴까요"
+        },
+        {
+            "audio_filepath": "/nas2/voice/data/kynd/AItheDaisy/08-1-MetaM_Labeling_Prepare/data_pyannotate/splited_speaker_data_metam_pyannotate_change_rx_tx/split_mono_left/mono/103-1678422697.1304_stereo_mono/chunk00001_customer_3653.wav",
+            "pred_text": "내 수아힘이라",
+            "label_text": "내 수아힘이라"
+        },
+        {
+            "audio_filepath": "/nas2/voice/data/kynd/AItheDaisy/08-1-MetaM_Labeling_Prepare/data_pyannotate/splited_speaker_data_metam_pyannotate_change_rx_tx/split_mono_left/mono/103-1678422697.1304_stereo_mono/chunk00002_counselor_5003.wav",
+            "pred_text": "네 감사합니다",
+            "label_text": "네 감사합니다"
+        },
+        {
+            "audio_filepath": "/nas2/voice/data/kynd/AItheDaisy/08-1-MetaM_Labeling_Prepare/data_pyannotate/splited_speaker_data_metam_pyannotate_change_rx_tx/split_mono_left/mono/103-1678422697.1304_stereo_mono/chunk00003_customer_6387.wav",
+            "pred_text": "아까 전화드렸었는데요",
+            "label_text": "아까 전화드렸었는데요"
+        },
+        {
+            "audio_filepath": "/nas2/voice/data/kynd/AItheDaisy/08-1-MetaM_Labeling_Prepare/data_pyannotate/splited_speaker_data_metam_pyannotate_change_rx_tx/split_mono_left/mono/103-1678422697.1304_stereo_mono/chunk00004_counselor_8462.wav",
+            "pred_text": "네네",
+            "label_text": "네네"
+        },
+        {
+            "audio_filepath": "/nas2/voice/data/kynd/AItheDaisy/08-1-MetaM_Labeling_Prepare/data_pyannotate/splited_speaker_data_metam_pyannotate_change_rx_tx/split_mono_left/mono/103-1678422697.1304_stereo_mono/chunk00005_customer_9711.wav",
+            "pred_text": "저 회원가입할려면은 어떻게 해야 돼요",
+            "label_text": "저 회원가입할려면은 어떻게 해야 돼요"
+        },
+        {
+            "audio_filepath": "/nas2/voice/data/kynd/AItheDaisy/08-1-MetaM_Labeling_Prepare/data_pyannotate/splited_speaker_data_metam_pyannotate_change_rx_tx/split_mono_left/mono/103-1678422697.1304_stereo_mono/chunk00006_counselor_12614.wav",
+            "pred_text": "아 네 어 그냥 저희 그 와이드리 홈페이지는 들어가 보셨을까요",
+            "label_text": "아 네 어 그냥 저희 그 와이드리 홈페이지는 들어가 보셨을까요"
+        },
+        {
+            "audio_filepath": "/nas2/voice/data/kynd/AItheDaisy/08-1-MetaM_Labeling_Prepare/data_pyannotate/splited_speaker_data_metam_pyannotate_change_rx_tx/split_mono_left/mono/103-1678422697.1304_stereo_mono/chunk00007_customer_18874.wav",
+            "pred_text": "홈페이지에 들어가세요",
+            "label_text": "홈페이지에 들어가세요"
+        },
+        {
+            "audio_filepath": "/nas2/voice/data/kynd/AItheDaisy/08-1-MetaM_Labeling_Prepare/data_pyannotate/splited_speaker_data_metam_pyannotate_change_rx_tx/split_mono_left/mono/103-1678422697.1304_stereo_mono/chunk00008_counselor_20258.wav",
+            "pred_text": "예예",
+            "label_text": "예예"
+        },
+        {
+            "audio_filepath": "/nas2/voice/data/kynd/AItheDaisy/08-1-MetaM_Labeling_Prepare/data_pyannotate/splited_speaker_data_metam_pyannotate_change_rx_tx/split_mono_left/mono/103-1678422697.1304_stereo_mono/chunk00009_customer_21405.wav",
+            "pred_text": "네",
+            "label_text": "네"
+        },
+        {
+            "audio_filepath": "/nas2/voice/data/kynd/AItheDaisy/08-1-MetaM_Labeling_Prepare/data_pyannotate/splited_speaker_data_metam_pyannotate_change_rx_tx/split_mono_left/mono/103-1678422697.1304_stereo_mono/chunk00010_counselor_22232.wav",
+            "pred_text": "홈페이딩 들어가셨어요",
+            "label_text": "홈페이딩 들어가셨어요"
+        },
+        {
+            "audio_filepath": "/nas2/voice/data/kynd/AItheDaisy/08-1-MetaM_Labeling_Prepare/data_pyannotate/splited_speaker_data_metam_pyannotate_change_rx_tx/split_mono_left/mono/103-1678422697.1304_stereo_mono/chunk00011_customer_25810.wav",
+            "pred_text": "의심은 아니요 저 홈페이지 들어가서 어떻게 해요",
+            "label_text": "의심은 아니요 저 홈페이지 들어가서 어떻게 해요"
+        },
+        {
+            "audio_filepath": "/nas2/voice/data/kynd/AItheDaisy/08-1-MetaM_Labeling_Prepare/data_pyannotate/splited_speaker_data_metam_pyannotate_change_rx_tx/split_mono_left/mono/103-1678422697.1304_stereo_mono/chunk00012_counselor_30012.wav",
+            "pred_text": "홈 사이지 들어가시면 제 위쪽에 회원가입이라고 있습니다",
+            "label_text": "홈 사이지 들어가시면 제 위쪽에 회원가입이라고 있습니다"
+        },
+        {
+            "audio_filepath": "/nas2/voice/data/kynd/AItheDaisy/08-1-MetaM_Labeling_Prepare/data_pyannotate/splited_speaker_data_metam_pyannotate_change_rx_tx/split_mono_left/mono/103-1678422697.1304_stereo_mono/chunk00013_customer_31767.wav",
+            "pred_text": "네 네이에이이",
+            "label_text": "네 네이에이이"
+        },
+        {
+            "audio_filepath": "/nas2/voice/data/kynd/AItheDaisy/08-1-MetaM_Labeling_Prepare/data_pyannotate/splited_speaker_data_metam_pyannotate_change_rx_tx/split_mono_left/mono/103-1678422697.1304_stereo_mono/chunk00014_counselor_34585.wav",
+            "pred_text": "회원가입을 클릭하시면",
+            "label_text": "회원가입을 클릭하시면"
+        },
+        {
+            "audio_filepath": "/nas2/voice/data/kynd/AItheDaisy/08-1-MetaM_Labeling_Prepare/data_pyannotate/splited_speaker_data_metam_pyannotate_change_rx_tx/split_mono_left/mono/103-1678422697.1304_stereo_mono/chunk00015_customer_36576.wav",
+            "pred_text": "예",
+            "label_text": "예"
+        },
+        {
+            "audio_filepath": "/nas2/voice/data/kynd/AItheDaisy/08-1-MetaM_Labeling_Prepare/data_pyannotate/splited_speaker_data_metam_pyannotate_change_rx_tx/split_mono_left/mono/103-1678422697.1304_stereo_mono/chunk00016_counselor_37015.wav",
+            "pred_text": "카카오톡으로 뭐 십대 회원가입 혹은 그냥 뭐 이늘일 회원가입 있습니다 그중에 보용 원하시는 쪽으로 선택하시면 되시고요",
+            "label_text": "카카오톡으로 뭐 십대 회원가입 혹은 그냥 뭐 이늘일 회원가입 있습니다 그중에 보용 원하시는 쪽으로 선택하시면 되시고요"
+        },
+        {
+            "audio_filepath": "/nas2/voice/data/kynd/AItheDaisy/08-1-MetaM_Labeling_Prepare/data_pyannotate/splited_speaker_data_metam_pyannotate_change_rx_tx/split_mono_left/mono/103-1678422697.1304_stereo_mono/chunk00017_customer_43680.wav",
+            "pred_text": "네 어",
+            "label_text": "네 어"
+        },
+        {
+            "audio_filepath": "/nas2/voice/data/kynd/AItheDaisy/08-1-MetaM_Labeling_Prepare/data_pyannotate/splited_speaker_data_metam_pyannotate_change_rx_tx/split_mono_left/mono/103-1678422697.1304_stereo_mono/chunk00018_counselor_46026.wav",
+            "pred_text": "카카오톡으로 회원 가입하시 게 조금 더 편하실 거예요 지금 카카오톡을 사용하신다면요",
+            "label_text": "카카오톡으로 회원 가입하시 게 조금 더 편하실 거예요 지금 카카오톡을 사용하신다면요"
+        },
+        {
+            "audio_filepath": "/nas2/voice/data/kynd/AItheDaisy/08-1-MetaM_Labeling_Prepare/data_pyannotate/splited_speaker_data_metam_pyannotate_change_rx_tx/split_mono_left/mono/103-1678422697.1304_stereo_mono/chunk00019_customer_49283.wav",
+            "pred_text": "예 가 예예",
+            "label_text": "예 가 예예"
+        },
+        {
+            "audio_filepath": "/nas2/voice/data/kynd/AItheDaisy/08-1-MetaM_Labeling_Prepare/data_pyannotate/splited_speaker_data_metam_pyannotate_change_rx_tx/split_mono_left/mono/103-1678422697.1304_stereo_mono/chunk00020_counselor_51409.wav",
+            "pred_text": "응 네네 그러시면 네",
+            "label_text": "응 네네 그러시면 네"
+        },
+        {
+            "audio_filepath": "/nas2/voice/data/kynd/AItheDaisy/08-1-MetaM_Labeling_Prepare/data_pyannotate/splited_speaker_data_metam_pyannotate_change_rx_tx/split_mono_left/mono/103-1678422697.1304_stereo_mono/chunk00021_customer_52624.wav",
+            "pred_text": "카카오톡 보험가입이",
+            "label_text": "카카오톡 보험가입이"
+        },
+        {
+            "audio_filepath": "/nas2/voice/data/kynd/AItheDaisy/08-1-MetaM_Labeling_Prepare/data_pyannotate/splited_speaker_data_metam_pyannotate_change_rx_tx/split_mono_left/mono/103-1678422697.1304_stereo_mono/chunk00022_counselor_54143.wav",
+            "pred_text": "예에",
+            "label_text": "예에"
+        },
+        {
+            "audio_filepath": "/nas2/voice/data/kynd/AItheDaisy/08-1-MetaM_Labeling_Prepare/data_pyannotate/splited_speaker_data_metam_pyannotate_change_rx_tx/split_mono_left/mono/103-1678422697.1304_stereo_mono/chunk00023_customer_55172.wav",
+            "pred_text": "네",
+            "label_text": "네"
+        },
+        {
+            "audio_filepath": "/nas2/voice/data/kynd/AItheDaisy/08-1-MetaM_Labeling_Prepare/data_pyannotate/splited_speaker_data_metam_pyannotate_change_rx_tx/split_mono_left/mono/103-1678422697.1304_stereo_mono/chunk00024_counselor_55695.wav",
+            "pred_text": "그거 선택하시고 네 그냥 그대로 진행해주시면 되시거든요 고객님",
+            "label_text": "그거 선택하시고 네 그냥 그대로 진행해주시면 되시거든요 고객님"
+        },
+        {
+            "audio_filepath": "/nas2/voice/data/kynd/AItheDaisy/08-1-MetaM_Labeling_Prepare/data_pyannotate/splited_speaker_data_metam_pyannotate_change_rx_tx/split_mono_left/mono/103-1678422697.1304_stereo_mono/chunk00025_customer_61230.wav",
+            "pred_text": "아 카카오톡 회원가액은 어디들 카카오톡에 들어가요",
+            "label_text": "아 카카오톡 회원가액은 어디들 카카오톡에 들어가요"
+        },
+        {
+            "audio_filepath": "/nas2/voice/data/kynd/AItheDaisy/08-1-MetaM_Labeling_Prepare/data_pyannotate/splited_speaker_data_metam_pyannotate_change_rx_tx/split_mono_left/mono/103-1678422697.1304_stereo_mono/chunk00026_counselor_64943.wav",
+            "pred_text": "아니요 그 저희 그거 홈페이지에서 회원가입을 누르시면",
+            "label_text": "아니요 그 저희 그거 홈페이지에서 회원가입을 누르시면"
+        },
+        {
+            "audio_filepath": "/nas2/voice/data/kynd/AItheDaisy/08-1-MetaM_Labeling_Prepare/data_pyannotate/splited_speaker_data_metam_pyannotate_change_rx_tx/split_mono_left/mono/103-1678422697.1304_stereo_mono/chunk00027_customer_66209.wav",
+            "pred_text": "어 아나 아나 어",
+            "label_text": "어 아나 아나 어"
+        },
+        {
+            "audio_filepath": "/nas2/voice/data/kynd/AItheDaisy/08-1-MetaM_Labeling_Prepare/data_pyannotate/splited_speaker_data_metam_pyannotate_change_rx_tx/split_mono_left/mono/103-1678422697.1304_stereo_mono/chunk00028_counselor_68993.wav",
+            "pred_text": "카카오톡으로 쉽게 시작하게라고 있어요 그걸 클릭하시면",
+            "label_text": "카카오톡으로 쉽게 시작하게라고 있어요 그걸 클릭하시면"
+        },
+        {
+            "audio_filepath": "/nas2/voice/data/kynd/AItheDaisy/08-1-MetaM_Labeling_Prepare/data_pyannotate/splited_speaker_data_metam_pyannotate_change_rx_tx/split_mono_left/mono/103-1678422697.1304_stereo_mono/chunk00029_customer_71592.wav",
+            "pred_text": "난 아래",
+            "label_text": "난 아래"
+        },
+        {
+            "audio_filepath": "/nas2/voice/data/kynd/AItheDaisy/08-1-MetaM_Labeling_Prepare/data_pyannotate/splited_speaker_data_metam_pyannotate_change_rx_tx/split_mono_left/mono/103-1678422697.1304_stereo_mono/chunk00030_counselor_72520.wav",
+            "pred_text": "오티피 하기라고 나와요 고괜히근데 어렵지 않고 그냥 그대로 확인하기 이렇게 누르시면 바로 가입되시거든요",
+            "label_text": "오티피 하기라고 나와요 고괜히근데 어렵지 않고 그냥 그대로 확인하기 이렇게 누르시면 바로 가입되시거든요"
+        },
+        {
+            "audio_filepath": "/nas2/voice/data/kynd/AItheDaisy/08-1-MetaM_Labeling_Prepare/data_pyannotate/splited_speaker_data_metam_pyannotate_change_rx_tx/split_mono_left/mono/103-1678422697.1304_stereo_mono/chunk00031_customer_74376.wav",
+            "pred_text": "예 알겠습니겠지만 그냥 고맙습니다",
+            "label_text": "예 알겠습니겠지만 그냥 고맙습니다"
+        },
+        {
+            "audio_filepath": "/nas2/voice/data/kynd/AItheDaisy/08-1-MetaM_Labeling_Prepare/data_pyannotate/splited_speaker_data_metam_pyannotate_change_rx_tx/split_mono_left/mono/103-1678422697.1304_stereo_mono/chunk00032_counselor_78443.wav",
+            "pred_text": "네네네 네네 감사합니다 좋은 하루 되세요 에들리 김지연이었습니다",
+            "label_text": "네네네 네네 감사합니다 좋은 하루 되세요 에들리 김지연이었습니다"
+        },
+        {
+            "audio_filepath": "/nas2/voice/data/kynd/AItheDaisy/08-1-MetaM_Labeling_Prepare/data_pyannotate/splited_speaker_data_metam_pyannotate_change_rx_tx/split_mono_left/mono/103-1678422697.1304_stereo_mono/chunk00033_customer_81852.wav",
+            "pred_text": "있는데",
+            "label_text": "있는데"
+        }
+    ]
+}

@@ -1,0 +1,105 @@
+{
+    "is_ignored": true,
+    "labeler_id": "C",
+    "call_id": "103-1680765793.2281_stereo_mono",
+    "label_time": "2025-05-07 15:06:05.868883",
+    "sentiment": "긍정",
+    "topic": [],
+    "stt_label": [
+        {
+            "audio_filepath": "/nas2/voice/data/kynd/AItheDaisy/08-1-MetaM_Labeling_Prepare/data_pyannotate/splited_speaker_data_metam_pyannotate_change_rx_tx/split_mono_left/mono/103-1680765793.2281_stereo_mono/chunk00000_counselor_666.wav",
+            "pred_text": "즐거운 경험 와이들리 문 지수입니다 무엇을 도와드릴까요",
+            "label_text": "즐거운 경험 와이들리 문 지수입니다 무엇을 도와드릴까요"
+        },
+        {
+            "audio_filepath": "/nas2/voice/data/kynd/AItheDaisy/08-1-MetaM_Labeling_Prepare/data_pyannotate/splited_speaker_data_metam_pyannotate_change_rx_tx/split_mono_left/mono/103-1680765793.2281_stereo_mono/chunk00001_customer_4159.wav",
+            "pred_text": "네 안녕하세요 방금 문자가 왔는데",
+            "label_text": "네 안녕하세요 방금 문자가 왔는데"
+        },
+        {
+            "audio_filepath": "/nas2/voice/data/kynd/AItheDaisy/08-1-MetaM_Labeling_Prepare/data_pyannotate/splited_speaker_data_metam_pyannotate_change_rx_tx/split_mono_left/mono/103-1680765793.2281_stereo_mono/chunk00002_counselor_6792.wav",
+            "pred_text": "네",
+            "label_text": "네"
+        },
+        {
+            "audio_filepath": "/nas2/voice/data/kynd/AItheDaisy/08-1-MetaM_Labeling_Prepare/data_pyannotate/splited_speaker_data_metam_pyannotate_change_rx_tx/split_mono_left/mono/103-1680765793.2281_stereo_mono/chunk00003_customer_7922.wav",
+            "pred_text": "제가 그 주문한 내역이 그 바디워시가 아닌데 바디워시라고 문자가 와가지고 혹시나 해서 뭐 주문이 잘못됐나 해서요",
+            "label_text": "제가 그 주문한 내역이 그 바디워시가 아닌데 바디워시라고 문자가 와가지고 혹시나 해서 뭐 주문이 잘못됐나 해서요"
+        },
+        {
+            "audio_filepath": "/nas2/voice/data/kynd/AItheDaisy/08-1-MetaM_Labeling_Prepare/data_pyannotate/splited_speaker_data_metam_pyannotate_change_rx_tx/split_mono_left/mono/103-1680765793.2281_stereo_mono/chunk00004_counselor_15567.wav",
+            "pred_text": "아 그러시니까 우선 불편드려 죄송하고요 성함과 휴대폰 번호 말씀해주시는 정법 확인 후 안내해 드리겠습니다",
+            "label_text": "아 그러시니까 우선 불편드려 죄송하고요 성함과 휴대폰 번호 말씀해주시는 정법 확인 후 안내해 드리겠습니다"
+        },
+        {
+            "audio_filepath": "/nas2/voice/data/kynd/AItheDaisy/08-1-MetaM_Labeling_Prepare/data_pyannotate/splited_speaker_data_metam_pyannotate_change_rx_tx/split_mono_left/mono/103-1680765793.2281_stereo_mono/chunk00005_customer_22283.wav",
+            "pred_text": "남 주원이구요",
+            "label_text": "남 주원이구요"
+        },
+        {
+            "audio_filepath": "/nas2/voice/data/kynd/AItheDaisy/08-1-MetaM_Labeling_Prepare/data_pyannotate/splited_speaker_data_metam_pyannotate_change_rx_tx/split_mono_left/mono/103-1680765793.2281_stereo_mono/chunk00006_counselor_23515.wav",
+            "pred_text": "네",
+            "label_text": "네"
+        },
+        {
+            "audio_filepath": "/nas2/voice/data/kynd/AItheDaisy/08-1-MetaM_Labeling_Prepare/data_pyannotate/splited_speaker_data_metam_pyannotate_change_rx_tx/split_mono_left/mono/103-1680765793.2281_stereo_mono/chunk00007_customer_24510.wav",
+            "pred_text": "공 일 공 하 오 하나 하나  이 육 둘 하나야",
+            "label_text": "공 일 공 하 오 하나 하나  이 육 둘 하나야"
+        },
+        {
+            "audio_filepath": "/nas2/voice/data/kynd/AItheDaisy/08-1-MetaM_Labeling_Prepare/data_pyannotate/splited_speaker_data_metam_pyannotate_change_rx_tx/split_mono_left/mono/103-1680765793.2281_stereo_mono/chunk00008_counselor_27514.wav",
+            "pred_text": "소중한 정보 확인 감사합니다 잠시만 기다려 주세요 정보 확인 안내해 드리겠습니다",
+            "label_text": "소중한 정보 확인 감사합니다 잠시만 기다려 주세요 정보 확인 안내해 드리겠습니다"
+        },
+        {
+            "audio_filepath": "/nas2/voice/data/kynd/AItheDaisy/08-1-MetaM_Labeling_Prepare/data_pyannotate/splited_speaker_data_metam_pyannotate_change_rx_tx/split_mono_left/mono/103-1680765793.2281_stereo_mono/chunk00009_customer_30434.wav",
+            "pred_text": "네",
+            "label_text": "네"
+        },
+        {
+            "audio_filepath": "/nas2/voice/data/kynd/AItheDaisy/08-1-MetaM_Labeling_Prepare/data_pyannotate/splited_speaker_data_metam_pyannotate_change_rx_tx/split_mono_left/mono/103-1680765793.2281_stereo_mono/chunk00010_counselor_35024.wav",
+            "pred_text": "네 남교환 고객님 확인되셨구요 어 사 월 오 일 어제 주문하신 제품 말씀하시는 거 맞으실까요",
+            "label_text": "네 남교환 고객님 확인되셨구요 어 사 월 오 일 어제 주문하신 제품 말씀하시는 거 맞으실까요"
+        },
+        {
+            "audio_filepath": "/nas2/voice/data/kynd/AItheDaisy/08-1-MetaM_Labeling_Prepare/data_pyannotate/splited_speaker_data_metam_pyannotate_change_rx_tx/split_mono_left/mono/103-1680765793.2281_stereo_mono/chunk00011_customer_37757.wav",
+            "pred_text": "네네 네네",
+            "label_text": "네네 네네"
+        },
+        {
+            "audio_filepath": "/nas2/voice/data/kynd/AItheDaisy/08-1-MetaM_Labeling_Prepare/data_pyannotate/splited_speaker_data_metam_pyannotate_change_rx_tx/split_mono_left/mono/103-1680765793.2281_stereo_mono/chunk00012_counselor_41419.wav",
+            "pred_text": "네 음 바디워시는 주문하지 않으신 거 맞구요 저희가 품절된 상품의 목록들을 일반적으로 문자를 보내다 보니까 조금 실수가 있었던 것 같으세요",
+            "label_text": "네 음 바디워시는 주문하지 않으신 거 맞구요 저희가 품절된 상품의 목록들을 일반적으로 문자를 보내다 보니까 조금 실수가 있었던 것 같으세요"
+        },
+        {
+            "audio_filepath": "/nas2/voice/data/kynd/AItheDaisy/08-1-MetaM_Labeling_Prepare/data_pyannotate/splited_speaker_data_metam_pyannotate_change_rx_tx/split_mono_left/mono/103-1680765793.2281_stereo_mono/chunk00013_customer_50262.wav",
+            "pred_text": "아 예예",
+            "label_text": "아 예예"
+        },
+        {
+            "audio_filepath": "/nas2/voice/data/kynd/AItheDaisy/08-1-MetaM_Labeling_Prepare/data_pyannotate/splited_speaker_data_metam_pyannotate_change_rx_tx/split_mono_left/mono/103-1680765793.2281_stereo_mono/chunk00014_counselor_51021.wav",
+            "pred_text": "네 고객님 주문하신 상품 트레리아 토마토 일 등급 한 돈 판매던 탈모케어 샴푸 맞으실까요",
+            "label_text": "네 고객님 주문하신 상품 트레리아 토마토 일 등급 한 돈 판매던 탈모케어 샴푸 맞으실까요"
+        },
+        {
+            "audio_filepath": "/nas2/voice/data/kynd/AItheDaisy/08-1-MetaM_Labeling_Prepare/data_pyannotate/splited_speaker_data_metam_pyannotate_change_rx_tx/split_mono_left/mono/103-1680765793.2281_stereo_mono/chunk00015_customer_57754.wav",
+            "pred_text": "네네 맞아요",
+            "label_text": "네네 맞아요"
+        },
+        {
+            "audio_filepath": "/nas2/voice/data/kynd/AItheDaisy/08-1-MetaM_Labeling_Prepare/data_pyannotate/splited_speaker_data_metam_pyannotate_change_rx_tx/split_mono_left/mono/103-1680765793.2281_stereo_mono/chunk00016_counselor_58615.wav",
+            "pred_text": "네 요구 맞습니다 고님 걱정하지 않으셔도 괜찮습니다",
+            "label_text": "네 요구 맞습니다 고님 걱정하지 않으셔도 괜찮습니다"
+        },
+        {
+            "audio_filepath": "/nas2/voice/data/kynd/AItheDaisy/08-1-MetaM_Labeling_Prepare/data_pyannotate/splited_speaker_data_metam_pyannotate_change_rx_tx/split_mono_left/mono/103-1680765793.2281_stereo_mono/chunk00017_customer_61838.wav",
+            "pred_text": "아 네 알겠습니다 감사합니다",
+            "label_text": "아 네 알겠습니다 감사합니다"
+        },
+        {
+            "audio_filepath": "/nas2/voice/data/kynd/AItheDaisy/08-1-MetaM_Labeling_Prepare/data_pyannotate/splited_speaker_data_metam_pyannotate_change_rx_tx/split_mono_left/mono/103-1680765793.2281_stereo_mono/chunk00018_counselor_63525.wav",
+            "pred_text": "네 감사합니다",
+            "label_text": "네 감사합니다"
+        }
+    ]
+}

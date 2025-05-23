@@ -1,0 +1,9 @@
+{
+    "call_id": "103-1685581372.504_stereo",
+    "ms_adpcm_audio_file_path": "/data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Server-STT-Masking-QA-Pipeline-Kolon-JW/shared_folder/input_request_folder/2025-05-09_10-48-00.343275_f03c9c1a-eb99-4dcc-a2fa-5ecc04775cd1/103-1685581372.504_stereo.wav",
+    "split_output_folder": "/data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Server-STT-Masking-QA-Pipeline-Kolon-JW/shared_folder/output_vad_folder/2025-05-09_10-48-00.343275_f03c9c1a-eb99-4dcc-a2fa-5ecc04775cd1/103-1685581372.504_stereo",
+    "is_rx_counselor": true,
+    "length": 16.5,
+    "successYN": false,
+    "error": "TOO SHORT"
+}

@@ -1,0 +1,158 @@
+{
+    "call_id": "103-1685581653.529_stereo",
+    "ms_adpcm_audio_file_path": "/data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Server-STT-Masking-QA-Pipeline-Kolon-JW/shared_folder/input_request_folder/2025-05-09_10-48-00.343275_f03c9c1a-eb99-4dcc-a2fa-5ecc04775cd1/103-1685581653.529_stereo.wav",
+    "split_output_folder": "/data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Server-STT-Masking-QA-Pipeline-Kolon-JW/shared_folder/output_vad_folder/2025-05-09_10-48-00.343275_f03c9c1a-eb99-4dcc-a2fa-5ecc04775cd1/103-1685581653.529_stereo",
+    "is_rx_counselor": true,
+    "length": 76.125,
+    "successYN": true,
+    "counselor_info": {
+        "silence_thresh": 0,
+        "ranges": [
+            [
+                8,
+                2252
+            ],
+            [
+                5104,
+                5442
+            ],
+            [
+                22300,
+                32104
+            ],
+            [
+                36104,
+                39968
+            ],
+            [
+                43326,
+                56438
+            ],
+            [
+                57467,
+                65348
+            ],
+            [
+                66563,
+                70714
+            ],
+            [
+                72081,
+                73397
+            ]
+        ],
+        "ranges_ext": [
+            [
+                -492,
+                2752
+            ],
+            [
+                4604,
+                5942
+            ],
+            [
+                21800,
+                32604
+            ],
+            [
+                35604,
+                40468
+            ],
+            [
+                42826,
+                56938
+            ],
+            [
+                56967,
+                65848
+            ],
+            [
+                66063,
+                71214
+            ],
+            [
+                71581,
+                73897
+            ]
+        ]
+    },
+    "customer_info": {
+        "silence_thresh": 0,
+        "ranges": [
+            [
+                2505,
+                4986
+            ],
+            [
+                6809,
+                15128
+            ],
+            [
+                16073,
+                20562
+            ],
+            [
+                33792,
+                35783
+            ],
+            [
+                40339,
+                41166
+            ],
+            [
+                56742,
+                57366
+            ],
+            [
+                65601,
+                66344
+            ],
+            [
+                70883,
+                71946
+            ],
+            [
+                73785,
+                74039
+            ]
+        ],
+        "ranges_ext": [
+            [
+                2005,
+                5486
+            ],
+            [
+                6309,
+                15600
+            ],
+            [
+                15600,
+                21062
+            ],
+            [
+                33292,
+                36283
+            ],
+            [
+                39839,
+                41666
+            ],
+            [
+                56242,
+                57866
+            ],
+            [
+                65101,
+                66844
+            ],
+            [
+                70383,
+                72446
+            ],
+            [
+                73285,
+                74539
+            ]
+        ]
+    }
+}

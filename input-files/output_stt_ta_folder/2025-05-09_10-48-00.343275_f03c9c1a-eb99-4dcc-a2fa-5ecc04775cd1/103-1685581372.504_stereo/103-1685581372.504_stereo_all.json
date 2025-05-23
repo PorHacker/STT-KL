@@ -1,0 +1,11 @@
+{
+    "call_id": "103-1685581372.504_stereo",
+    "call_folder_path": "/data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Server-STT-Masking-QA-Pipeline-Kolon-JW/shared_folder/output_vad_folder/2025-05-09_10-48-00.343275_f03c9c1a-eb99-4dcc-a2fa-5ecc04775cd1/103-1685581372.504_stereo",
+    "combine_audio_path": "/data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Server-STT-Masking-QA-Pipeline-Kolon-JW/shared_folder/output_vad_folder/2025-05-09_10-48-00.343275_f03c9c1a-eb99-4dcc-a2fa-5ecc04775cd1/103-1685581372.504_stereo/a_combine_audio.mp3",
+    "wave_img_path": "/data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Server-STT-Masking-QA-Pipeline-Kolon-JW/shared_folder/output_vad_folder/2025-05-09_10-48-00.343275_f03c9c1a-eb99-4dcc-a2fa-5ecc04775cd1/103-1685581372.504_stereo/a_wave_image.png",
+    "info_path": "/data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Server-STT-Masking-QA-Pipeline-Kolon-JW/shared_folder/output_vad_folder/2025-05-09_10-48-00.343275_f03c9c1a-eb99-4dcc-a2fa-5ecc04775cd1/103-1685581372.504_stereo/info.json",
+    "stt_json_output": "/data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Server-STT-Masking-QA-Pipeline-Kolon-JW/shared_folder/output_stt_ta_folder/2025-05-09_10-48-00.343275_f03c9c1a-eb99-4dcc-a2fa-5ecc04775cd1/103-1685581372.504_stereo/103-1685581372.504_stereo_stt.json",
+    "call_date": "103-1685581372.504_stereo",
+    "successYN": false,
+    "error": "SPLIT ERROR - TOO SHORT"
+}

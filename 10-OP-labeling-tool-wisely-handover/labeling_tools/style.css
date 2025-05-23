@@ -1,0 +1,52 @@
+.highlight {
+    border-radius: 0.4rem;
+    color: white;
+    padding: 0.5rem;
+    margin-bottom: 1rem;
+  }
+  .bold {
+    padding-left: 1rem;
+    font-weight: 700;
+  }
+
+  .blue {
+    background-color: blue;
+  }
+
+  .red {
+    background-color: red;
+  }
+
+  .green {
+    background-color:greenyellow
+  }
+
+  audio::-webkit-media-controls-mute-button {
+    display: none !important;
+    }
+    
+  audio::-webkit-media-controls-volume-slider {
+    display: none !important;
+    }
+    
+  audio::-webkit-media-controls-volume-control-container.closed {
+    display: none !important;
+    }
+  audio::-webkit-media-controls-volume-control-container{
+    display: none !important;
+    }
+
+
+    footer {
+	
+      visibility: hidden;
+      
+      }
+    footer:after {
+      content:'(주)에이아이더뉴트리진 ｜ AI사업부문 대표 : 김수화 ｜ 사업자등록번호 : 713-85-01607 ｜ 문의 : marketing@aithe.io'; 
+      visibility: visible;
+      display: block;
+      position: relative;
+      padding: 5px;
+      top: 2px;
+    }

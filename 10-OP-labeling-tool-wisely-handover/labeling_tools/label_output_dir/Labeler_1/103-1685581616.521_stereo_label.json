@@ -1,0 +1,418 @@
+{
+    "is_ignored": false,
+    "labeler_id": "Labeler_1",
+    "call_id": "103-1685581616.521_stereo",
+    "label_time": "2025-05-15 09:50:25.837018",
+    "sentiment": "부정",
+    "topic": [],
+    "stt_label": [
+        {
+            "audio_filepath": "/data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Server-STT-Masking-QA-Pipeline-Kolon-JW/shared_folder/output_vad_folder/2025-05-09_10-48-00.343275_f03c9c1a-eb99-4dcc-a2fa-5ecc04775cd1/103-1685581616.521_stereo/chunk00000_counselor_0_4423.wav",
+            "pred_text": "네 감사합니다 유니 세품김지윤입니다",
+            "label_text": "네 감사합니다 유니세품 김지윤입니다",
+            "emotion": ""
+        },
+        {
+            "audio_filepath": "/data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Server-STT-Masking-QA-Pipeline-Kolon-JW/shared_folder/output_vad_folder/2025-05-09_10-48-00.343275_f03c9c1a-eb99-4dcc-a2fa-5ecc04775cd1/103-1685581616.521_stereo/chunk00001_customer_3592_12590.wav",
+            "pred_text": "네 저기 죄송한데 제가 이거 이쪽으로 전화데 그 기부검 영수증을 좀 택스로 받기로 원하 거거든요",
+            "label_text": "네 저기 죄송한데 제가 이거 이쪽으로 전화한게 그 기부한 영수증을 좀 팩스로 받기를 원하거든요",
+            "emotion": ""
+        },
+        {
+            "audio_filepath": "/data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Server-STT-Masking-QA-Pipeline-Kolon-JW/shared_folder/output_vad_folder/2025-05-09_10-48-00.343275_f03c9c1a-eb99-4dcc-a2fa-5ecc04775cd1/103-1685581616.521_stereo/chunk00002_counselor_12080_17366.wav",
+            "pred_text": "아 네 그러시면은 성함과 생년월일이 어떻게 되세요",
+            "label_text": "아 네 그러시면은 성함과 생년월일이 어떻게 되세요",
+            "emotion": ""
+        },
+        {
+            "audio_filepath": "/data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Server-STT-Masking-QA-Pipeline-Kolon-JW/shared_folder/output_vad_folder/2025-05-09_10-48-00.343275_f03c9c1a-eb99-4dcc-a2fa-5ecc04775cd1/103-1685581616.521_stereo/chunk00003_customer_16822_19222.wav",
+            "pred_text": "어 김혜쪽",
+            "label_text": "어 김혜쪽",
+            "emotion": ""
+        },
+        {
+            "audio_filepath": "/data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Server-STT-Masking-QA-Pipeline-Kolon-JW/shared_folder/output_vad_folder/2025-05-09_10-48-00.343275_f03c9c1a-eb99-4dcc-a2fa-5ecc04775cd1/103-1685581616.521_stereo/chunk00004_counselor_18509_20015.wav",
+            "pred_text": "네",
+            "label_text": "네",
+            "emotion": ""
+        },
+        {
+            "audio_filepath": "/data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Server-STT-Masking-QA-Pipeline-Kolon-JW/shared_folder/output_vad_folder/2025-05-09_10-48-00.343275_f03c9c1a-eb99-4dcc-a2fa-5ecc04775cd1/103-1685581616.521_stereo/chunk00005_customer_19758_23964.wav",
+            "pred_text": "육구 어 육 팔 공 삼 공 이",
+            "label_text": "육구 육 팔 공 삼 공 이",
+            "emotion": ""
+        },
+        {
+            "audio_filepath": "/data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Server-STT-Masking-QA-Pipeline-Kolon-JW/shared_folder/output_vad_folder/2025-05-09_10-48-00.343275_f03c9c1a-eb99-4dcc-a2fa-5ecc04775cd1/103-1685581616.521_stereo/chunk00006_counselor_23133_29786.wav",
+            "pred_text": "네 확인 감사합니다 택스로 발송해드릴 텐데요 택스 번호가 어떻게 되실까요",
+            "label_text": "네 확인 감사합니다 팩스로 발송해드릴 텐데요 팩스 번호가 어떻게 되실까요",
+            "emotion": ""
+        },
+        {
+            "audio_filepath": "/data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Server-STT-Masking-QA-Pipeline-Kolon-JW/shared_folder/output_vad_folder/2025-05-09_10-48-00.343275_f03c9c1a-eb99-4dcc-a2fa-5ecc04775cd1/103-1685581616.521_stereo/chunk00007_customer_29039_31811.wav",
+            "pred_text": "예 오 공 오 사",
+            "label_text": "예 오 공 오 사",
+            "emotion": ""
+        },
+        {
+            "audio_filepath": "/data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Server-STT-Masking-QA-Pipeline-Kolon-JW/shared_folder/output_vad_folder/2025-05-09_10-48-00.343275_f03c9c1a-eb99-4dcc-a2fa-5ecc04775cd1/103-1685581616.521_stereo/chunk00008_counselor_30980_32925.wav",
+            "pred_text": "공 오 사",
+            "label_text": "공 오 사",
+            "emotion": ""
+        },
+        {
+            "audio_filepath": "/data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Server-STT-Masking-QA-Pipeline-Kolon-JW/shared_folder/output_vad_folder/2025-05-09_10-48-00.343275_f03c9c1a-eb99-4dcc-a2fa-5ecc04775cd1/103-1685581616.521_stereo/chunk00009_customer_32448_34309.wav",
+            "pred_text": "이 사 육",
+            "label_text": "이 사 육",
+            "emotion": ""
+        },
+        {
+            "audio_filepath": "/data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Server-STT-Masking-QA-Pipeline-Kolon-JW/shared_folder/output_vad_folder/2025-05-09_10-48-00.343275_f03c9c1a-eb99-4dcc-a2fa-5ecc04775cd1/103-1685581616.521_stereo/chunk00010_counselor_33663_35540.wav",
+            "pred_text": "이 사 육",
+            "label_text": "이 사 육",
+            "emotion": ""
+        },
+        {
+            "audio_filepath": "/data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Server-STT-Masking-QA-Pipeline-Kolon-JW/shared_folder/output_vad_folder/2025-05-09_10-48-00.343275_f03c9c1a-eb99-4dcc-a2fa-5ecc04775cd1/103-1685581616.521_stereo/chunk00011_customer_34962_37599.wav",
+            "pred_text": "팔 구 팔 이 번",
+            "label_text": "팔 구 팔 이 번",
+            "emotion": ""
+        },
+        {
+            "audio_filepath": "/data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Server-STT-Masking-QA-Pipeline-Kolon-JW/shared_folder/output_vad_folder/2025-05-09_10-48-00.343275_f03c9c1a-eb99-4dcc-a2fa-5ecc04775cd1/103-1685581616.521_stereo/chunk00012_counselor_36852_43360.wav",
+            "pred_text": "팔 구 팔 이 네 지금 발송해드리면 한 십 분에서 십 오 분 정도 되시구요",
+            "label_text": "팔 구 팔 이 네 지금 발송해드리면 한 십 분에서 십 오 분 정도 되시구요",
+            "emotion": ""
+        },
+        {
+            "audio_filepath": "/data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Server-STT-Masking-QA-Pipeline-Kolon-JW/shared_folder/output_vad_folder/2025-05-09_10-48-00.343275_f03c9c1a-eb99-4dcc-a2fa-5ecc04775cd1/103-1685581616.521_stereo/chunk00013_customer_42590_44585.wav",
+            "pred_text": "네 감사다",
+            "label_text": "네 감사다",
+            "emotion": ""
+        },
+        {
+            "audio_filepath": "/data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Server-STT-Masking-QA-Pipeline-Kolon-JW/shared_folder/output_vad_folder/2025-05-09_10-48-00.343275_f03c9c1a-eb99-4dcc-a2fa-5ecc04775cd1/103-1685581616.521_stereo/chunk00014_counselor_43360_50205.wav",
+            "pred_text": "한 지금데 방만 주소지가 지금 북구 홍에 라분 카페로 되어 있으신데",
+            "label_text": "한 지금데 방만 주소지가 지금 북구 홍에 라분 카페로 되어 있으신데",
+            "emotion": ""
+        },
+        {
+            "audio_filepath": "/data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Server-STT-Masking-QA-Pipeline-Kolon-JW/shared_folder/output_vad_folder/2025-05-09_10-48-00.343275_f03c9c1a-eb99-4dcc-a2fa-5ecc04775cd1/103-1685581616.521_stereo/chunk00015_customer_48547_51774.wav",
+            "pred_text": "아 그거를 참 고쳐야 됩니다",
+            "label_text": "아 그거를 참 고쳐야 됩니다",
+            "emotion": ""
+        },
+        {
+            "audio_filepath": "/data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Server-STT-Masking-QA-Pipeline-Kolon-JW/shared_folder/output_vad_folder/2025-05-09_10-48-00.343275_f03c9c1a-eb99-4dcc-a2fa-5ecc04775cd1/103-1685581616.521_stereo/chunk00016_counselor_50656_52702.wav",
+            "pred_text": "아 네네",
+            "label_text": "아 네네",
+            "emotion": ""
+        },
+        {
+            "audio_filepath": "/data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Server-STT-Masking-QA-Pipeline-Kolon-JW/shared_folder/output_vad_folder/2025-05-09_10-48-00.343275_f03c9c1a-eb99-4dcc-a2fa-5ecc04775cd1/103-1685581616.521_stereo/chunk00017_customer_51820_55434.wav",
+            "pred_text": "어 저기 그  사자가",
+            "label_text": "어 저기 그  사자가",
+            "emotion": ""
+        },
+        {
+            "audio_filepath": "/data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Server-STT-Masking-QA-Pipeline-Kolon-JW/shared_folder/output_vad_folder/2025-05-09_10-48-00.343275_f03c9c1a-eb99-4dcc-a2fa-5ecc04775cd1/103-1685581616.521_stereo/chunk00018_counselor_54672_56094.wav",
+            "pred_text": "네",
+            "label_text": "네",
+            "emotion": ""
+        },
+        {
+            "audio_filepath": "/data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Server-STT-Masking-QA-Pipeline-Kolon-JW/shared_folder/output_vad_folder/2025-05-09_10-48-00.343275_f03c9c1a-eb99-4dcc-a2fa-5ecc04775cd1/103-1685581616.521_stereo/chunk00019_customer_55434_58963.wav",
+            "pred_text": "그 풍명기계 당사",
+            "label_text": "그 풍명기계 당사",
+            "emotion": ""
+        },
+        {
+            "audio_filepath": "/data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Server-STT-Masking-QA-Pipeline-Kolon-JW/shared_folder/output_vad_folder/2025-05-09_10-48-00.343275_f03c9c1a-eb99-4dcc-a2fa-5ecc04775cd1/103-1685581616.521_stereo/chunk00020_counselor_58689_60077.wav",
+            "pred_text": "통영",
+            "label_text": "통영",
+            "emotion": ""
+        },
+        {
+            "audio_filepath": "/data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Server-STT-Masking-QA-Pipeline-Kolon-JW/shared_folder/output_vad_folder/2025-05-09_10-48-00.343275_f03c9c1a-eb99-4dcc-a2fa-5ecc04775cd1/103-1685581616.521_stereo/chunk00021_customer_59954_62439.wav",
+            "pred_text": "기계상사",
+            "label_text": "기계상사",
+            "emotion": ""
+        },
+        {
+            "audio_filepath": "/data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Server-STT-Masking-QA-Pipeline-Kolon-JW/shared_folder/output_vad_folder/2025-05-09_10-48-00.343275_f03c9c1a-eb99-4dcc-a2fa-5ecc04775cd1/103-1685581616.521_stereo/chunk00022_counselor_61591_63064.wav",
+            "pred_text": "네",
+            "label_text": "네",
+            "emotion": ""
+        },
+        {
+            "audio_filepath": "/data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Server-STT-Masking-QA-Pipeline-Kolon-JW/shared_folder/output_vad_folder/2025-05-09_10-48-00.343275_f03c9c1a-eb99-4dcc-a2fa-5ecc04775cd1/103-1685581616.521_stereo/chunk00023_customer_62772_66844.wav",
+            "pred_text": "그리고 그 사업자 번호는 팔 일 구",
+            "label_text": "그리고 그 사업자 번호는 팔 일 구",
+            "emotion": ""
+        },
+        {
+            "audio_filepath": "/data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Server-STT-Masking-QA-Pipeline-Kolon-JW/shared_folder/output_vad_folder/2025-05-09_10-48-00.343275_f03c9c1a-eb99-4dcc-a2fa-5ecc04775cd1/103-1685581616.521_stereo/chunk00024_counselor_67666_71434.wav",
+            "pred_text": "지금 그 명의를 아예 변경을 하셔야 된단 말씀이세요",
+            "label_text": "지금 그 명의를 아예 변경을 하셔야 된단 말씀이세요",
+            "emotion": ""
+        },
+        {
+            "audio_filepath": "/data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Server-STT-Masking-QA-Pipeline-Kolon-JW/shared_folder/output_vad_folder/2025-05-09_10-48-00.343275_f03c9c1a-eb99-4dcc-a2fa-5ecc04775cd1/103-1685581616.521_stereo/chunk00025_customer_70248_73043.wav",
+            "pred_text": "예 왜냐면 제가 그 카페를 했는데",
+            "label_text": "예 왜냐면 제가 그 카페를 했는데",
+            "emotion": ""
+        },
+        {
+            "audio_filepath": "/data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Server-STT-Masking-QA-Pipeline-Kolon-JW/shared_folder/output_vad_folder/2025-05-09_10-48-00.343275_f03c9c1a-eb99-4dcc-a2fa-5ecc04775cd1/103-1685581616.521_stereo/chunk00026_counselor_72408_73813.wav",
+            "pred_text": "네",
+            "label_text": "네",
+            "emotion": ""
+        },
+        {
+            "audio_filepath": "/data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Server-STT-Masking-QA-Pipeline-Kolon-JW/shared_folder/output_vad_folder/2025-05-09_10-48-00.343275_f03c9c1a-eb99-4dcc-a2fa-5ecc04775cd1/103-1685581616.521_stereo/chunk00027_customer_73043_83437.wav",
+            "pred_text": "거기 새를 새를 줘가지고 인제 다른 사람이 이렇게 운영을 하고 있어가지고 제가 지금 여기 사업자를 제가 지금 하고 있거든요",
+            "label_text": "거기 새를 새를 줘가지고 인제 다른 사람이 이렇게 운영을 하고 있어가지고 제가 지금 여기 사업자를 제가 지금 하고 있거든요",
+            "emotion": ""
+        },
+        {
+            "audio_filepath": "/data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Server-STT-Masking-QA-Pipeline-Kolon-JW/shared_folder/output_vad_folder/2025-05-09_10-48-00.343275_f03c9c1a-eb99-4dcc-a2fa-5ecc04775cd1/103-1685581616.521_stereo/chunk00028_counselor_82938_88087.wav",
+            "pred_text": "아 지금은 김혜수님 개인명의로 후원 중이셔서",
+            "label_text": "아 지금은 김혜수님 개인명의로 후원 중이셔서",
+            "emotion": ""
+        },
+        {
+            "audio_filepath": "/data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Server-STT-Masking-QA-Pipeline-Kolon-JW/shared_folder/output_vad_folder/2025-05-09_10-48-00.343275_f03c9c1a-eb99-4dcc-a2fa-5ecc04775cd1/103-1685581616.521_stereo/chunk00029_customer_83437_86081.wav",
+            "pred_text": "년기계 산자",
+            "label_text": "년기계 산자",
+            "emotion": ""
+        },
+        {
+            "audio_filepath": "/data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Server-STT-Masking-QA-Pipeline-Kolon-JW/shared_folder/output_vad_folder/2025-05-09_10-48-00.343275_f03c9c1a-eb99-4dcc-a2fa-5ecc04775cd1/103-1685581616.521_stereo/chunk00030_counselor_88087_95717.wav",
+            "pred_text": "영수증은 김혜수님 앞으로만 이제 발급이 되시는 부분이신데요 아니시면 사업자로 아예 변경을 해드려야 될까요",
+            "label_text": "영수증은 김혜수님 앞으로만 이제 발급이 되시는 부분이신데요 아니시면 사업자로 아예 변경을 해드려야 될까요",
+            "emotion": ""
+        },
+        {
+            "audio_filepath": "/data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Server-STT-Masking-QA-Pipeline-Kolon-JW/shared_folder/output_vad_folder/2025-05-09_10-48-00.343275_f03c9c1a-eb99-4dcc-a2fa-5ecc04775cd1/103-1685581616.521_stereo/chunk00031_customer_92050_96915.wav",
+            "pred_text": "네 네네 파표로 네네",
+            "label_text": "네 네네 파표로 네네",
+            "emotion": ""
+        },
+        {
+            "audio_filepath": "/data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Server-STT-Masking-QA-Pipeline-Kolon-JW/shared_folder/output_vad_folder/2025-05-09_10-48-00.343275_f03c9c1a-eb99-4dcc-a2fa-5ecc04775cd1/103-1685581616.521_stereo/chunk00032_counselor_96100_103699.wav",
+            "pred_text": "어 그러시면은 제가 기존에 김혜수님 회원건은 중단을 해드리고 사업자로 변경을 해드리겠습니다",
+            "label_text": "어 그러시면은 제가 기존에 김혜수님 회원건은 중단을 해드리고 사업자로 변경을 해드리겠습니다",
+            "emotion": ""
+        },
+        {
+            "audio_filepath": "/data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Server-STT-Masking-QA-Pipeline-Kolon-JW/shared_folder/output_vad_folder/2025-05-09_10-48-00.343275_f03c9c1a-eb99-4dcc-a2fa-5ecc04775cd1/103-1685581616.521_stereo/chunk00033_customer_102631_106669.wav",
+            "pred_text": "아 사자로 네네네 그렇게 해주세요 네",
+            "label_text": "아 사자로 네네네 그렇게 해주세요 네",
+            "emotion": ""
+        },
+        {
+            "audio_filepath": "/data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Server-STT-Masking-QA-Pipeline-Kolon-JW/shared_folder/output_vad_folder/2025-05-09_10-48-00.343275_f03c9c1a-eb99-4dcc-a2fa-5ecc04775cd1/103-1685581616.521_stereo/chunk00034_counselor_105517_123035.wav",
+            "pred_text": "네 그러시면 잠시만 기다려주십시오 네 작년 같은 경우에는 이미 회수연보가 마감이 되셨기 때문에 김혜수님 성함으로만 영수증 발급이 가능하세요",
+            "label_text": "네 그러시면 잠시만 기다려주십시오 네 작년 같은 경우에는 이미 회수연보가 마감이 되셨기 때문에 김혜수님 성함으로만 영수증 발급이 가능하세요",
+            "emotion": ""
+        },
+        {
+            "audio_filepath": "/data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Server-STT-Masking-QA-Pipeline-Kolon-JW/shared_folder/output_vad_folder/2025-05-09_10-48-00.343275_f03c9c1a-eb99-4dcc-a2fa-5ecc04775cd1/103-1685581616.521_stereo/chunk00035_customer_121464_124337.wav",
+            "pred_text": "아 네네 그래도 괜찮습니다네",
+            "label_text": "아 네네 그래도 괜찮습니다네",
+            "emotion": ""
+        },
+        {
+            "audio_filepath": "/data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Server-STT-Masking-QA-Pipeline-Kolon-JW/shared_folder/output_vad_folder/2025-05-09_10-48-00.343275_f03c9c1a-eb99-4dcc-a2fa-5ecc04775cd1/103-1685581616.521_stereo/chunk00036_counselor_123035_136537.wav",
+            "pred_text": "괜찮으실까요 네 그러시면 명의 변경 같은 경우에는 전화 주신 시점부터 가능하기 때문에 제가 유 월 달부터 명의 변경 진행해드릴 거구요 사업자 번호 다시 한번만 말씀 부탁드리겠습니다",
+            "label_text": "괜찮으실까요 네 그러시면 명의 변경 같은 경우에는 전화 주신 시점부터 가능하기 때문에 제가 유 월 달부터 명의 변경 진행해드릴 거구요 사업자 번호 다시 한번만 말씀 부탁드리겠습니다",
+            "emotion": ""
+        },
+        {
+            "audio_filepath": "/data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Server-STT-Masking-QA-Pipeline-Kolon-JW/shared_folder/output_vad_folder/2025-05-09_10-48-00.343275_f03c9c1a-eb99-4dcc-a2fa-5ecc04775cd1/103-1685581616.521_stereo/chunk00037_customer_131926_138883.wav",
+            "pred_text": "예 예 어 팔 일 구",
+            "label_text": "예 예 어 팔 일 구",
+            "emotion": ""
+        },
+        {
+            "audio_filepath": "/data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Server-STT-Masking-QA-Pipeline-Kolon-JW/shared_folder/output_vad_folder/2025-05-09_10-48-00.343275_f03c9c1a-eb99-4dcc-a2fa-5ecc04775cd1/103-1685581616.521_stereo/chunk00038_counselor_138119_140317.wav",
+            "pred_text": "팔 하나 구",
+            "label_text": "팔 하나 구",
+            "emotion": ""
+        },
+        {
+            "audio_filepath": "/data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Server-STT-Masking-QA-Pipeline-Kolon-JW/shared_folder/output_vad_folder/2025-05-09_10-48-00.343275_f03c9c1a-eb99-4dcc-a2fa-5ecc04775cd1/103-1685581616.521_stereo/chunk00039_customer_139773_141347.wav",
+            "pred_text": "이 육",
+            "label_text": "이 육",
+            "emotion": ""
+        },
+        {
+            "audio_filepath": "/data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Server-STT-Masking-QA-Pipeline-Kolon-JW/shared_folder/output_vad_folder/2025-05-09_10-48-00.343275_f03c9c1a-eb99-4dcc-a2fa-5ecc04775cd1/103-1685581616.521_stereo/chunk00040_counselor_141022_142849.wav",
+            "pred_text": "이 육",
+            "label_text": "이 육",
+            "emotion": ""
+        },
+        {
+            "audio_filepath": "/data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Server-STT-Masking-QA-Pipeline-Kolon-JW/shared_folder/output_vad_folder/2025-05-09_10-48-00.343275_f03c9c1a-eb99-4dcc-a2fa-5ecc04775cd1/103-1685581616.521_stereo/chunk00041_customer_142490_145329.wav",
+            "pred_text": "영 영 팔 구 삼",
+            "label_text": "영 영 팔 구 삼",
+            "emotion": ""
+        },
+        {
+            "audio_filepath": "/data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Server-STT-Masking-QA-Pipeline-Kolon-JW/shared_folder/output_vad_folder/2025-05-09_10-48-00.343275_f03c9c1a-eb99-4dcc-a2fa-5ecc04775cd1/103-1685581616.521_stereo/chunk00042_counselor_144717_150288.wav",
+            "pred_text": "영 영 팔 구 삼 네 그러시면 김혜수님이 대표신 거죠",
+            "label_text": "영 영 팔 구 삼 네 그러시면 김혜수님이 대표신 거죠",
+            "emotion": ""
+        },
+        {
+            "audio_filepath": "/data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Server-STT-Masking-QA-Pipeline-Kolon-JW/shared_folder/output_vad_folder/2025-05-09_10-48-00.343275_f03c9c1a-eb99-4dcc-a2fa-5ecc04775cd1/103-1685581616.521_stereo/chunk00043_customer_149341_150999.wav",
+            "pred_text": "네네",
+            "label_text": "네네",
+            "emotion": ""
+        },
+        {
+            "audio_filepath": "/data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Server-STT-Masking-QA-Pipeline-Kolon-JW/shared_folder/output_vad_folder/2025-05-09_10-48-00.343275_f03c9c1a-eb99-4dcc-a2fa-5ecc04775cd1/103-1685581616.521_stereo/chunk00044_counselor_150288_160162.wav",
+            "pred_text": "네 잠시만 기다려주십시오 네 그러시면은 그 사업장 주소지는 어떻게 되세요",
+            "label_text": "네 잠시만 기다려주십시오 네 그러시면은 그 사업장 주소지는 어떻게 되세요",
+            "emotion": ""
+        },
+        {
+            "audio_filepath": "/data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Server-STT-Masking-QA-Pipeline-Kolon-JW/shared_folder/output_vad_folder/2025-05-09_10-48-00.343275_f03c9c1a-eb99-4dcc-a2fa-5ecc04775cd1/103-1685581616.521_stereo/chunk00045_customer_159466_162204.wav",
+            "pred_text": "어 포항시 북구",
+            "label_text": "어 포항시 북구",
+            "emotion": ""
+        },
+        {
+            "audio_filepath": "/data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Server-STT-Masking-QA-Pipeline-Kolon-JW/shared_folder/output_vad_folder/2025-05-09_10-48-00.343275_f03c9c1a-eb99-4dcc-a2fa-5ecc04775cd1/103-1685581616.521_stereo/chunk00046_counselor_162115_164533.wav",
+            "pred_text": "포항시 북구",
+            "label_text": "포항시 북구",
+            "emotion": ""
+        },
+        {
+            "audio_filepath": "/data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Server-STT-Masking-QA-Pipeline-Kolon-JW/shared_folder/output_vad_folder/2025-05-09_10-48-00.343275_f03c9c1a-eb99-4dcc-a2fa-5ecc04775cd1/103-1685581616.521_stereo/chunk00047_customer_164107_166288.wav",
+            "pred_text": "칠성로",
+            "label_text": "칠성로",
+            "emotion": ""
+        },
+        {
+            "audio_filepath": "/data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Server-STT-Masking-QA-Pipeline-Kolon-JW/shared_folder/output_vad_folder/2025-05-09_10-48-00.343275_f03c9c1a-eb99-4dcc-a2fa-5ecc04775cd1/103-1685581616.521_stereo/chunk00048_counselor_165727_167975.wav",
+            "pred_text": "칠성로",
+            "label_text": "칠성로",
+            "emotion": ""
+        },
+        {
+            "audio_filepath": "/data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Server-STT-Masking-QA-Pipeline-Kolon-JW/shared_folder/output_vad_folder/2025-05-09_10-48-00.343275_f03c9c1a-eb99-4dcc-a2fa-5ecc04775cd1/103-1685581616.521_stereo/chunk00049_customer_167718_169747.wav",
+            "pred_text": "그리고 숫자 구 공",
+            "label_text": "그리고 숫자 구 공",
+            "emotion": ""
+        },
+        {
+            "audio_filepath": "/data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Server-STT-Masking-QA-Pipeline-Kolon-JW/shared_folder/output_vad_folder/2025-05-09_10-48-00.343275_f03c9c1a-eb99-4dcc-a2fa-5ecc04775cd1/103-1685581616.521_stereo/chunk00050_counselor_171937_176149.wav",
+            "pred_text": "네 어 그러시면은 개인사업자신 걸까요",
+            "label_text": "네 어 그러시면은 개인사업자신 걸까요",
+            "emotion": ""
+        },
+        {
+            "audio_filepath": "/data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Server-STT-Masking-QA-Pipeline-Kolon-JW/shared_folder/output_vad_folder/2025-05-09_10-48-00.343275_f03c9c1a-eb99-4dcc-a2fa-5ecc04775cd1/103-1685581616.521_stereo/chunk00051_customer_175143_176750.wav",
+            "pred_text": "네네네",
+            "label_text": "네네네",
+            "emotion": ""
+        },
+        {
+            "audio_filepath": "/data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Server-STT-Masking-QA-Pipeline-Kolon-JW/shared_folder/output_vad_folder/2025-05-09_10-48-00.343275_f03c9c1a-eb99-4dcc-a2fa-5ecc04775cd1/103-1685581616.521_stereo/chunk00052_counselor_176149_185852.wav",
+            "pred_text": "네 개인업자이시고 네 그러시면 지금 기존에 이십 오 일마다 이만 원으로 후원을 해주셨는데요 동일하게 등록을 해드릴 거구요",
+            "label_text": "네 개인업자이시고 네 그러시면 지금 기존에 이십 오 일마다 이만 원으로 후원을 해주셨는데요 동일하게 등록을 해드릴 거구요",
+            "emotion": ""
+        },
+        {
+            "audio_filepath": "/data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Server-STT-Masking-QA-Pipeline-Kolon-JW/shared_folder/output_vad_folder/2025-05-09_10-48-00.343275_f03c9c1a-eb99-4dcc-a2fa-5ecc04775cd1/103-1685581616.521_stereo/chunk00053_customer_183040_186470.wav",
+            "pred_text": "네 네네네",
+            "label_text": "네 네네네",
+            "emotion": ""
+        },
+        {
+            "audio_filepath": "/data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Server-STT-Masking-QA-Pipeline-Kolon-JW/shared_folder/output_vad_folder/2025-05-09_10-48-00.343275_f03c9c1a-eb99-4dcc-a2fa-5ecc04775cd1/103-1685581616.521_stereo/chunk00054_counselor_185852_189826.wav",
+            "pred_text": "네 농협계좌 그대로 동일하게 등록을 해드리면 될까요",
+            "label_text": "네 농협계좌 그대로 동일하게 등록을 해드리면 될까요",
+            "emotion": ""
+        },
+        {
+            "audio_filepath": "/data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Server-STT-Masking-QA-Pipeline-Kolon-JW/shared_folder/output_vad_folder/2025-05-09_10-48-00.343275_f03c9c1a-eb99-4dcc-a2fa-5ecc04775cd1/103-1685581616.521_stereo/chunk00055_customer_188829_190504.wav",
+            "pred_text": "네네네",
+            "label_text": "네네네",
+            "emotion": ""
+        },
+        {
+            "audio_filepath": "/data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Server-STT-Masking-QA-Pipeline-Kolon-JW/shared_folder/output_vad_folder/2025-05-09_10-48-00.343275_f03c9c1a-eb99-4dcc-a2fa-5ecc04775cd1/103-1685581616.521_stereo/chunk00056_counselor_189826_197209.wav",
+            "pred_text": "아 예 알겠습니다 그러시면은 폰 중단되고 이제 사업자 명의로 저희가 신규로 등록을 해드릴 거구요",
+            "label_text": "아 예 알겠습니다 그러시면은 폰 중단되고 이제 사업자 명의로 저희가 신규로 등록을 해드릴 거구요",
+            "emotion": ""
+        },
+        {
+            "audio_filepath": "/data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Server-STT-Masking-QA-Pipeline-Kolon-JW/shared_folder/output_vad_folder/2025-05-09_10-48-00.343275_f03c9c1a-eb99-4dcc-a2fa-5ecc04775cd1/103-1685581616.521_stereo/chunk00057_customer_196760_198080.wav",
+            "pred_text": "네",
+            "label_text": "네",
+            "emotion": ""
+        },
+        {
+            "audio_filepath": "/data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Server-STT-Masking-QA-Pipeline-Kolon-JW/shared_folder/output_vad_folder/2025-05-09_10-48-00.343275_f03c9c1a-eb99-4dcc-a2fa-5ecc04775cd1/103-1685581616.521_stereo/chunk00058_counselor_197209_203571.wav",
+            "pred_text": "오늘 안으로 그 출금동에 전화가 한 번 더 가실 거예요 그래서 출금동에 전화받으시면",
+            "label_text": "오늘 안으로 그 출금동에 전화가 한 번 더 가실 거예요 그래서 출금동에 전화받으시면",
+            "emotion": ""
+        },
+        {
+            "audio_filepath": "/data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Server-STT-Masking-QA-Pipeline-Kolon-JW/shared_folder/output_vad_folder/2025-05-09_10-48-00.343275_f03c9c1a-eb99-4dcc-a2fa-5ecc04775cd1/103-1685581616.521_stereo/chunk00059_customer_200928_202333.wav",
+            "pred_text": "네",
+            "label_text": "네",
+            "emotion": ""
+        },
+        {
+            "audio_filepath": "/data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Server-STT-Masking-QA-Pipeline-Kolon-JW/shared_folder/output_vad_folder/2025-05-09_10-48-00.343275_f03c9c1a-eb99-4dcc-a2fa-5ecc04775cd1/103-1685581616.521_stereo/chunk00060_counselor_203571_212694.wav",
+            "pred_text": "예금주 정보 입력을 해야 되기 때문에 김혜수님 생년월일로 입력해주시면 되시구요 어 제가 명의변경으로 처리 진행해드리겠습니다",
+            "label_text": "예금주 정보 입력을 해야 되기 때문에 김혜수님 생년월일로 입력해주시면 되시구요 어 제가 명의변경으로 처리 진행해드리겠습니다",
+            "emotion": ""
+        },
+        {
+            "audio_filepath": "/data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Server-STT-Masking-QA-Pipeline-Kolon-JW/shared_folder/output_vad_folder/2025-05-09_10-48-00.343275_f03c9c1a-eb99-4dcc-a2fa-5ecc04775cd1/103-1685581616.521_stereo/chunk00061_customer_208944_213932.wav",
+            "pred_text": "네네 네네 알겠습니다",
+            "label_text": "네네 네네 알겠습니다",
+            "emotion": ""
+        },
+        {
+            "audio_filepath": "/data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Server-STT-Masking-QA-Pipeline-Kolon-JW/shared_folder/output_vad_folder/2025-05-09_10-48-00.343275_f03c9c1a-eb99-4dcc-a2fa-5ecc04775cd1/103-1685581616.521_stereo/chunk00062_counselor_213331_215462.wav",
+            "pred_text": "네 감사합니다",
+            "label_text": "네 감사합니다",
+            "emotion": ""
+        },
+        {
+            "audio_filepath": "/data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Server-STT-Masking-QA-Pipeline-Kolon-JW/shared_folder/output_vad_folder/2025-05-09_10-48-00.343275_f03c9c1a-eb99-4dcc-a2fa-5ecc04775cd1/103-1685581616.521_stereo/chunk00063_customer_213932_217048.wav",
+            "pred_text": "그 팩스는 언제쯤 받을 수 있을까요",
+            "label_text": "그 팩스는 언제쯤 받을 수 있을까요",
+            "emotion": ""
+        },
+        {
+            "audio_filepath": "/data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Server-STT-Masking-QA-Pipeline-Kolon-JW/shared_folder/output_vad_folder/2025-05-09_10-48-00.343275_f03c9c1a-eb99-4dcc-a2fa-5ecc04775cd1/103-1685581616.521_stereo/chunk00064_counselor_216217_219855.wav",
+            "pred_text": "텍스는 한 십 분에서 십 오 분 정도 소요되세요",
+            "label_text": "텍스는 한 십 분에서 십 오 분 정도 소요되세요",
+            "emotion": ""
+        },
+        {
+            "audio_filepath": "/data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Server-STT-Masking-QA-Pipeline-Kolon-JW/shared_folder/output_vad_folder/2025-05-09_10-48-00.343275_f03c9c1a-eb99-4dcc-a2fa-5ecc04775cd1/103-1685581616.521_stereo/chunk00065_customer_218377_220513.wav",
+            "pred_text": "아 네 네 알겠습니다",
+            "label_text": "아 네 네 알겠습니다",
+            "emotion": ""
+        },
+        {
+            "audio_filepath": "/data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Server-STT-Masking-QA-Pipeline-Kolon-JW/shared_folder/output_vad_folder/2025-05-09_10-48-00.343275_f03c9c1a-eb99-4dcc-a2fa-5ecc04775cd1/103-1685581616.521_stereo/chunk00066_counselor_219855_222212.wav",
+            "pred_text": "예 감사합니다",
+            "label_text": "예 감사합니다",
+            "emotion": ""
+        },
+        {
+            "audio_filepath": "/data12t/03_STT_FOR_SK/03_KIM/13-Kolon-Batch-Pipeline/Server-STT-Masking-QA-Pipeline-Kolon-JW/shared_folder/output_vad_folder/2025-05-09_10-48-00.343275_f03c9c1a-eb99-4dcc-a2fa-5ecc04775cd1/103-1685581616.521_stereo/chunk00067_customer_220513_222600.wav",
+            "pred_text": "네 네 네",
+            "label_text": "네 네 네",
+            "emotion": ""
+        }
+    ]
+}

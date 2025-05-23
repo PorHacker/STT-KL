@@ -1,0 +1,6 @@
+[client]
+toolbarMode = "minimal"
+
+
+[server]
+port = 8503
