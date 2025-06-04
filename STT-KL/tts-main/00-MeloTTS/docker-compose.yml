@@ -1,0 +1,35 @@
+version: '3.8'
+
+services:
+  melotts:
+    build:
+        context: ./MeloTTS
+    container_name: MeloTTS-container
+    ports:
+      - "9889:9889"
+    volumes:
+      - ./MeloTTS:/workspace
+      - .statics/nltk_data:/root/nltk_data
+      - /etc/localtime:/etc/localtime:ro
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5001/health"]
+      interval: 120s
+      timeout: 60s
+      retries: 5
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              device_ids: ['0']
+              capabilities: [gpu]
+    stdin_open: true
+    tty: true
+    restart: unless-stopped
+
+networks:
+  default:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 192.168.122.0/24

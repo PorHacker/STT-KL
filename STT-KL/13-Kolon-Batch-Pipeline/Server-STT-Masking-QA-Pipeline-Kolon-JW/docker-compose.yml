@@ -1,0 +1,131 @@
+version: '3'
+services:
+  api-gateway:
+    build:
+      context: ./api-gateway
+    ports:
+      - "8110:5000"
+    volumes:
+      - ./api-gateway:/workspace    # MAY REMOVE IN PRODUCTION
+      - ./shared_folder:/workspace/shared_folder
+      - ./api-gateway/logs:/workspace/logs
+      - /etc/localtime:/etc/localtime:ro
+    depends_on:
+      - aithe-sti-vad
+      - aithe-sti-asr
+    networks:
+      - aithe-sti-kolon-batch-pipeline
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5000/health"]
+      interval: 90s
+      timeout: 60s
+      retries: 5
+
+  aithe-sti-vad:
+    build:
+      context: ./services/voice_activity_detector
+    ports:
+      - "8111:5001"
+    volumes:
+      - ./services/voice_activity_detector:/workspace    # MAY REMOVE IN PRODUCTION
+      - ./shared_folder:/workspace/shared_folder
+      - ./services/voice_activity_detector/logs:/workspace/logs
+      - /etc/localtime:/etc/localtime:ro
+    networks:
+      - aithe-sti-kolon-batch-pipeline
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5001/vad/health"]
+      interval: 120s
+      timeout: 60s
+      retries: 5
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              device_ids: ['1']
+              capabilities: [gpu]
+
+  aithe-sti-asr:
+    build:
+      context: ./services/speech_to_text
+    ports:
+      - "8112:5004"
+    volumes:
+      - ./services/speech_to_text/installing:/workspace/installing    # MAY REMOVE IN PRODUCTION
+      - ./services/speech_to_text/api:/workspace/api    # MAY REMOVE IN PRODUCTION
+      - ./shared_folder:/workspace/shared_folder
+      - ./services/speech_to_text/logs:/workspace/logs
+      - ./services/speech_to_text/app.py:/workspace/app.py
+      - /etc/localtime:/etc/localtime:ro
+    networks:
+      - aithe-sti-kolon-batch-pipeline
+
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5004/asr/health"]
+      interval: 120s
+      timeout: 60s
+      retries: 5
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              device_ids: ['1']
+              capabilities: [gpu]
+
+  aithe-sti-masking-ner:
+    build:
+      context: ./services/masking_ner_new
+    ports:
+      - "8113:5003"
+    volumes:
+      - ./services/masking_ner_new/static/nltk_data:/root/nltk_data  # Mapping nltk data
+      - ./services/masking_ner_new/static/.pororo:/root/.pororo  # Mapping pororo data
+      - ./services/masking_ner_new:/workspace
+      - ./services/masking_ner_new/logs:/workspace/logs
+      - /etc/localtime:/etc/localtime:ro
+    networks:
+      - aithe-sti-kolon-batch-pipeline
+
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5003/masking_ner/health"]
+      interval: 120s
+      timeout: 60s
+      retries: 5
+
+
+
+  aithe-sti-ta_qa_process:
+    build:
+      context: ./services/ta_qa_process
+    ports:
+      - "8114:5004"
+    volumes:
+      - ./services/ta_qa_process:/workspace    # MAY REMOVE IN PRODUCTION
+      - ./shared_folder:/workspace/shared_folder
+      - ./services/ta_qa_process/logs:/workspace/logs
+      - /etc/localtime:/etc/localtime:ro
+    networks:
+      - aithe-sti-kolon-batch-pipeline
+
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5004/generative-ai/health"]
+      interval: 120s
+      timeout: 60s
+      retries: 5
+
+  cron-schedule:
+    build:
+      context: ./services/cron-schedule
+
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - ./services/cron-schedule:/workspace
+      # - ./services/cron-schedule/config/cronjobs:/etc/crontabs/root
+      # - ./services/cron-schedule/logs:/workspace/logs
+
+
+networks:
+  aithe-sti-kolon-batch-pipeline:
+    driver: bridge
